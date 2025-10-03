@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>APBMN - Signup</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Roboto', sans-serif;
+    }
+
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background: #007BFF; /* Corporate blue */
+    }
+
+    .signup-container {
+      background: #ffffff;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+      width: 100%;
+      max-width: 400px;
+      text-align: center;
+    }
+
+    .signup-container h1 {
+      margin-bottom: 20px;
+      color: #007BFF;
+      font-size: 28px;
+    }
+
+    .signup-container form {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .signup-container input {
+      padding: 12px 15px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+
+    .signup-container input:focus {
+      outline: none;
+      border-color: #007BFF;
+      box-shadow: 0 0 5px rgba(0,123,255,0.3);
+    }
+
+    .signup-container button {
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      background: #007BFF;
+      color: #fff;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .signup-container button:hover {
+      background: #0056b3;
+    }
+
+    .signin-link {
+      margin-top: 15px;
+      font-size: 14px;
+    }
+
+    .signin-link a {
+      color: #007BFF;
+      text-decoration: none;
+    }
+
+    .signin-link a:hover {
+      text-decoration: underline;
+    }
+
+    /* Notification Box */
+    .notification {
+      margin-top: 15px;
+      padding: 12px;
+      border-radius: 8px;
+      font-size: 14px;
+      display: none;
+      text-align: center;
+    }
+
+    .success {
+      background: #d4edda;
+      color: #155724;
+    }
+
+    .error {
+      background: #f8d7da;
+      color: #721c24;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="signup-container">
+    <h1>APBMN Signup</h1>
+    <form id="signupForm">
+      <input type="text" id="referrer" placeholder="Referred by (username)" />
+      <input type="text" id="username" placeholder="Username" required />
+      <input type="email" id="email" placeholder="Email" required />
+      <input type="password" id="password" placeholder="Password" required />
+      <input type="password" id="confirmPassword" placeholder="Confirm Password" required />
+      <button type="submit">Signup</button>
+    </form>
+    <div class="signin-link">
+      Already have an account? <a href="signin.html">Sign in</a>
+    </div>
+    <div id="notification" class="notification"></div>
+  </div>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
+  <script>
+    // Firebase config
+    const firebaseConfig = {
+      apiKey: "AIzaSyD2Dqz6jg8YACBvg_G_7yIR6c8sSH39BsQ",
+      authDomain: "cypx-onlinecrypto.firebaseapp.com",
+      databaseURL: "https://cypx-onlinecrypto-default-rtdb.europe-west1.firebasedatabase.app",
+      projectId: "cypx-onlinecrypto",
+      storageBucket: "cypx-onlinecrypto.firebasestorage.app",
+      messagingSenderId: "857500807275",
+      appId: "1:857500807275:web:0e04242866ff30bec3812e",
+      measurementId: "G-7PXLNKJLXV"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+
+    const auth = firebase.auth();
+    const database = firebase.database();
+    const notificationBox = document.getElementById("notification");
+
+    function showNotification(message, type) {
+      notificationBox.innerText = message;
+      notificationBox.className = "notification " + type;
+      notificationBox.style.display = "block";
+      setTimeout(() => {
+        notificationBox.style.display = "none";
+      }, 4000);
+    }
+
+    document.getElementById("signupForm").addEventListener("submit", (e) => {
+      e.preventDefault();
+
+      const referrer = document.getElementById('referrer').value.trim();
+      const username = document.getElementById('username').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+      const confirmPassword = document.getElementById('confirmPassword').value;
+
+      if(password !== confirmPassword){
+        showNotification("Passwords do not match!", "error");
+        return;
+      }
+
+      auth.createUserWithEmailAndPassword(email, password)
+        .then((userCredential) => {
+          const user = userCredential.user;
+
+          database.ref("users/" + user.uid).set({
+            username: username,
+            email: email,
+            referrer: referrer || "None",
+            uid: user.uid,
+            createdAt: new Date().toISOString()
+          });
+
+          showNotification("Signup successful!", "success");
+          document.getElementById("signupForm").reset();
+        })
+        .catch((error) => {
+          showNotification(error.message, "error");
+        });
+    });
+  </script>
+
+</body>
+</html>
