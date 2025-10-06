@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>CYPX ONLINE CRYPTO TZ – Dashibodi</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<!-- Firebase compat SDKs -->
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+
+<script>
+/* ==== Firebase config: pinned CYPX config ==== */
+const firebaseConfig = {
+  apiKey: "AIzaSyD2Dqz6jg8YACBvg_G_7yIR6c8sSH39BsQ",
+  authDomain: "cypx-onlinecrypto.firebaseapp.com",
+  databaseURL: "https://cypx-onlinecrypto-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "cypx-onlinecrypto",
+  storageBucket: "cypx-onlinecrypto.firebasestorage.app",
+  messagingSenderId: "857500807275",
+  appId: "1:857500807275:web:0e04242866ff30bec3812e",
+  measurementId: "G-7PXLNKJLXV"
+};
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.database();
+</script>
+
+<style>
+/* keep original look — loader + popup styles added */
+*{box-sizing:border-box;-webkit-user-select:none;-ms-user-select:none;user-select:none}
+html,body{height:100%}
+body{
+  margin:0;
+  font-family:Inter, system-ui, Arial, sans-serif;
+  background: linear-gradient(135deg,#050d25,#0a182c);
+  color:#eef2f7;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* Loader */
+#loader{
+  position:fixed;inset:0;display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(135deg,#050d25,#0a182c);z-index:99999;
+}
+.loader-box{display:flex;flex-direction:column;align-items:center;gap:12px;color:#dbeafe}
+.spinner{width:64px;height:64px;border:6px solid rgba(255,255,255,0.08);border-top-color:#7c3aed;border-radius:50%;animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loader-text{font-weight:700;color:#cfe8ff}
+
+/* Page layout (unchanged) */
+.page-content{padding-bottom:120px;max-width:980px;margin:0 auto}
+header{background:rgba(255,255,255,0.03);display:flex;align-items:center;gap:12px;padding:12px 16px;position:sticky;top:0;z-index:30}
+header img{height:36px}
+header h2{margin:0;font-size:1.15rem;color:#a5b4fc;letter-spacing:1px}
+
+/* ticker */
+.announcement{background:#00345a;color:#ffef6b;padding:8px;margin-top:8px;overflow:hidden;white-space:nowrap}
+.announcement span{display:inline-block;padding-left:100%;animation:scroll 18s linear infinite}
+@keyframes scroll{0%{transform:translateX(0)}100%{transform:translateX(-100%)}}
+
+/* Balance area */
+.balance-section{margin-top:12px;text-align:center;background:rgba(255,255,255,0.02);padding:18px;border-radius:10px}
+.balance-section .email{font-size:.9rem;color:#ffd580}
+.balance-section .balance{font-size:1.4rem;margin:8px 0;color:#ffd965}
+.balance-buttons{display:flex;gap:12px;justify-content:center;margin-top:8px;flex-wrap:wrap}
+.balance-buttons button{
+  background:linear-gradient(90deg,#06b6d4,#7c3aed);
+  color:#fff;border:none;border-radius:10px;padding:10px 14px;font-weight:700;cursor:pointer;
+  box-shadow:0 8px 20px rgba(12,18,45,0.6);
+  transition:transform .18s ease,opacity .18s ease;
+}
+
+/* extra info */
+.extra-info{text-align:center;padding:18px;margin-top:14px;background:rgba(255,255,255,0.02);border-radius:10px}
+.extra-info img{max-width:100%;border-radius:10px;margin-bottom:12px;display:block;margin-left:auto;margin-right:auto;box-shadow:0 10px 30px rgba(5,10,20,0.6)}
+.extra-info p{color:#dbeafe;line-height:1.45}
+.claim-btn{background:linear-gradient(90deg,#f59e0b,#fde68a);border:none;padding:8px 16px;border-radius:10px;font-weight:800;cursor:pointer;color:#071123;box-shadow:0 8px 20px rgba(245,158,11,0.12)}
+.claim-btn[disabled]{opacity:.6;cursor:not-allowed}
+
+/* countdown */
+.task-countdown{margin:14px 0;padding:10px;text-align:center;background:rgba(6,9,21,0.45);border-radius:10px;color:#ffd965;font-weight:700}
+
+/* earnings */
+.earnings-card{background:rgba(255,255,255,0.02);padding:14px;border-radius:10px;margin-bottom:12px}
+.earnings-card h3{color:#fcd34d;margin:0 0 8px 0}
+.earnings-list{max-height:180px;overflow:auto;padding-right:6px}
+.earnings-list .row{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px dashed rgba(255,255,255,0.03);color:#dbeafe}
+
+/* vip list */
+.vip-list{margin-top:8px;padding:6px}
+.vip-box{display:flex;align-items:center;gap:14px;background:rgba(255,255,255,0.02);padding:12px;border-radius:10px;margin-bottom:10px;position:relative;
+  border:1px solid rgba(255,215,102,0.06);
+  box-shadow:0 8px 40px rgba(255,204,0,0.06), inset 0 0 18px rgba(255,215,102,0.02);
+  /* constant soft gold glow */
+  outline: 2px solid rgba(255,204,0,0.06);
+  box-shadow: 0 8px 30px rgba(255,204,0,0.06), 0 0 18px rgba(255,204,0,0.06);
+}
+.vip-box img{height:46px;flex-shrink:0;border-radius:8px}
+.vip-box .info{flex:1}
+.vip-box .info p{margin:3px 0;color:#e6f4ff}
+.vip-box .info .amount{font-weight:800;color:#ffd965}
+.vip-box .arrow{margin-left:12px;color:#ffd965;font-weight:900;cursor:pointer;font-size:20px;flex-shrink:0;display:flex;align-items:center;justify-content:center;padding:8px;border-radius:8px;background:linear-gradient(90deg,#061025,#0d1b2e);box-shadow:0 6px 18px rgba(124,58,237,0.02)}
+
+/* popup (centered) */
+.popup{
+  position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(.98);
+  min-width:260px;padding:14px 18px;border-radius:12px;background:#061022;color:#fff;font-weight:800;z-index:99999;
+  border:2px solid rgba(124,58,237,0.6);
+  box-shadow:0 12px 40px rgba(124,58,237,0.12),0 0 30px rgba(6,182,212,0.06);
+  opacity:0;pointer-events:none;transition:opacity .25s ease,transform .25s ease;
+}
+.popup.show{opacity:1;transform:translate(-50%,-50%) scale(1)}
+.popup.red{border-color:rgba(220,38,38,0.85);box-shadow:0 12px 40px rgba(220,38,38,0.12)}
+
+/* bottom nav (unchanged layout) */
+nav{position:fixed;bottom:0;left:0;right:0;display:flex;justify-content:space-around;background:#002244;padding:8px 0}
+nav a{color:#fff;text-decoration:none;text-align:center;font-size:.8rem}
+nav i{font-size:18px}
+
+/* responsive */
+@media (max-width:520px){
+  .vip-box{flex-direction:column;align-items:flex-start}
+  .vip-box .arrow{align-self:flex-end;margin-top:8px}
+}
+</style>
+</head>
+<body>
+<!-- Loader -->
+<div id="loader" aria-hidden="false">
+  <div class="loader-box" role="status" aria-live="polite">
+    <div class="spinner" aria-hidden="true"></div>
+    <div class="loader-text">Inapakia... tafadhali subiri</div>
+  </div>
+</div>
+
+<div class="page-content" id="pageContent" aria-hidden="true">
+  <header>
+    <img src="https://png.pngtree.com/png-clipart/20221216/original/pngtree-vip-icon-design-png-image_8749175.png" alt="logo">
+    <h2>CYPX ONLINE CRYPTO TZ</h2>
+  </header>
+
+  <div class="announcement"><span>🛒 Karibu CYPX ONLINE CRYPTO TZ 🛒 Tunakaribisha wawekezaji na mawakala Tanzania nzima!</span></div>
+
+  <div class="balance-section">
+    <div class="email" id="user-email">Inapakia...</div>
+    <div class="balance" id="user-balance">Salio: TZS 0</div>
+
+    <div class="balance-buttons">
+      <button id="btn-deposit">Weka Amana</button>
+      <button id="btn-withdraw">Toa Pesa</button>
+      <button id="btn-company">Kampuni</button>
+    </div>
+  </div>
+
+  <div class="extra-info">
+    <img src="https://media.istockphoto.com/id/841526170/photo/three-business-people-in-the-office-working-together.jpg?s=170667a&w=0&k=20&c=58v5HeRzpzV3qusfD33JuF0j4Am5rbBYhkc37ozCv84=" alt="Timu">
+    <p>
+      Boresheni kanuni za kazi za VIP siku ile ile. Kuinua kiwango cha VIP siku ile ile kunakuwezesha kukamilisha kazi nyingi bila vikwazo.
+      Hivi sasa uko VIP1 na umekamilisha kazi ya leo. Unaweza kuhamia VIP2 ili kuendelea kufanya kazi za VIP2. Kiwango cha juu ni VIP10.
+    </p>
+    <button class="claim-btn" id="claim-btn">Dai TZS 500</button>
+  </div>
+
+  <div class="task-countdown">Wakati wa kupangwa upya wa kazi: <span id="countdown"></span></div>
+
+  <div class="earnings-card">
+    <h3>Mapato ya VIP</h3>
+    <div class="earnings-list" id="earnings-list"></div>
+    <div class="earnings-total" id="vip-grand-total">Jumla ya Mapato ya VIP: TZS 0</div>
+  </div>
+
+  <div class="vip-list" id="vip-list"></div>
+</div>
+
+<nav>
+  <a href="dashboard.html"><i class="fas fa-home"></i><br>Mwanzo</a>
+  <a href="task.html"><i class="fas fa-tasks"></i><br>Kazi</a>
+  <a href="team.html"><i class="fas fa-users"></i><br>Timu</a>
+  <a href="vip.html"><i class="fas fa-crown"></i><br>VIP</a>
+  <a href="profile.html"><i class="fas fa-user"></i><br>Mimi</a>
+</nav>
+
+<script>
+/* small helper to format numbers with commas (no decimals) */
+function fmt(n){
+  const num = Number(n || 0);
+  return num.toLocaleString('en-US');
+}
+
+/* popup helper (Kiswahili) - centered, glow, auto-dismiss */
+function showPopup(msg, isError=false){
+  const p = document.createElement('div');
+  p.className = 'popup' + (isError ? ' red' : '');
+  p.textContent = msg;
+  document.body.appendChild(p);
+  // show
+  requestAnimationFrame(()=>p.classList.add('show'));
+  // remove after ~3s
+  setTimeout(()=> {
+    p.classList.remove('show');
+    setTimeout(()=> p.remove(), 300);
+  }, 3000);
+}
+
+/* hide loader and show page */
+function hideLoader(){
+  const loader = document.getElementById('loader');
+  const page = document.getElementById('pageContent');
+  if(loader){
+    loader.style.transition = 'opacity .45s ease';
+    loader.style.opacity = '0';
+    setTimeout(()=> loader.remove(), 500);
+  }
+  if(page) page.removeAttribute('aria-hidden');
+}
+
+/* wire top nav buttons (Kiswahili labels already in place) */
+document.addEventListener('DOMContentLoaded', ()=> {
+  const d = document.getElementById('btn-deposit');
+  const w = document.getElementById('btn-withdraw');
+  const c = document.getElementById('btn-company');
+  if(d) d.addEventListener('click', ()=> location.href='depositbonus.html');
+  if(w) w.addEventListener('click', ()=> location.href='withdraw.html');
+  if(c) c.addEventListener('click', ()=> location.href='company.html');
+});
+
+/* Auth + DB sync (Realtime) */
+auth.onAuthStateChanged(async user => {
+  if(!user){ window.location='signin.html'; return; }
+  const uid = user.uid;
+  document.getElementById('user-email').textContent = user.email || user.displayName || 'Mtumiaji';
+
+  // Balance real-time (TZS)
+  const balRef = db.ref('users/' + uid + '/balance');
+  balRef.on('value', snap => {
+    const bal = parseFloat(snap.val() || 0);
+    document.getElementById('user-balance').textContent = `Salio: TZS ${fmt(bal)}`;
+  });
+
+  // VIP earnings (real-time)
+  const vipSimple = {1:75000,2:105000,3:150000,4:200000,5:250000,6:300000,7:350000,8:400000,9:450000,10:500000};
+  const vipClaimsRef = db.ref('users/' + uid + '/vipClaims');
+  vipClaimsRef.on('value', snap => {
+    const claims = snap.val() || {};
+    const list = document.getElementById('earnings-list');
+    list.innerHTML = '';
+    let total = 0;
+    for(let i=1;i<=10;i++){
+      const days = (claims[i] && claims[i].daysClaimed) ? parseInt(claims[i].daysClaimed,10) : 0;
+      const earned = days * (vipSimple[i] || 0);
+      total += earned;
+      const row = document.createElement('div');
+      row.className = 'row';
+      row.innerHTML = `<div>VIP ${i}</div><div>TZS ${fmt(earned)}</div>`;
+      list.appendChild(row);
+    }
+    document.getElementById('vip-grand-total').textContent = `Jumla ya Mapato ya VIP: TZS ${fmt(total)}`;
+  });
+
+  // Render VIP list and sync with unlockedVips
+  const vipAmounts = [75000,105000,150000,200000,250000,300000,350000,400000,450000,500000];
+  const vipNames = ["Starter","Basic","Silver","Gold","Platinum","Diamond","Elite","VIP Pro","Executive","Ultimate"];
+  const vipList = document.getElementById('vip-list');
+
+  function renderVipLevels(unlocked=[]){
+    vipList.innerHTML = '';
+    vipAmounts.forEach((amt, idx) => {
+      const lvl = idx + 1;
+      const isUnlocked = unlocked.includes(lvl);
+      const box = document.createElement('div');
+      box.className = 'vip-box';
+      const arrowClass = isUnlocked ? 'arrow' : 'arrow locked';
+      box.innerHTML = `
+        <img src="https://png.pngtree.com/png-clipart/20221216/original/pngtree-vip-icon-design-png-image_8749175.png" alt="VIP">
+        <div class="info">
+          <p><strong>${vipNames[idx]}</strong> – Fungua kwa: <span class="amount">TZS ${fmt(amt)}</span></p>
+          <p>${isUnlocked ? "✅ Imefunguliwa" : "🔐 Haijafunguliwa"} VIP${lvl}</p>
+          <p>Mapato yatapatikana ndani ya saa 24</p>
+        </div>
+        <div class="${arrowClass}" data-lvl="${lvl}">»</div>
+      `;
+      vipList.appendChild(box);
+    });
+
+    // attach arrow handlers AFTER elements exist
+    document.querySelectorAll('.vip-box .arrow').forEach(el => {
+      el.onclick = () => {
+        const lvl = parseInt(el.getAttribute('data-lvl'),10);
+        const locked = el.classList.contains('locked');
+        if(locked){
+          showPopup('Tafadhali fungua kiwango chako cha VIP kwanza', true);
+          return;
+        }
+        // navigate to vip.html with level param (sync)
+        window.location.href = `vip.html?level=${lvl}`;
+      };
+    });
+  }
+
+  // initially render all locked
+  renderVipLevels([]);
+
+  // listen to unlockedVips node
+  const vipRef = db.ref('users/' + uid + '/unlockedVips');
+  vipRef.on('value', snap => {
+    const raw = snap.val() || {};
+    const unlocked = [];
+    // try keys as amounts or values as levels
+    Object.keys(raw).forEach(k => {
+      const parsedKey = parseInt(k,10);
+      if(!isNaN(parsedKey) && parsedKey !== 0){
+        const idx = vipAmounts.indexOf(parsedKey);
+        if(idx !== -1) unlocked.push(idx+1);
+      } else {
+        // maybe stored as levels or object with level field
+        const maybe = raw[k];
+        const asNum = parseInt(maybe,10);
+        if(!isNaN(asNum) && asNum >=1 && asNum <=10) unlocked.push(asNum);
+      }
+    });
+    const uniq = Array.from(new Set(unlocked));
+    renderVipLevels(uniq);
+    // hide loader once vip data has been rendered at least once
+    hideLoader();
+  });
+
+  // Claim bonus logic (TZS 500)
+  const claimBtn = document.getElementById('claim-btn');
+  const userRef = db.ref('users/' + uid);
+  userRef.child('hasClaimedBonus').once('value').then(snap=>{
+    if(snap.val()){ claimBtn.textContent='Imekamilika'; claimBtn.disabled = true; }
+  });
+  claimBtn.onclick = () => {
+    if(claimBtn.disabled) return;
+    userRef.transaction(userData => {
+      userData = userData || {};
+      if(userData.hasClaimedBonus) return userData;
+      const current = parseFloat(userData.balance || 0);
+      userData.balance = current + 500; // TZS 500
+      userData.hasClaimedBonus = true;
+      return userData;
+    }, (err, committed) => {
+      if(err) showPopup('Hitilafu wakati wa kudai bonasi', true);
+      else if(committed){
+        claimBtn.textContent='Imekamilika';
+        claimBtn.disabled = true;
+        showPopup('TZS 500 Imedaiwa');
+      } else {
+        claimBtn.textContent='Imekamilika';
+        claimBtn.disabled = true;
+      }
+    });
+  };
+
+}); // end auth.onAuthStateChanged
+
+/* countdown */
+function startCountdown(){
+  const c = document.getElementById('countdown');
+  let start = localStorage.getItem('cStart') || Date.now();
+  localStorage.setItem('cStart', start);
+  setInterval(()=>{
+    let diff = 86400000 - (Date.now() - start);
+    if(diff <= 0){ start = Date.now(); localStorage.setItem('cStart', start); diff = 86400000; }
+    const h = Math.floor(diff/3600000), m = Math.floor((diff%3600000)/60000), s = Math.floor((diff%60000)/1000);
+    c.textContent = `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+  },1000);
+}
+startCountdown();
+
+/* fallback: ensure loader is removed if page load finished but DB slower */
+window.addEventListener('load', ()=> {
+  // hideLoader will be also called after vipRef.on('value') - this is a fallback
+  setTimeout(()=> {
+    const loader = document.getElementById('loader');
+    if(loader) hideLoader();
+  }, 1600);
+});
+</script>
+</body>
+  </html>
