@@ -1,134 +1,56 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>APBMN - Sign In</title>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>CYPX Sign In</title>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: 'Roboto', sans-serif;
-    }
-
-    body {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      background: #007BFF; /* Corporate blue */
-    }
-
-    .signin-container {
-      background: #ffffff;
-      padding: 40px;
-      border-radius: 12px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
-      width: 100%;
-      max-width: 400px;
-      text-align: center;
-    }
-
-    .signin-container h1 {
-      margin-bottom: 20px;
-      color: #007BFF;
-      font-size: 28px;
-    }
-
-    .signin-container form {
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-    }
-
-    .signin-container input {
-      padding: 12px 15px;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      font-size: 16px;
-    }
-
-    .signin-container input:focus {
-      outline: none;
-      border-color: #007BFF;
-      box-shadow: 0 0 5px rgba(0,123,255,0.3);
-    }
-
-    .signin-container button {
-      padding: 12px;
-      border: none;
-      border-radius: 8px;
-      background: #007BFF;
-      color: #fff;
-      font-size: 16px;
-      cursor: pointer;
-      transition: background 0.3s ease;
-    }
-
-    .signin-container button:hover {
-      background: #0056b3;
-    }
-
-    .signup-link {
-      margin-top: 15px;
-      font-size: 14px;
-    }
-
-    .signup-link a {
-      color: #007BFF;
-      text-decoration: none;
-    }
-
-    .signup-link a:hover {
-      text-decoration: underline;
-    }
-
-    /* Notification Box */
-    .notification {
-      margin-top: 15px;
-      padding: 12px;
-      border-radius: 8px;
-      font-size: 14px;
-      display: none;
-      text-align: center;
-    }
-
-    .success {
-      background: #d4edda;
-      color: #155724;
-    }
-
-    .error {
-      background: #f8d7da;
-      color: #721c24;
-    }
+    *{box-sizing:border-box;margin:0;padding:0;font-family:Inter,system-ui,Segoe UI,Roboto,Arial}
+    body{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#050d25,#0a182c);color:#f1f5f9;padding:24px}
+    .card{width:100%;max-width:420px;background:rgba(255,255,255,0.03);border-radius:14px;padding:24px;box-shadow:0 8px 30px rgba(2,6,23,0.6)}
+    h1{font-size:22px;margin-bottom:16px;text-align:center;color:#c7d2fe}
+    form{display:grid;gap:14px}
+    label{font-size:13px;color:#cbd5e1}
+    input{width:100%;padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,0.05);background:rgba(255,255,255,0.02);color:#f8fafc;font-size:15px}
+    input::placeholder{color:#94a3b8}
+    button{padding:12px;border-radius:10px;background:linear-gradient(90deg,#06b6d4,#7c3aed);color:white;border:none;font-weight:600;cursor:pointer;font-size:15px}
+    button:disabled{opacity:.6;cursor:not-allowed}
+    .error{display:none;color:#fecaca;background:rgba(255,100,100,0.06);border:1px solid rgba(255,100,100,0.1);padding:8px;border-radius:8px;text-align:center;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);min-width:260px;z-index:999}
+    .foot{margin-top:10px;text-align:center;font-size:13px;color:#94a3b8}
+    .foot a{color:#a5b4fc;text-decoration:none;font-weight:600}
   </style>
 </head>
 <body>
+  <div class="card">
+    <h1>Sign in</h1>
 
-  <div class="signin-container">
-    <h1>APBMN Sign In</h1>
     <form id="signinForm">
-      <input type="email" id="email" placeholder="Email" required />
-      <input type="password" id="password" placeholder="Password" required />
-      <button type="submit">Sign In</button>
+      <div>
+        <label for="email">Email</label>
+        <input id="email" type="email" placeholder="you@example.com" required/>
+      </div>
+
+      <div>
+        <label for="password">Password</label>
+        <input id="password" type="password" placeholder="Enter your password" minlength="8" required/>
+      </div>
+
+      <div id="error" class="error"></div>
+      <button id="signinBtn" type="submit">Sign in</button>
+
+      <div class="foot">
+        Don’t have an account? <a href="signup.html">Sign up</a><br/>
+        By signing in you agree to our <a href="#">Terms</a>
+      </div>
     </form>
-    <div class="signup-link">
-      Don’t have an account? <a href="signup.html">Sign up</a>
-    </div>
-    <div id="notification" class="notification"></div>
   </div>
 
-  <!-- Firebase SDK -->
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
 
   <script>
-    // Firebase config
     const firebaseConfig = {
       apiKey: "AIzaSyD2Dqz6jg8YACBvg_G_7yIR6c8sSH39BsQ",
       authDomain: "cypx-onlinecrypto.firebaseapp.com",
@@ -141,53 +63,36 @@
     };
 
     firebase.initializeApp(firebaseConfig);
-
     const auth = firebase.auth();
-    const database = firebase.database();
-    const notificationBox = document.getElementById("notification");
 
-    function showNotification(message, type) {
-      notificationBox.innerText = message;
-      notificationBox.className = "notification " + type;
-      notificationBox.style.display = "block";
-      setTimeout(() => {
-        notificationBox.style.display = "none";
-      }, 4000);
-    }
+    const $ = id => document.getElementById(id);
+    const showError = msg => {
+      const err = $("error");
+      err.textContent = msg;
+      err.style.display = "block";
+      setTimeout(()=>err.style.display="none",3000);
+    };
 
-    document.getElementById("signinForm").addEventListener("submit", (e) => {
+    $("signinForm").addEventListener("submit", async e => {
       e.preventDefault();
+      const email = $("email").value.trim();
+      const pass = $("password").value;
 
-      const email = document.getElementById('email').value.trim();
-      const password = document.getElementById('password').value;
+      if (!email) return showError("Email is required.");
+      if (pass.length < 8) return showError("Password must be at least 8 characters or more.");
 
-      auth.signInWithEmailAndPassword(email, password)
-        .then((userCredential) => {
-          const user = userCredential.user;
+      $("signinBtn").disabled = true;
 
-          // Fetch user profile from Realtime DB
-          database.ref("users/" + user.uid).once("value")
-            .then(snapshot => {
-              if(snapshot.exists()){
-                const userData = snapshot.val();
-                showNotification(`Welcome back, ${userData.username}!`, "success");
-                console.log("User Profile:", userData);
-
-                // redirect after short delay
-                setTimeout(() => {
-                  window.location.href = "dashboard.html"; // create dashboard later
-                }, 1500);
-              } else {
-                showNotification("No profile data found.", "error");
-              }
-            });
-
-        })
-        .catch((error) => {
-          showNotification(error.message, "error");
-        });
+      try {
+        await auth.signInWithEmailAndPassword(email, pass);
+        window.location.href = "dashboard.html";
+      } catch (err) {
+        console.error(err);
+        showError("Invalid email or password.");
+      } finally {
+        $("signinBtn").disabled = false;
+      }
     });
   </script>
-
 </body>
 </html>
