@@ -1,137 +1,71 @@
-<!DOCTYPE html>
+<!doctype html>
+
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>APBMN - Signup</title>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>CYPX Signup</title>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: 'Roboto', sans-serif;
-    }
-
-    body {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      background: #007BFF; /* Corporate blue */
-    }
-
-    .signup-container {
-      background: #ffffff;
-      padding: 40px;
-      border-radius: 12px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
-      width: 100%;
-      max-width: 400px;
-      text-align: center;
-    }
-
-    .signup-container h1 {
-      margin-bottom: 20px;
-      color: #007BFF;
-      font-size: 28px;
-    }
-
-    .signup-container form {
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-    }
-
-    .signup-container input {
-      padding: 12px 15px;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      font-size: 16px;
-    }
-
-    .signup-container input:focus {
-      outline: none;
-      border-color: #007BFF;
-      box-shadow: 0 0 5px rgba(0,123,255,0.3);
-    }
-
-    .signup-container button {
-      padding: 12px;
-      border: none;
-      border-radius: 8px;
-      background: #007BFF;
-      color: #fff;
-      font-size: 16px;
-      cursor: pointer;
-      transition: background 0.3s ease;
-    }
-
-    .signup-container button:hover {
-      background: #0056b3;
-    }
-
-    .signin-link {
-      margin-top: 15px;
-      font-size: 14px;
-    }
-
-    .signin-link a {
-      color: #007BFF;
-      text-decoration: none;
-    }
-
-    .signin-link a:hover {
-      text-decoration: underline;
-    }
-
-    /* Notification Box */
-    .notification {
-      margin-top: 15px;
-      padding: 12px;
-      border-radius: 8px;
-      font-size: 14px;
-      display: none;
-      text-align: center;
-    }
-
-    .success {
-      background: #d4edda;
-      color: #155724;
-    }
-
-    .error {
-      background: #f8d7da;
-      color: #721c24;
-    }
+    *{box-sizing:border-box;margin:0;padding:0;font-family:Inter,system-ui,Segoe UI,Roboto,Arial}
+    body{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#050d25,#0a182c);color:#f1f5f9;padding:24px}
+    .card{width:100%;max-width:420px;background:rgba(255,255,255,0.03);border-radius:14px;padding:24px;box-shadow:0 8px 30px rgba(2,6,23,0.6)}
+    h1{font-size:22px;margin-bottom:16px;text-align:center;color:#c7d2fe}
+    form{display:grid;gap:14px}
+    label{font-size:13px;color:#cbd5e1}
+    input{width:100%;padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,0.05);background:rgba(255,255,255,0.02);color:#f8fafc;font-size:15px}
+    input::placeholder{color:#94a3b8}
+    .row{display:flex;align-items:center;gap:8px}
+    .flag{display:flex;align-items:center;gap:6px;padding:8px;border-radius:10px;border:1px solid rgba(255,255,255,0.05);background:rgba(255,255,255,0.02)}
+    button{padding:12px;border-radius:10px;background:linear-gradient(90deg,#06b6d4,#7c3aed);color:white;border:none;font-weight:600;cursor:pointer;font-size:15px}
+    button:disabled{opacity:.6;cursor:not-allowed}
+    .notification{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(255,100,100,0.1);border:1px solid rgba(255,100,100,0.2);color:#fecaca;padding:12px 18px;border-radius:8px;text-align:center;display:none;max-width:80%;}
+    .foot{margin-top:10px;text-align:center;font-size:13px;color:#94a3b8}
+    .foot a{color:#a5b4fc;text-decoration:none;font-weight:600}
   </style>
 </head>
 <body>
-
-  <div class="signup-container">
-    <h1>APBMN Signup</h1>
+  <div class="card">
+    <h1>Sign up</h1>
     <form id="signupForm">
-      <input type="text" id="referrer" placeholder="Referred by (username)" />
-      <input type="text" id="username" placeholder="Username" required />
-      <input type="email" id="email" placeholder="Email" required />
-      <input type="password" id="password" placeholder="Password" required />
-      <input type="password" id="confirmPassword" placeholder="Confirm Password" required />
-      <button type="submit">Signup</button>
-    </form>
-    <div class="signin-link">
-      Already have an account? <a href="signin.html">Sign in</a>
+      <div>
+        <label for="username">Username</label>
+        <input id="username" placeholder="e.g. Kenmakrk" required minlength="3"/>
+      </div><div>
+    <label for="phone">Phone number (TZ)</label>
+    <div class="row">
+      <div class="flag">🇹🇿<span class="muted">+255</span></div>
+      <input id="phone" placeholder="6XXXXXXXX or 7XXXXXXXX" pattern="[67][0-9]{8}" inputmode="numeric" required/>
     </div>
-    <div id="notification" class="notification"></div>
   </div>
 
-  <!-- Firebase SDK -->
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+  <div>
+    <label for="email">Email</label>
+    <input id="email" type="email" placeholder="you@example.com" required/>
+  </div>
 
-  <script>
-    // Firebase config
+  <div>
+    <label for="password">Password</label>
+    <input id="password" type="password" placeholder="Choose a strong password" minlength="8" required/>
+  </div>
+
+  <div>
+    <label for="confirm">Confirm password</label>
+    <input id="confirm" type="password" placeholder="Repeat password" minlength="8" required/>
+  </div>
+
+  <div>
+    <label for="referredBy">Referred by</label>
+    <input id="referredBy" placeholder="Referral code or username"/>
+  </div>
+
+  <button id="signupBtn" type="submit">Sign up</button>
+  <div class="foot">
+    Have an account? <a href="signin.html">Sign in</a><br/>
+    By signing up you agree to our <a href="#">Terms</a>
+  </div>
+</form>
+
+  </div>  <div id="notify" class="notification"></div>  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>  <script>
     const firebaseConfig = {
       apiKey: "AIzaSyD2Dqz6jg8YACBvg_G_7yIR6c8sSH39BsQ",
       authDomain: "cypx-onlinecrypto.firebaseapp.com",
@@ -144,54 +78,81 @@
     };
 
     firebase.initializeApp(firebaseConfig);
-
     const auth = firebase.auth();
-    const database = firebase.database();
-    const notificationBox = document.getElementById("notification");
+    const db = firebase.database();
 
-    function showNotification(message, type) {
-      notificationBox.innerText = message;
-      notificationBox.className = "notification " + type;
-      notificationBox.style.display = "block";
-      setTimeout(() => {
-        notificationBox.style.display = "none";
-      }, 4000);
+    const $ = id => document.getElementById(id);
+    function showNotify(msg){
+      const n = $("notify");
+      n.textContent = msg;
+      n.style.display = "block";
+      setTimeout(()=> n.style.display = "none", 3000);
     }
 
-    document.getElementById("signupForm").addEventListener("submit", (e) => {
-      e.preventDefault();
+    function getRef() {
+      try {
+        const url = new URL(window.location.href);
+        return url.searchParams.get("ref") || "";
+      } catch { return ""; }
+    }
 
-      const referrer = document.getElementById('referrer').value.trim();
-      const username = document.getElementById('username').value.trim();
-      const email = document.getElementById('email').value.trim();
-      const password = document.getElementById('password').value;
-      const confirmPassword = document.getElementById('confirmPassword').value;
-
-      if(password !== confirmPassword){
-        showNotification("Passwords do not match!", "error");
-        return;
+    document.addEventListener("DOMContentLoaded", () => {
+      const ref = getRef();
+      if (ref) {
+        $("referredBy").value = ref;
+        $("referredBy").readOnly = true;
       }
-
-      auth.createUserWithEmailAndPassword(email, password)
-        .then((userCredential) => {
-          const user = userCredential.user;
-
-          database.ref("users/" + user.uid).set({
-            username: username,
-            email: email,
-            referrer: referrer || "None",
-            uid: user.uid,
-            createdAt: new Date().toISOString()
-          });
-
-          showNotification("Signup successful!", "success");
-          document.getElementById("signupForm").reset();
-        })
-        .catch((error) => {
-          showNotification(error.message, "error");
-        });
     });
-  </script>
 
-</body>
-</html>
+    function validPhone(p) { return /^[67]\d{8}$/.test(p); }
+
+    async function addReferral(refUser, newUid, data) {
+      const snap = await db.ref("users").orderByChild("username").equalTo(refUser).once("value");
+      if (!snap.exists()) return;
+      const refUid = Object.keys(snap.val())[0];
+      const refRef = db.ref("users/" + refUid);
+      await refRef.child("referralsCount").transaction(c => (c || 0) + 1);
+      await db.ref(`referrals/${refUid}/${newUid}`).set({
+        ...data,
+        timestamp: firebase.database.ServerValue.TIMESTAMP
+      });
+    }
+
+    $("signupForm").addEventListener("submit", async e => {
+      e.preventDefault();
+      const username = $("username").value.trim();
+      const phone = $("phone").value.trim();
+      const email = $("email").value.trim();
+      const pass = $("password").value;
+      const conf = $("confirm").value;
+      const refBy = $("referredBy").value.trim();
+
+      if (username.length < 3) return showNotify("Username must be at least 3 characters.");
+      if (!validPhone(phone)) return showNotify("Phone must be 9 digits starting with 6 or 7.");
+      if (!email) return showNotify("Email is required.");
+      if (pass.length < 8) return showNotify("Password must be at least 8 characters or more.");
+      if (pass !== conf) return showNotify("Passwords do not match.");
+
+      $("signupBtn").disabled = true;
+
+      try {
+        const userCred = await auth.createUserWithEmailAndPassword(email, pass);
+        const uid = userCred.user.uid;
+        const userObj = {
+          username, email, phone: "+255" + phone,
+          referredBy: refBy || null,
+          referralsCount: 0,
+          joinedAt: firebase.database.ServerValue.TIMESTAMP
+        };
+        await db.ref("users/" + uid).set(userObj);
+        if (refBy) await addReferral(refBy, uid, { username, email, phone: "+255" + phone });
+        window.location.href = "welcome.html";
+      } catch (err) {
+        console.error(err);
+        showNotify(err.message);
+      } finally {
+        $("signupBtn").disabled = false;
+      }
+    });
+  </script></body>
+  </html>
