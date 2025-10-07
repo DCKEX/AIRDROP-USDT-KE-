@@ -9,7 +9,7 @@
 
 <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-compat.js"></script>
 <script>
-// ✅ Pinned Firebase config
+// ✅ Pinned Firebase Config
 const firebaseConfig = {
   apiKey: "AIzaSyD2Dqz6jg8YACBvg_G_7yIR6c8sSH39BsQ",
   authDomain: "cypx-onlinecrypto.firebaseapp.com",
@@ -26,7 +26,7 @@ const db = firebase.database();
 </script>
 
 <style>
-body{
+body {
   margin:0;
   font-family: Arial, Helvetica, sans-serif;
   background:#001f3f;
@@ -35,7 +35,7 @@ body{
 }
 
 /* Header */
-header{
+header {
   display:flex;
   align-items:center;
   gap:12px;
@@ -58,7 +58,7 @@ header h2{margin:0;font-size:1.2rem;color:#fff;}
   justify-content: space-between;
   height: 96px;
 }
-.vip-card .info{
+.vip-card .info {
   display:flex;
   flex-direction:column;
   align-items:flex-start;
@@ -92,13 +92,13 @@ header h2{margin:0;font-size:1.2rem;color:#fff;}
 }
 
 /* Buttons */
-.buttons{
+.buttons {
   display:flex;
   flex-direction:column;
   gap:12px;
   margin:16px;
 }
-.buttons .btn{
+.buttons .btn {
   width:100%;
   padding:12px;
   background:#1e3a8a;
@@ -111,11 +111,11 @@ header h2{margin:0;font-size:1.2rem;color:#fff;}
   text-align:left;
   transition:0.2s;
 }
-.buttons .btn i{margin-right:8px;}
-.buttons .btn:hover{background:#3b82f6;}
+.buttons .btn i { margin-right:8px; }
+.buttons .btn:hover { background:#3b82f6; }
 
 /* Popup */
-.popup{
+.popup {
   position:fixed;
   top:50%;
   left:50%;
@@ -128,7 +128,7 @@ header h2{margin:0;font-size:1.2rem;color:#fff;}
   z-index:9999;
   text-align:center;
 }
-.popup.red{background:#cc0000}
+.popup.red { background:#cc0000; }
 
 /* Bottom Nav */
 nav {
@@ -140,13 +140,13 @@ nav {
   background:#002244;
   padding:6px 0;
 }
-nav a{
+nav a {
   color:#fff;
   text-decoration:none;
   text-align:center;
   font-size:0.8rem;
 }
-nav i{font-size:18px;}
+nav i { font-size:18px; }
 </style>
 </head>
 <body>
@@ -198,48 +198,46 @@ auth.onAuthStateChanged(user => {
   const uid = user.uid;
   const userRef = db.ref('users/' + uid);
   const transRef = db.ref('transactions/' + uid);
+  const depositRef = db.ref('deposits/' + uid);
 
   document.getElementById('user-email').textContent = user.email;
 
-  // VIP Levels
-  userRef.child('vipLevels').on('value', snap => {
-    const vipUnlocked = snap.val() || [];
-    let level = 0;
-    if (Array.isArray(vipUnlocked)) {
-      const nums = vipUnlocked.filter(n => typeof n === 'number');
-      if (nums.length > 0) level = Math.max(...nums);
-    } else if (typeof vipUnlocked === 'object' && Object.keys(vipUnlocked).length > 0) {
-      const nums = Object.keys(vipUnlocked).map(n => parseInt(n)).filter(n => !isNaN(n));
-      if (nums.length > 0) level = Math.max(...nums);
-    }
+  // ✅ Get VIP level synced with vip.html
+  userRef.child('vipLevel').on('value', snap => {
+    const level = parseInt(snap.val() || 0);
     document.getElementById('vip-level').textContent = `VIP ${level}`;
     document.getElementById('vip-stars').textContent = '★'.repeat(level);
   });
 
-  // Balances
+  // ✅ Show balance
   userRef.child('balance').on('value', snap => {
     const bal = parseFloat(snap.val() || 0);
     document.getElementById('total-balance').textContent =
       `Jumla ya Salio: TZS ${bal.toLocaleString()}`;
   });
 
+  // ✅ Show total recharged
   userRef.child('recharged').on('value', snap => {
     const rech = parseFloat(snap.val() || 0);
     document.getElementById('recharged-amount').textContent =
       `Kiasi Ulichoweka: TZS ${rech.toLocaleString()}`;
   });
 
-  // When a deposit is made (tracked from deposit.html)
-  db.ref('deposits/' + uid).on('child_added', snap => {
+  // ✅ Process new deposits ONCE (not on page reload)
+  let processedDeposits = new Set();
+  depositRef.on('child_added', snap => {
+    const key = snap.key;
     const deposit = snap.val();
-    if (!deposit || !deposit.amount) return;
+    if (!deposit || !deposit.amount || processedDeposits.has(key)) return;
+    processedDeposits.add(key);
+
     const amount = parseFloat(deposit.amount);
     const now = new Date().toLocaleString();
 
-    // Update total recharged
+    // Update total recharged (only once per new deposit)
     userRef.child('recharged').transaction(val => (val || 0) + amount);
 
-    // Record in transaction history for financial.html
+    // Record in transaction history
     transRef.push({
       type: "Amana (Deposit)",
       amount,
@@ -248,14 +246,14 @@ auth.onAuthStateChanged(user => {
     });
   });
 
-  // Reset password
+  // ✅ Reset password
   document.getElementById('change-password-btn').onclick = () => {
     auth.sendPasswordResetEmail(user.email).then(() => {
       showPopup('✅ Barua ya kubadilisha nenosiri imetumwa');
     }).catch(() => showPopup('❌ Hitilafu imetokea', true));
   };
 
-  // Logout
+  // ✅ Logout
   document.getElementById('logout-btn').onclick = () => {
     auth.signOut().then(() => {
       showPopup('✅ Umetoka');
@@ -274,4 +272,4 @@ function showPopup(msg, red = false) {
 </script>
 
 </body>
-  </html>
+</html>
