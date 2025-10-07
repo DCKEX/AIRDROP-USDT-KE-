@@ -241,7 +241,7 @@ auth.onAuthStateChanged(async user => {
   });
 
   // VIP earnings (real-time)
-  const vipSimple = {1:75000,2:105000,3:150000,4:200000,5:250000,6:300000,7:350000,8:400000,9:450000,10:500000};
+  const vipSimple = {1:10000,2:150000,3:200000,4:300000,5:400000,6:500000,7:600000,8:700000,9:800000,10:1000000};
   const vipClaimsRef = db.ref('users/' + uid + '/vipClaims');
   vipClaimsRef.on('value', snap => {
     const claims = snap.val() || {};
@@ -261,7 +261,7 @@ auth.onAuthStateChanged(async user => {
   });
 
   // Render VIP list and sync with unlockedVips
-  const vipAmounts = [75000,105000,150000,200000,250000,300000,350000,400000,450000,500000];
+  const vipAmounts = [100000,150000,200000,300000,400000,500000,600000,700000,800000,1000000];
   const vipNames = ["Starter","Basic","Silver","Gold","Platinum","Diamond","Elite","VIP Pro","Executive","Ultimate"];
   const vipList = document.getElementById('vip-list');
 
