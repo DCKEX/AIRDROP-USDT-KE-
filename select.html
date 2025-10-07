@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Chaguo za Muamala</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background: linear-gradient(135deg, #001f3f, #003366);
+  color: #fff;
+  padding-bottom: 60px;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* Header */
+header {
+  background: rgba(0, 0, 0, 0.4);
+  padding: 14px 16px;
+  font-size: 1.3rem;
+  font-weight: 600;
+  text-align: center;
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+/* Cards */
+.card {
+  margin: 16px;
+  padding: 16px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 12px;
+  box-shadow: 0 0 10px rgba(0,255,255,0.2);
+  backdrop-filter: blur(6px);
+  animation: fadeIn 0.5s ease-in-out;
+}
+.card h3 {
+  margin: 0 0 8px;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+.card p {
+  margin: 0;
+  color: #e0e0e0;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+.btn {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  margin-top: 14px;
+  background: #28a745;
+  color: #fff;
+  text-align: center;
+  font-weight: 600;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: 0.3s;
+  box-shadow: 0 0 10px rgba(40,167,69,0.5);
+}
+.btn:hover {
+  background: #218838;
+  transform: scale(1.03);
+}
+
+/* Bottom Navigation */
+nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-around;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(6px);
+  padding: 6px 0;
+  border-top: 1px solid rgba(255,255,255,0.1);
+}
+nav a {
+  color: #fff;
+  text-decoration: none;
+  text-align: center;
+  font-size: 0.8rem;
+}
+nav i {
+  font-size: 18px;
+}
+
+/* Loading Animation */
+#loader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+.spinner {
+  border: 5px solid rgba(255,255,255,0.2);
+  border-top: 5px solid #28a745;
+  border-radius: 50%;
+  width: 55px;
+  height: 55px;
+  animation: spin 1s linear infinite;
+}
+
+/* Animations */
+@keyframes spin {
+  0% {transform: rotate(0deg);}
+  100% {transform: rotate(360deg);}
+}
+@keyframes fadeIn {
+  from {opacity: 0; transform: translateY(10px);}
+  to {opacity: 1; transform: translateY(0);}
+}
+</style>
+</head>
+<body>
+
+<!-- Loader -->
+<div id="loader"><div class="spinner"></div></div>
+
+<header>Chaguo za Muamala</header>
+
+<div class="card">
+  <h3><i class="fas fa-shopping-cart"></i> Nunua Kifurushi cha VIP</h3>
+  <p>Boresha akaunti yako kwa kununua vifurushi vya VIP vilivyopo. Kila kiwango kinakupa faida kubwa za kila siku na zawadi zaidi.</p>
+  <a href="repackages.html" class="btn">Nunua Sasa</a>
+</div>
+
+<div class="card">
+  <h3><i class="fas fa-user-friends"></i> Mpango wa Rufaa</h3>
+  <p>Alika marafiki zako na upate bonasi wanapoweka amana. Jenga timu yako na fikia viwango vya juu vya kutoa fedha.</p>
+  <a href="team.html" class="btn">Angalia Kiungo chako cha Rufaa</a>
+</div>
+
+<div class="card">
+  <h3><i class="fas fa-info-circle"></i> Taarifa Muhimu</h3>
+  <p>Kutoa fedha kunahitaji angalau marafiki wawili walioweka TZS 75,000 kila mmoja. Hakikisha unakidhi masharti kabla ya kuomba kutoa fedha.</p>
+</div>
+
+<!-- Bottom Navigation -->
+<nav>
+  <a href="dashboard.html"><i class="fas fa-home"></i><br>Mwanzo</a>
+  <a href="task.html"><i class="fas fa-tasks"></i><br>Kazi</a>
+  <a href="team.html"><i class="fas fa-users"></i><br>Timu</a>
+  <a href="vip.html"><i class="fas fa-crown"></i><br>VIP</a>
+  <a href="profile.html"><i class="fas fa-user"></i><br>Mimi</a>
+</nav>
+
+<!-- Firebase Configuration -->
+<script type="module">
+  // Firebase configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyD2Dqz6jg8YACBvg_G_7yIR6c8sSH39BsQ",
+    authDomain: "cypx-onlinecrypto.firebaseapp.com",
+    databaseURL: "https://cypx-onlinecrypto-default-rtdb.europe-west1.firebasedatabase.app",
+    projectId: "cypx-onlinecrypto",
+    storageBucket: "cypx-onlinecrypto.firebasestorage.app",
+    messagingSenderId: "857500807275",
+    appId: "1:857500807275:web:0e04242866ff30bec3812e",
+    measurementId: "G-7PXLNKJLXV"
+  };
+
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
+  import { getDatabase } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-database.js";
+
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
+
+  // Loader fade out
+  window.addEventListener("load", () => {
+    const loader = document.getElementById("loader");
+    setTimeout(() => {
+      loader.style.opacity = "0";
+      setTimeout(() => loader.style.display = "none", 500);
+    }, 1000);
+  });
+</script>
+
+</body>
+</html>
