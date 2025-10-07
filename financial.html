@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CYPX ONLINE CRYPTO – Historia ya Miwamala</title>
+
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-compat.js"></script>
+<script>
+// 🔥 Config yako iliyopinned
+const firebaseConfig = {
+  apiKey: "AIzaSyD2Dqz6jg8YACBvg_G_7yIR6c8sSH39BsQ",
+  authDomain: "cypx-onlinecrypto.firebaseapp.com",
+  databaseURL: "https://cypx-onlinecrypto-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "cypx-onlinecrypto",
+  storageBucket: "cypx-onlinecrypto.firebasestorage.app",
+  messagingSenderId: "857500807275",
+  appId: "1:857500807275:web:0e04242866ff30bec3812e",
+  measurementId: "G-7PXLNKJLXV"
+};
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db   = firebase.database();
+</script>
+
+<!-- Styles -->
+<style>
+body {
+  margin: 0;
+  font-family: "Poppins", Arial, sans-serif;
+  background: linear-gradient(135deg, #001f3f, #002f6c);
+  color: #fff;
+  padding-bottom: 1cm;
+}
+
+header {
+  background: rgba(0, 0, 0, 0.4);
+  padding: 16px;
+  text-align: center;
+  border-bottom: 2px solid #ffcc00;
+}
+header h2 {
+  margin: 0;
+  font-size: 1.3rem;
+  color: #ffcc00;
+  letter-spacing: 1px;
+}
+
+.container {
+  padding: 16px;
+}
+
+/* Loader Animation */
+.loader-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+  gap: 12px;
+}
+.loader {
+  border: 6px solid rgba(255,255,255,0.1);
+  border-top: 6px solid #ffcc00;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  animation: spin 1s linear infinite;
+}
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+.loader-text {
+  font-size: 0.95rem;
+  color: #ffcc00;
+}
+
+/* Transaction Cards */
+.txn {
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 10px;
+  padding: 14px;
+  margin-bottom: 12px;
+  box-shadow: 0 0 10px rgba(255,255,255,0.05);
+  transition: transform 0.3s ease;
+}
+.txn:hover { transform: scale(1.02); }
+.txn h4 {
+  margin: 0 0 6px;
+  font-size: 1rem;
+  color: #90caf9;
+}
+.txn p { margin: 4px 0; font-size: 0.9rem; color: #eee; }
+
+.status {
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: bold;
+}
+.pending { background: #ff9800; color: #fff; }
+.approved { background: #4caf50; color: #fff; }
+.rejected { background: #f44336; color: #fff; }
+
+/* Navigation Bar */
+nav {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  display: flex;
+  justify-content: space-around;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 8px 0;
+  border-top: 1px solid rgba(255,255,255,0.2);
+  backdrop-filter: blur(8px);
+}
+nav a {
+  color: #fff;
+  text-decoration: none;
+  text-align: center;
+  font-size: 0.8rem;
+}
+nav i { font-size: 18px; }
+</style>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+
+<header>
+  <h2>Historia ya Miwamala</h2>
+</header>
+
+<div class="container" id="txn-container">
+  <div class="loader-container" id="loader">
+    <div class="loader"></div>
+    <div class="loader-text">Inapakia miamala yako...</div>
+  </div>
+  <div id="txn-list" style="display:none;"></div>
+</div>
+
+<nav>
+  <a href="dashboard.html"><i class="fas fa-home"></i><br>Nyumbani</a>
+  <a href="deposit.html"><i class="fas fa-wallet"></i><br>Weka Fedha</a>
+  <a href="withdraw.html"><i class="fas fa-money-bill-wave"></i><br>Toa Fedha</a>
+  <a href="vip.html"><i class="fas fa-crown"></i><br>VIP</a>
+  <a href="profile.html"><i class="fas fa-user"></i><br>Wasifu</a>
+</nav>
+
+<script>
+function renderTxn(type, id, data){
+  const div = document.createElement('div');
+  const amountTZS = Number(data.amount).toLocaleString('en-US');
+  div.className = 'txn';
+  div.innerHTML = `
+    <h4>${type} – TZS ${amountTZS}</h4>
+    <p><strong>Tarehe:</strong> ${new Date(data.timestamp).toLocaleString()}</p>
+    <p><strong>Hali:</strong> <span class="status ${data.status}">${data.status}</span></p>
+  `;
+  return div;
+}
+
+auth.onAuthStateChanged(user => {
+  if(!user){ window.location='signup.html'; return; }
+  const uid = user.uid;
+  const list = document.getElementById('txn-list');
+  const loader = document.getElementById('loader');
+
+  loader.style.display = 'flex';
+  list.style.display = 'none';
+  let hasData = false;
+
+  // Listen for deposits
+  db.ref('deposits/'+uid).on('value', snap => {
+    list.innerHTML = "";
+    snap.forEach(child => {
+      const txn = renderTxn("Kuweka", child.key, child.val());
+      list.prepend(txn);
+      hasData = true;
+    });
+    loader.style.display = 'none';
+    list.style.display = 'block';
+    if(!hasData) list.innerHTML = "<p>Hakuna miamala ya kuweka bado.</p>";
+  });
+
+  // Listen for withdrawals
+  db.ref('withdrawals/'+uid).on('value', snap => {
+    snap.forEach(child => {
+      const txn = renderTxn("Kutoa", child.key, child.val());
+      list.prepend(txn);
+      hasData = true;
+    });
+    loader.style.display = 'none';
+    list.style.display = 'block';
+    if(!hasData) list.innerHTML = "<p>Hakuna miamala ya kutoa bado.</p>";
+  });
+});
+</script>
+
+</body>
+  </html>
