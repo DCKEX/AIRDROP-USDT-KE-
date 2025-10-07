@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CYPX ONLINE CRYPTO – Kampuni</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<!-- Firebase compat -->
+<script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-compat.js"></script>
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyD2Dqz6jg8YACBvg_G_7yIR6c8sSH39BsQ",
+  authDomain: "cypx-onlinecrypto.firebaseapp.com",
+  databaseURL: "https://cypx-onlinecrypto-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "cypx-onlinecrypto",
+  storageBucket: "cypx-onlinecrypto.firebasestorage.app",
+  messagingSenderId: "857500807275",
+  appId: "1:857500807275:web:0e04242866ff30bec3812e",
+  measurementId: "G-7PXLNKJLXV"
+};
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.database();
+</script>
+
+<style>
+body{
+  margin:0;
+  font-family: Arial, Helvetica, sans-serif;
+  background:#001f3f;
+  color:#fff;
+  line-height:1.5;
+  padding-bottom:1cm;
+  -webkit-user-select:none;
+  -webkit-touch-callout:none;
+  user-select:none;
+}
+input,textarea,select,button{
+  -webkit-user-select:auto;
+  user-select:auto;
+  autocomplete: off;
+}
+header{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  background:#002f6c;
+  padding:12px 16px;
+}
+header img{height:40px;}
+header h2{margin:0;font-size:1.2rem;color:#fff;}
+.content{padding:16px;}
+h3{color:#ffd700;margin-top:20px;margin-bottom:8px;}
+p, li{color:#cfe6ff;margin-bottom:6px;font-size:0.95rem;}
+ul{padding-left:18px;}
+.vip-table{
+  width:100%;
+  border-collapse:collapse;
+  margin-top:12px;
+  margin-bottom:16px;
+}
+.vip-table th, .vip-table td{
+  border:1px solid rgba(255,255,255,0.2);
+  padding:6px 8px;
+  text-align:center;
+}
+.vip-table th{
+  background:#003366;
+  color:#ffd700;
+}
+.vip-table td{
+  background:rgba(255,255,255,0.05);
+  color:#fff;
+}
+.buttons{
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+  margin:16px 0;
+}
+.buttons .btn{
+  width:100%;
+  padding:12px;
+  background:#1e3a8a;
+  color:#fff;
+  font-weight:600;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+  font-size:1rem;
+}
+.buttons .btn:hover{
+  background:#3b82f6;
+}
+nav{
+  position:fixed;
+  bottom:0; left:0; right:0;
+  display:flex; justify-content:space-around;
+  background:#002244;
+  padding:6px 0;
+}
+nav a{color:#fff;text-decoration:none;text-align:center;font-size:0.8rem;}
+nav i{font-size:18px}
+</style>
+</head>
+<body>
+
+<header>
+  <img src="https://png.pngtree.com/png-clipart/20221216/original/pngtree-vip-icon-design-png-image_8749175.png" alt="VIP Icon">
+  <h2>CYPX ONLINE CRYPTO – Kampuni</h2>
+</header>
+
+<div class="content">
+
+  <p>Ili kuhakikisha uwazi na uwajibikaji kwa umma, tunakualika kutembelea <strong>Companies House</strong>, jukwaa rasmi la taarifa za kampuni nchini Uingereza, kupata taarifa kamili za usajili za <strong>CYPX ONLINE CRYPTO LTD</strong>. Jukwaa hili linaonyesha data iliyothibitishwa rasmi na linaakisi dhamira yetu ya uwazi na uongozi bora wa kibiashara.</p>
+
+  <ul>
+    <li><strong>Jina la Kampuni:</strong> CYPX ONLINE CRYPTO LTD</li>
+    <li><strong>Anwani ya Usajili:</strong> 68 Hillside, Hoddesdon, UK, EN11 8RW</li>
+    <li><strong>Nambari ya Kampuni:</strong> 15865738</li>
+    <li><strong>Tarehe ya Kuanzishwa:</strong> Aprili 02, 2024</li>
+  </ul>
+
+  <h3>❶ Usajili</h3>
+  <p>CYPX ONLINE CRYPTO ni kampuni ya mtandaoni inayotoa huduma kwa majukwaa ya biashara ya mtandaoni. Biashara yetu kuu ni kusaidia majukwaa hayo kuongeza uzalishaji na mauzo. Unachohitaji ni kutumia simu yako kufanya kazi chache za kila siku mtandaoni, na baada ya kazi ya siku kumalizika, unaweza kutoa kamisheni yako.</p>
+
+  <h3>❷ Sababu za kuchagua sisi</h3>
+  <ul>
+    <li>Soko la kimataifa (unaweza kujiunga popote, wakati wowote)</li>
+    <li>Mfumo madhubuti wa kifedha</li>
+    <li>Uaminifu na nguvu ya chapa</li>
+    <li>Huduma ya malipo ya kimataifa (kamati ya malipo kwa sarafu za kidijitali)</li>
+    <li>Mkakati wa ubunifu wa uendeshaji wa kifedha duniani</li>
+  </ul>
+
+  <h3>❸ Uanachama na Kamisheni ya Timu</h3>
+  <p>Ili kuwa mwanachama wa jukwaa, lazima ulipe ada ya uanachama (kiasi kinachotajwa na jukwaa) TZS. Mapato yako yatategemea kiwango cha malipo unachoweka.</p>
+
+  <h3>Ngazi za VIP</h3>
+<table class="vip-table">
+  <tr>
+    <th>Kiwango cha VIP</th>
+    <th>Malipo (TZS)</th>
+    <th>Faida ya Kila Siku (TZS)</th>
+    <th>Jina la Mpango</th>
+  </tr>
+  <tr><td>VIP1</td><td>50,000</td><td>100,000</td><td>Mpango wa Mwanzo</td></tr>
+  <tr><td>VIP2</td><td>100,000</td><td>200,000</td><td>Mpango wa Shaba</td></tr>
+  <tr><td>VIP3</td><td>150,000</td><td>300,000</td><td>Mpango wa Fedha</td></tr>
+  <tr><td>VIP4</td><td>200,000</td><td>400,000</td><td>Mpango wa Dhahabu</td></tr>
+  <tr><td>VIP5</td><td>250,000</td><td>500,000</td><td>Mpango wa Platinamu</td></tr>
+  <tr><td>VIP6</td><td>300,000</td><td>600,000</td><td>Mpango wa Almasi</td></tr>
+  <tr><td>VIP7</td><td>350,000</td><td>700,000</td><td>Mpango wa Rubi</td></tr>
+  <tr><td>VIP8</td><td>400,000</td><td>800,000</td><td>Mpango wa Zumaridi</td></tr>
+  <tr><td>VIP9</td><td>450,000</td><td>900,000</td><td>Mpango wa Sapphiri</td></tr>
+  <tr><td>VIP10</td><td>500,000</td><td>1,000,000</td><td>Mpango wa Juu (Elite)</td></tr>
+</table>
+
+  <h3>❹ Mfumo wa Mwualiko na Kamisheni ya Timu</h3>
+  <p>Watumiaji wanaweza kualika wengine kujiunga kupitia nambari binafsi ya mwaliko au kiungo maalum. Kuna ngazi tatu za kamisheni: 17%, 2%, na 1% kwa wanachama wanaojiunga kupitia timu yako. Iwapo utagunduliwa kutumia vibaya mfumo, CYPX ina haki ya kusitisha akaunti au kufuta zawadi.</p>
+
+  <h3>❺ Muda wa Uanachama</h3>
+  <p>Kila kiwango cha VIP kinadumu kwa saa 24 tangu kuthibitishwa. Baada ya muda kuisha, faida hukoma isipokuwa utafanya upya. Jukwaa lina haki ya kubadilisha kanuni au manufaa kulingana na sera.</p>
+
+  <h3>❻ Kazi za Wakala</h3>
+  <p>Kazi zinatolewa kwa nasibu. Kutokufuata maagizo kunaweza kusababisha kufungiwa. Kazi za ngazi za juu zinaweza kuwa na masharti maalum. Malipo yanafanyika kila siku kupitia simu (mobile money) kwa TZS.</p>
+
+  <h3>❼ Marejesho</h3>
+  <p>Marejesho ya ada yanafanyika baada ya saa 12 ikiwa masharti yametimizwa. Ukienda kinyume, haki ya kurejeshewa itapotea.</p>
+
+  <h3>❽ Mwongozo wa Mtumiaji na Kanusho</h3>
+  <p>Watumiaji lazima wahakikishe usalama na uhalali wa matumizi. CYPX ONLINE CRYPTO haitawajibika kwa makosa ya mtumiaji. Jukwaa linaweza kubadilisha masharti wakati wowote, na watumiaji lazima wafuate sheria za eneo lao.</p>
+
+</div>
+
+<nav>
+  <a href="dashboard.html"><i class="fas fa-home"></i><br>Nyumbani</a>
+  <a href="task.html"><i class="fas fa-tasks"></i><br>Kazi</a>
+  <a href="team.html"><i class="fas fa-users"></i><br>Timu</a>
+  <a href="vip.html"><i class="fas fa-crown"></i><br>VIP</a>
+  <a href="profile.html"><i class="fas fa-user"></i><br>Mimi</a>
+</nav>
+
+</body>
+    </html>
