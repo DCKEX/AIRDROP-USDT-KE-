@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Lipa Sasa – M-Pesa Kenya</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<!-- Firebase Config -->
+<script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-compat.js"></script>
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyD2Dqz6jg8YACBvg_G_7yIR6c8sSH39BsQ",
+  authDomain: "cypx-onlinecrypto.firebaseapp.com",
+  databaseURL: "https://cypx-onlinecrypto-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "cypx-onlinecrypto",
+  storageBucket: "cypx-onlinecrypto.firebasestorage.app",
+  messagingSenderId: "857500807275",
+  appId: "1:857500807275:web:0e04242866ff30bec3812e",
+  measurementId: "G-7PXLNKJLXV"
+};
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.database();
+</script>
+
+<style>
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background: linear-gradient(135deg, #001f3f, #003366);
+  color: #fff;
+  padding-bottom: 60px;
+}
+header {
+  background: rgba(0,0,0,0.5);
+  padding: 14px 16px;
+  font-size: 1.3rem;
+  font-weight: 600;
+  text-align: center;
+  backdrop-filter: blur(8px);
+}
+.card {
+  margin: 16px;
+  padding: 16px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 12px;
+  box-shadow: 0 0 12px rgba(0,255,255,0.2);
+  backdrop-filter: blur(6px);
+}
+.card h3 {
+  margin: 0 0 8px;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+.card p {
+  margin: 0 0 6px;
+  color: #cfcfcf;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+.input-card {
+  margin: 16px;
+  padding: 16px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 12px;
+}
+.input-card label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+.input-card input {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  margin-bottom: 12px;
+}
+.btn {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  background: #28a745;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 0 8px rgba(40,167,69,0.5);
+}
+.btn:hover {
+  background: #218838;
+  transform: scale(1.03);
+}
+nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-around;
+  background: rgba(0,0,0,0.6);
+  backdrop-filter: blur(6px);
+  padding: 6px 0;
+}
+nav a {
+  color: #fff;
+  text-decoration: none;
+  text-align: center;
+  font-size: 0.8rem;
+}
+nav i {
+  font-size: 18px;
+}
+.popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+  background: #28a745;
+  color: #fff;
+  padding: 14px 18px;
+  border-radius: 10px;
+  font-weight: 600;
+  box-shadow: 0 0 12px rgba(0,255,0,0.5);
+  z-index: 9999;
+  opacity: 0;
+  animation: fadeIn 0.4s ease-in-out forwards;
+}
+.popup.red {
+  background: #cc0000;
+  box-shadow: 0 0 12px rgba(255,0,0,0.5);
+}
+
+@keyframes fadeIn {
+  from {opacity: 0; transform: translate(-50%, -60%);}
+  to {opacity: 1; transform: translate(-50%, -50%);}
+}
+</style>
+</head>
+<body>
+
+<header>Kamilisha Malipo Yako</header>
+
+<!-- Maelekezo ya Malipo -->
+<div class="card">
+  <h3><i class="fas fa-mobile-alt"></i> Tumia Tigo au Vodacom</h3>
+  <p><strong>Fuata hatua hizi:</strong></p>
+  <p>1️⃣ Piga <span style="color:#00ffcc;">*150*00#</span></p>
+  <p>2️⃣ Chagua <strong>"Tuma Pesa"</strong></p>
+  <p>3️⃣ Kisha chagua <strong>"Nje ya Nchi"</strong></p>
+  <p>4️⃣ Chagua <strong>"Kenya"</strong></p>
+  <p>5️⃣ Chagua <strong>"Safaricom M-Pesa"</strong></p>
+  <p>6️⃣ Weka nambari ya mpokeaji: <strong style="color:#00ffcc;">254707207201</strong></p>
+  <p>7️⃣ Jina: <strong style="color:#00ffcc;">LANGAT ROBERT</strong></p>
+  <p>Tuma kiasi kamili cha kifurushi. Baada ya malipo, tafadhali weka namba uliotumia kutuma hapa chini.</p>
+</div>
+
+<!-- Ingizo la namba -->
+<div class="input-card">
+  <label for="senderPhone">Namba yako ya simu (uliyotumia kutuma)</label>
+  <input type="tel" id="senderPhone" placeholder="mf. 07XXXXXXXX">
+  <button class="btn" id="submit-deposit">Tuma Maelezo</button>
+</div>
+
+<!-- Maelezo ya ziada -->
+<div class="card">
+  <h3><i class="fas fa-info-circle"></i> Maelezo Muhimu</h3>
+  <p>1️⃣ Hakikisha unaweka namba uliyotumia kutuma hela.</p>
+  <p>2️⃣ Baada ya kutuma, timu yetu itathibitisha ndani ya muda mfupi.</p>
+  <p>3️⃣ Baada ya kuthibitishwa, vipengele vyako vitaongezwa kiotomatiki.</p>
+</div>
+
+<!-- Bottom Navigation -->
+<nav>
+  <a href="dashboard.html"><i class="fas fa-home"></i><br>Mwanzo</a>
+  <a href="task.html"><i class="fas fa-tasks"></i><br>Kazi</a>
+  <a href="team.html"><i class="fas fa-users"></i><br>Timu</a>
+  <a href="vip.html"><i class="fas fa-crown"></i><br>VIP</a>
+  <a href="profile.html"><i class="fas fa-user"></i><br>Mimi</a>
+</nav>
+
+<script>
+auth.onAuthStateChanged(user => {
+  if (!user) {
+    window.location = 'signin.html';
+    return;
+  }
+  const uid = user.uid;
+
+  document.getElementById('submit-deposit').onclick = () => {
+    const phone = document.getElementById('senderPhone').value.trim();
+    if (!phone) return showPopup('Tafadhali weka namba yako ya simu', true);
+
+    // Tambua group kutoka URL
+    const params = new URLSearchParams(window.location.search);
+    const group = params.get('group') || 'haijajulikana';
+
+    const depositRef = db.ref('deposits/' + uid).push();
+    const depositData = {
+      phone: phone,
+      group: group,
+      status: 'inasubiri',
+      created: Date.now()
+    };
+    depositRef.set(depositData).then(() => {
+      showPopup('Taarifa zako zimetumwa kikamilifu');
+      document.getElementById('senderPhone').value = '';
+    }).catch(err => {
+      console.error(err);
+      showPopup('Hitilafu imetokea, jaribu tena', true);
+    });
+  };
+});
+
+function showPopup(msg, red = false) {
+  const p = document.createElement('div');
+  p.className = 'popup' + (red ? ' red' : '');
+  p.textContent = msg;
+  document.body.appendChild(p);
+  setTimeout(() => p.remove(), 3000);
+}
+</script>
+
+</body>
+</html>
