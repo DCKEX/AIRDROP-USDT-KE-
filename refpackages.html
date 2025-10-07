@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Vifurushi vya Rufaa</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<!-- Firebase compat -->
+<script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-compat.js"></script>
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyD2Dqz6jg8YACBvg_G_7yIR6c8sSH39BsQ",
+  authDomain: "cypx-onlinecrypto.firebaseapp.com",
+  databaseURL: "https://cypx-onlinecrypto-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "cypx-onlinecrypto",
+  storageBucket: "cypx-onlinecrypto.firebasestorage.app",
+  messagingSenderId: "857500807275",
+  appId: "1:857500807275:web:0e04242866ff30bec3812e",
+  measurementId: "G-7PXLNKJLXV"
+};
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.database();
+</script>
+
+<style>
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background: linear-gradient(135deg, #001f3f, #012a50, #001a35);
+  color: #fff;
+  padding-bottom: 60px;
+  overflow-x: hidden;
+}
+
+/* Loading animation */
+#loader {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0.85);
+  z-index: 9999;
+}
+.loader-circle {
+  border: 6px solid rgba(255,255,255,0.2);
+  border-top: 6px solid #00c3ff;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  animation: spin 1s linear infinite;
+}
+@keyframes spin {
+  0% { transform: rotate(0deg);}
+  100% { transform: rotate(360deg);}
+}
+
+header {
+  background: rgba(0,47,108,0.9);
+  padding: 14px 16px;
+  font-size: 1.2rem;
+  font-weight: 600;
+  text-align: center;
+  box-shadow: 0 0 12px rgba(0,255,255,0.3);
+  backdrop-filter: blur(4px);
+}
+
+.card {
+  margin: 16px;
+  padding: 16px;
+  background: rgba(1,42,80,0.95);
+  border-radius: 10px;
+  box-shadow: 0 0 12px rgba(0,255,255,0.2);
+  transition: transform 0.2s ease, box-shadow 0.3s ease;
+}
+.card:hover {
+  transform: scale(1.02);
+  box-shadow: 0 0 18px rgba(0,255,255,0.4);
+}
+.card h3 {
+  margin: 0 0 8px;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+.card p {
+  margin: 0;
+  color: #cfcfcf;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.btn {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  margin-top: 14px;
+  background: #00c851;
+  color: #fff;
+  text-align: center;
+  font-weight: 600;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: 0.2s;
+  box-shadow: 0 0 10px rgba(0,255,100,0.3);
+}
+.btn:hover {
+  background: #009e45;
+  box-shadow: 0 0 15px rgba(0,255,120,0.6);
+}
+
+.info {
+  margin: 16px;
+  padding: 14px;
+  background: rgba(0,51,102,0.9);
+  border-radius: 8px;
+  font-size: 0.9rem;
+  line-height: 1.4;
+  box-shadow: 0 0 10px rgba(0,200,255,0.2);
+}
+
+nav {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  display: flex;
+  justify-content: space-around;
+  background: rgba(0,34,68,0.95);
+  padding: 6px 0;
+  backdrop-filter: blur(6px);
+}
+nav a {
+  color: #fff;
+  text-decoration: none;
+  text-align: center;
+  font-size: 0.8rem;
+}
+nav i {font-size: 18px;}
+</style>
+</head>
+<body>
+
+<!-- Loader -->
+<div id="loader">
+  <div class="loader-circle"></div>
+</div>
+
+<header>Vifurushi vya Rufaa</header>
+
+<div class="info">
+  <p><i class="fas fa-info-circle"></i> Chagua kifurushi cha rufaa ili kukuza timu yako haraka zaidi. Kila kundi litakupa rufaa za moja kwa moja zitakazohesabiwa kwenye akaunti yako mara tu utakaponunua.</p>
+</div>
+
+<div class="card">
+  <h3>Kundi 1</h3>
+  <p>Nunua rufaa 2</p>
+  <p><strong>TZS 100,000</strong></p>
+  <a href="buynow.html?group=1" class="btn">Nunua Sasa</a>
+</div>
+
+<div class="card">
+  <h3>Kundi 2</h3>
+  <p>Nunua rufaa 4</p>
+  <p><strong>TZS 150,000</strong></p>
+  <a href="buynow.html?group=2" class="btn">Nunua Sasa</a>
+</div>
+
+<div class="card">
+  <h3>Kundi 3</h3>
+  <p>Nunua rufaa 6</p>
+  <p><strong>TZS 200,000</strong></p>
+  <a href="buynow.html?group=3" class="btn">Nunua Sasa</a>
+</div>
+
+<div class="card">
+  <h3>Kundi 4</h3>
+  <p>Nunua rufaa 8</p>
+  <p><strong>TZS 250,000</strong></p>
+  <a href="buynow.html?group=4" class="btn">Nunua Sasa</a>
+</div>
+
+<!-- Bottom Navigation -->
+<nav>
+  <a href="dashboard.html"><i class="fas fa-home"></i><br>Nyumbani</a>
+  <a href="task.html"><i class="fas fa-tasks"></i><br>Kazi</a>
+  <a href="team.html"><i class="fas fa-users"></i><br>Timu</a>
+  <a href="vip.html"><i class="fas fa-crown"></i><br>VIP</a>
+  <a href="profile.html"><i class="fas fa-user"></i><br>Mimi</a>
+</nav>
+
+<script>
+// Loader hide after content loads
+window.addEventListener('load', () => {
+  const loader = document.getElementById('loader');
+  loader.style.opacity = '0';
+  setTimeout(() => loader.style.display = 'none', 500);
+});
+</script>
+
+</body>
+</html>
