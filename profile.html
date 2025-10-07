@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>CYPX – Wasifu</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-compat.js"></script>
+<script>
+// ✅ Pinned Firebase config
+const firebaseConfig = {
+  apiKey: "AIzaSyD2Dqz6jg8YACBvg_G_7yIR6c8sSH39BsQ",
+  authDomain: "cypx-onlinecrypto.firebaseapp.com",
+  databaseURL: "https://cypx-onlinecrypto-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "cypx-onlinecrypto",
+  storageBucket: "cypx-onlinecrypto.firebasestorage.app",
+  messagingSenderId: "857500807275",
+  appId: "1:857500807275:web:0e04242866ff30bec3812e",
+  measurementId: "G-7PXLNKJLXV"
+};
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.database();
+</script>
+
+<style>
+body{
+  margin:0;
+  font-family: Arial, Helvetica, sans-serif;
+  background:#001f3f;
+  color:#fff;
+  padding-bottom:1.5cm;
+}
+
+/* Header */
+header{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  background:#002f6c;
+  padding:12px 16px;
+}
+header img{height:40px;}
+header h2{margin:0;font-size:1.2rem;color:#fff;}
+
+/* VIP + Email Card */
+.vip-card {
+  position: relative;
+  background: #1e40af;
+  border-radius: 12px;
+  padding: 16px;
+  margin: 16px;
+  width: calc(100% - 32px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 96px;
+}
+.vip-card .info{
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+}
+.vip-card .user-email { font-size: 0.95rem; color: #fff; margin-bottom: 6px; }
+.vip-card .vip-level {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 700;
+  font-size: 1.2rem;
+  color: #ffd700;
+}
+.vip-card .vip-stars { color: #ffd700; }
+.vip-card img.icon{height:40px;}
+
+/* Balance Card */
+.balance-card {
+  background: #8B4513;
+  border-radius: 12px;
+  padding: 16px;
+  margin: 16px;
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: #fff;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  text-align: center;
+}
+
+/* Buttons */
+.buttons{
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+  margin:16px;
+}
+.buttons .btn{
+  width:100%;
+  padding:12px;
+  background:#1e3a8a;
+  color:#fff;
+  font-weight:600;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+  font-size:1rem;
+  text-align:left;
+  transition:0.2s;
+}
+.buttons .btn i{margin-right:8px;}
+.buttons .btn:hover{background:#3b82f6;}
+
+/* Popup */
+.popup{
+  position:fixed;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  background:#28a745;
+  color:#fff;
+  padding:16px 20px;
+  border-radius:8px;
+  font-weight:600;
+  z-index:9999;
+  text-align:center;
+}
+.popup.red{background:#cc0000}
+
+/* Bottom Nav */
+nav {
+  position:fixed;
+  bottom:0;
+  left:0; right:0;
+  display:flex;
+  justify-content:space-around;
+  background:#002244;
+  padding:6px 0;
+}
+nav a{
+  color:#fff;
+  text-decoration:none;
+  text-align:center;
+  font-size:0.8rem;
+}
+nav i{font-size:18px;}
+</style>
+</head>
+<body>
+
+<header>
+  <img src="https://png.pngtree.com/png-clipart/20221216/original/pngtree-vip-icon-design-png-image_8749175.png" alt="VIP Icon">
+  <h2>CYPX – Wasifu</h2>
+</header>
+
+<!-- VIP + Email -->
+<div class="vip-card">
+  <div class="info">
+    <div class="user-email" id="user-email">Inapakia...</div>
+    <div class="vip-level">
+      <span id="vip-level">VIP 0</span>
+      <span class="vip-stars" id="vip-stars"></span>
+    </div>
+  </div>
+  <img class="icon" src="https://png.pngtree.com/png-clipart/20221216/original/pngtree-vip-icon-design-png-image_8749175.png" alt="VIP">
+</div>
+
+<!-- Balances -->
+<div class="balance-card">
+  <div id="total-balance">Jumla ya Salio: TZS 0</div>
+  <div id="recharged-amount">Kiasi Ulichoweka: TZS 0</div>
+</div>
+
+<!-- Buttons -->
+<div class="buttons">
+  <button class="btn" onclick="location.href='deposit.html'"><i class="fas fa-wallet"></i>Weka Fedha</button>
+  <button class="btn" onclick="location.href='withdraw.html'"><i class="fas fa-money-bill"></i>Toa Fedha</button>
+  <button class="btn" onclick="location.href='financial.html'"><i class="fas fa-history"></i>Historia ya Muamala</button>
+  <button class="btn" id="change-password-btn"><i class="fas fa-key"></i>Badilisha Nenosiri</button>
+  <button class="btn" id="logout-btn"><i class="fas fa-sign-out-alt"></i>Toka</button>
+</div>
+
+<!-- Bottom Navigation -->
+<nav>
+  <a href="dashboard.html"><i class="fas fa-home"></i><br>Nyumbani</a>
+  <a href="task.html"><i class="fas fa-tasks"></i><br>Kazi</a>
+  <a href="team.html"><i class="fas fa-users"></i><br>Timu</a>
+  <a href="vip.html"><i class="fas fa-crown"></i><br>VIP</a>
+  <a href="profile.html"><i class="fas fa-user"></i><br>Mimi</a>
+</nav>
+
+<script>
+auth.onAuthStateChanged(user => {
+  if (!user) { window.location = 'signin.html'; return; }
+  const uid = user.uid;
+  const userRef = db.ref('users/' + uid);
+  const transRef = db.ref('transactions/' + uid);
+
+  document.getElementById('user-email').textContent = user.email;
+
+  // VIP Levels
+  userRef.child('vipLevels').on('value', snap => {
+    const vipUnlocked = snap.val() || [];
+    let level = 0;
+    if (Array.isArray(vipUnlocked)) {
+      const nums = vipUnlocked.filter(n => typeof n === 'number');
+      if (nums.length > 0) level = Math.max(...nums);
+    } else if (typeof vipUnlocked === 'object' && Object.keys(vipUnlocked).length > 0) {
+      const nums = Object.keys(vipUnlocked).map(n => parseInt(n)).filter(n => !isNaN(n));
+      if (nums.length > 0) level = Math.max(...nums);
+    }
+    document.getElementById('vip-level').textContent = `VIP ${level}`;
+    document.getElementById('vip-stars').textContent = '★'.repeat(level);
+  });
+
+  // Balances
+  userRef.child('balance').on('value', snap => {
+    const bal = parseFloat(snap.val() || 0);
+    document.getElementById('total-balance').textContent =
+      `Jumla ya Salio: TZS ${bal.toLocaleString()}`;
+  });
+
+  userRef.child('recharged').on('value', snap => {
+    const rech = parseFloat(snap.val() || 0);
+    document.getElementById('recharged-amount').textContent =
+      `Kiasi Ulichoweka: TZS ${rech.toLocaleString()}`;
+  });
+
+  // When a deposit is made (tracked from deposit.html)
+  db.ref('deposits/' + uid).on('child_added', snap => {
+    const deposit = snap.val();
+    if (!deposit || !deposit.amount) return;
+    const amount = parseFloat(deposit.amount);
+    const now = new Date().toLocaleString();
+
+    // Update total recharged
+    userRef.child('recharged').transaction(val => (val || 0) + amount);
+
+    // Record in transaction history for financial.html
+    transRef.push({
+      type: "Amana (Deposit)",
+      amount,
+      date: now,
+      currency: "TZS"
+    });
+  });
+
+  // Reset password
+  document.getElementById('change-password-btn').onclick = () => {
+    auth.sendPasswordResetEmail(user.email).then(() => {
+      showPopup('✅ Barua ya kubadilisha nenosiri imetumwa');
+    }).catch(() => showPopup('❌ Hitilafu imetokea', true));
+  };
+
+  // Logout
+  document.getElementById('logout-btn').onclick = () => {
+    auth.signOut().then(() => {
+      showPopup('✅ Umetoka');
+      setTimeout(() => window.location = 'signin.html', 1500);
+    }).catch(() => showPopup('❌ Kushindwa kutoka', true));
+  };
+});
+
+function showPopup(msg, red = false) {
+  const p = document.createElement('div');
+  p.className = 'popup' + (red ? ' red' : '');
+  p.textContent = msg;
+  document.body.appendChild(p);
+  setTimeout(() => p.remove(), 3000);
+}
+</script>
+
+</body>
+  </html>
