@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CYPX ONLINE CRYPTO – Weka Amana</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-compat.js"></script>
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyD2Dqz6jg8YACBvg_G_7yIR6c8sSH39BsQ",
+  authDomain: "cypx-onlinecrypto.firebaseapp.com",
+  databaseURL: "https://cypx-onlinecrypto-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "cypx-onlinecrypto",
+  storageBucket: "cypx-onlinecrypto.firebasestorage.app",
+  messagingSenderId: "857500807275",
+  appId: "1:857500807275:web:0e04242866ff30bec3812e",
+  measurementId: "G-7PXLNKJLXV"
+};
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.database();
+const storage = firebase.storage();
+</script>
+
+<style>
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background: #041833;
+  color: #fff;
+  padding-bottom: 80px;
+}
+.container { padding: 16px; }
+.card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 14px;
+  padding: 20px;
+  margin-bottom: 18px;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.4);
+}
+.card h3 {
+  margin-top: 0;
+  color: #00ffcc;
+  display: flex;
+  align-items: center;
+}
+.card p { margin: 6px 0; font-size: 0.95rem; }
+.card strong { color: #ffee58; }
+input[type=text], input[type=file] {
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  border-radius: 8px;
+  border: 1px solid #00ffcc;
+  background: #06224d;
+  color: #fff;
+  font-size: 1rem;
+}
+button {
+  width: 100%;
+  padding: 14px;
+  background: #00cc66;
+  border: none;
+  border-radius: 8px;
+  color: #fff;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-top: 12px;
+}
+button:hover { background: #00ff88; }
+
+nav {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  display: flex;
+  justify-content: space-around;
+  background: #06224d;
+  padding: 10px 0;
+}
+nav a {
+  color: #fff;
+  text-decoration: none;
+  text-align: center;
+  font-size: 0.85rem;
+}
+nav i { font-size: 1.2rem; }
+
+#notification {
+  position: fixed;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  background: #00cc66;
+  color: #001f3f;
+  padding: 16px 24px;
+  border-radius: 10px;
+  font-weight: 700;
+  display: none;
+  z-index: 9999;
+  text-align: center;
+}
+
+/* Loading animation */
+#loader {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background: #041833;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 99999;
+}
+.spinner {
+  border: 5px solid rgba(255,255,255,0.2);
+  border-top: 5px solid #00ffcc;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 1s linear infinite;
+}
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+</style>
+</head>
+<body>
+
+<div id="loader"><div class="spinner"></div></div>
+
+<div class="container" style="display:none;" id="mainContent">
+  <div class="card">
+    <h3><i class="fas fa-wallet" style="margin-right:8px;"></i>Maelezo ya Malipo</h3>
+    <p><strong>Tumia:</strong> Vodacom au Tigo</p>
+    <p><strong>Mpangilio:</strong> Piga <strong>*150*00#</strong></p>
+    <p><strong>Chagua:</strong> Tuma pesa</p>
+    <p><strong>Nje ya Nchi:</strong> Kenya</p>
+    <p><strong>Safaricom Mpesa</strong></p>
+    <p><strong>Namba ya Mpesa:</strong>
+      <span id="mpesaNumber" style="cursor:pointer; background:#06224d; padding:4px 8px; border-radius:6px;">254707207201</span>
+    </p>
+    <p><strong>Jina:</strong> LANGAT ROBERT</p>
+    <p>Tuma pesa kwa maelezo yaliyo hapo juu kisha wasilisha taarifa zako hapa chini.</p>
+  </div>
+
+  <div class="card">
+    <h3><i class="fas fa-coins" style="margin-right:8px;"></i>Wasilisha Amana Yako</h3>
+    <label>Kiasi (TZS)</label>
+    <input type="text" id="amount" placeholder="mfano: 50,000">
+    <label>Namba yako ya Simu</label>
+    <input type="text" id="phone" placeholder="07XXXXXXXX">
+    <label>Risiti / Picha ya uthibitisho (hiari)</label>
+    <input type="file" id="receipt">
+    <button id="submitDeposit">Tuma Amana</button>
+  </div>
+</div>
+
+<nav>
+  <a href="dashboard.html"><i class="fas fa-home"></i><br>Nyumbani</a>
+  <a href="task.html"><i class="fas fa-tasks"></i><br>Kazi</a>
+  <a href="team.html"><i class="fas fa-users"></i><br>Timu</a>
+  <a href="vip.html"><i class="fas fa-crown"></i><br>VIP</a>
+  <a href="profile.html"><i class="fas fa-user"></i><br>Mimi</a>
+</nav>
+
+<div id="notification"></div>
+
+<script>
+window.addEventListener('load', ()=>{
+  setTimeout(()=>{
+    document.getElementById('loader').style.display = 'none';
+    document.getElementById('mainContent').style.display = 'block';
+  }, 1000);
+});
+
+function showNotification(msg){
+  const notif = document.getElementById('notification');
+  notif.innerText = msg;
+  notif.style.display = 'block';
+  setTimeout(()=>{notif.style.display='none';}, 3000);
+}
+
+document.getElementById('mpesaNumber').addEventListener('click', ()=>{
+  navigator.clipboard.writeText('254707207201')
+    .then(()=>showNotification("Namba ya Mpesa imenakiliwa!"))
+    .catch(()=>showNotification("Imeshindikana kunakili"));
+});
+
+auth.onAuthStateChanged(user=>{
+  if(!user){
+    window.location='signin.html';
+    return;
+  }
+  const uid = user.uid;
+
+  db.ref('users/'+uid+'/phone').once('value').then(snap=>{
+    const val = snap.val();
+    if(val) document.getElementById('phone').value = val;
+    else if(user.phoneNumber) document.getElementById('phone').value = user.phoneNumber;
+  });
+
+  const btn = document.getElementById('submitDeposit');
+  btn.addEventListener('click', async ()=>{
+    try {
+      let amountStr = document.getElementById('amount').value.replace(/,/g,'');
+      const amount = parseFloat(amountStr);
+      const phone  = document.getElementById('phone').value.trim();
+      const receiptFile = document.getElementById('receipt').files[0];
+
+      if(!amount || amount < 50000){
+        showNotification("Weka kiasi sahihi cha angalau 50,000 TZS");
+        return;
+      }
+      if(!phone){
+        showNotification("Weka namba yako ya simu");
+        return;
+      }
+
+      await db.ref('users/'+uid+'/phone').set(phone);
+
+      const ref = db.ref('deposits/'+uid).push();
+      const newDeposit = {
+        amount,
+        phone,
+        status:"pending",
+        timestamp: Date.now()
+      };
+
+      if(receiptFile){
+        const storageRef = firebase.storage().ref('deposits/'+uid+'/'+ref.key+'_'+receiptFile.name);
+        await storageRef.put(receiptFile);
+        newDeposit.receiptURL = await storageRef.getDownloadURL();
+      }
+
+      await ref.set(newDeposit);
+      showNotification("Amana imetumwa kwa mafanikio!");
+      document.getElementById('amount').value='';
+      document.getElementById('receipt').value='';
+    } catch(err){
+      console.error(err);
+      showNotification("Hitilafu: "+err.message);
+    }
+  });
+
+  db.ref('deposits/'+uid).on('child_changed', snap=>{
+    const deposit = snap.val();
+    if(deposit.status === "approved"){
+      db.ref('users/'+uid+'/balance').transaction(b => (parseFloat(b)||0) + parseFloat(deposit.amount));
+      showNotification("Amana imeidhinishwa na salio limeongezwa");
+    }
+  });
+});
+</script>
+</body>
+</html>
