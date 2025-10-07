@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>CYPX – Timu</title>
+
+<!-- Firebase compat build -->
+<script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-compat.js"></script>
+<script>
+// ✅ Firebase Config (Pinned)
+const firebaseConfig = {
+  apiKey: "AIzaSyD2Dqz6jg8YACBvg_G_7yIR6c8sSH39BsQ",
+  authDomain: "cypx-onlinecrypto.firebaseapp.com",
+  databaseURL: "https://cypx-onlinecrypto-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "cypx-onlinecrypto",
+  storageBucket: "cypx-onlinecrypto.firebasestorage.app",
+  messagingSenderId: "857500807275",
+  appId: "1:857500807275:web:0e04242866ff30bec3812e",
+  measurementId: "G-7PXLNKJLXV"
+};
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db   = firebase.database();
+</script>
+
+<style>
+body {
+  margin: 0;
+  font-family: "Poppins", Arial, Helvetica, sans-serif;
+  color: #fff;
+  padding-bottom: 1cm;
+  background: linear-gradient(160deg, #00152e, #002f5e, #004080);
+  background-attachment: fixed;
+  background-size: cover;
+}
+
+/* Header */
+header {
+  background: rgba(0, 40, 90, 0.8);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+header img { height: 32px; }
+header h2 { margin: 0; font-size: 1.2rem; }
+
+/* Section */
+.section {
+  margin: 12px;
+  padding: 12px;
+  background: rgba(0, 55, 115, 0.5);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0,255,255,0.15);
+}
+h3 { margin: 0 0 8px 0; color: #ffcc00; }
+
+/* Stats grid */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+.stat {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  text-align: center;
+  padding: 6px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  box-shadow: 0 0 5px rgba(255,255,255,0.05);
+}
+.stat-label { color: #cfe6ff; font-size: 0.75rem; }
+.stat-value { color: #ffd966; font-size: 1rem; font-weight: 600; }
+
+/* Copy button */
+.copy-btn {
+  background: #ffcc00;
+  color: #002244;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s;
+}
+.copy-btn:hover { background: #ffe066; }
+
+/* Level boxes */
+.level-box {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  margin: 8px 0;
+  padding: 8px;
+  border-radius: 6px;
+  box-shadow: 0 0 8px rgba(255,255,255,0.05);
+}
+.level-box h4 {
+  margin: 0 0 4px 0;
+  color: #ffd966;
+  font-size: 0.95rem;
+}
+
+/* Navigation */
+nav {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  display: flex;
+  justify-content: space-around;
+  background: rgba(0, 25, 60, 0.9);
+  padding: 8px 0;
+  backdrop-filter: blur(6px);
+  border-top: 1px solid rgba(255,255,255,0.1);
+}
+nav a {
+  color: #fff;
+  text-decoration: none;
+  text-align: center;
+  font-size: 0.8rem;
+}
+nav i { font-size: 18px; }
+
+/* Toast */
+.toast {
+  position: fixed;
+  bottom: 70px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 10px 20px;
+  color: #fff;
+  border-radius: 6px;
+  opacity: 0;
+  transition: opacity .3s;
+  font-size: 0.85rem;
+  box-shadow: 0 0 10px rgba(255,255,255,0.3);
+}
+.toast.show { opacity: 1; }
+.toast.success { background: #28a745; }
+.toast.error { background: #c0392b; }
+</style>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+<header>
+  <img src="https://png.pngtree.com/png-clipart/20221216/original/pngtree-vip-icon-design-png-image_8749175.png" alt="logo">
+  <h2>CYPX – Timu</h2>
+</header>
+
+<div class="section">
+  <h3>Kiungo Chako cha Rufaa</h3>
+  <div style="display:flex;align-items:center;gap:6px;">
+    <input id="ref-link" style="flex:1;border:none;padding:6px;border-radius:6px;" readonly>
+    <button class="copy-btn" id="copyRefBtn">Nakili</button>
+  </div>
+</div>
+
+<div class="section">
+  <h3>Takwimu za Timu</h3>
+  <div class="stats-grid">
+    <div class="stat"><div class="stat-label">Ukubwa wa Timu</div><div class="stat-value" id="team-size">0</div></div>
+    <div class="stat"><div class="stat-label">Jumla ya Chaji</div><div class="stat-value" id="team-recharge">0 TZS</div></div>
+    <div class="stat"><div class="stat-label">Chaji ya Kwanza</div><div class="stat-value" id="first-recharge">0 TZS</div></div>
+    <div class="stat"><div class="stat-label">Timu Mpya</div><div class="stat-value" id="new-team">0</div></div>
+    <div class="stat"><div class="stat-label">Jumla ya Utoaji</div><div class="stat-value" id="team-withdraw">0 TZS</div></div>
+    <div class="stat"><div class="stat-label">Utoaji wa Kwanza</div><div class="stat-value" id="first-withdraw">0 TZS</div></div>
+  </div>
+</div>
+
+<div class="section">
+  <h3>Tume kwa Kiwango</h3>
+  <div class="level-box"><h4>Kiwango 1 – 17%</h4><p>Jumla: <span id="lvl1-total">0 TZS</span></p></div>
+  <div class="level-box"><h4>Kiwango 2 – 2%</h4><p>Jumla: <span id="lvl2-total">0 TZS</span></p></div>
+  <div class="level-box"><h4>Kiwango 3 – 1%</h4><p>Jumla: <span id="lvl3-total">0 TZS</span></p></div>
+</div>
+
+<nav>
+  <a href="dashboard.html"><i class="fas fa-home"></i><br>Nyumbani</a>
+  <a href="task.html"><i class="fas fa-tasks"></i><br>Kazi</a>
+  <a href="team.html"><i class="fas fa-users"></i><br>Timu</a>
+  <a href="vip.html"><i class="fas fa-crown"></i><br>VIP</a>
+  <a href="profile.html"><i class="fas fa-user"></i><br>Mimi</a>
+</nav>
+
+<div id="toast" class="toast"></div>
+
+<script>
+function formatTZS(value){
+  return parseFloat(value || 0).toLocaleString('sw-TZ') + ' TZS';
+}
+
+function showToast(msg,type='success'){
+  const t=document.getElementById('toast');
+  t.textContent=msg;
+  t.className='toast show '+type;
+  setTimeout(()=>t.classList.remove('show'),2800);
+}
+
+auth.onAuthStateChanged(user=>{
+  if(!user){window.location='signin.html';return;}
+  const uid=user.uid;
+
+  // ✅ Kiungo cha Rufaa (Now fixed to CYPXONLINECRYPTO-TZ project)
+  db.ref('users/'+uid+'/username').once('value').then(snap=>{
+    const username = snap.val() || uid;
+    const link = `https://dckex.github.io/CYPXONLINECRYPTO-TZ-/signup.html?ref=${encodeURIComponent(username)}`;
+    document.getElementById('ref-link').value = link;
+
+    document.getElementById('copyRefBtn').onclick = () => {
+      navigator.clipboard.writeText(link).then(() => {
+        db.ref('users/' + uid + '/referralLogs').push({
+          copiedAt: firebase.database.ServerValue.TIMESTAMP,
+          link: link
+        });
+        showToast('Kiungo kimenakiliwa kwa mafanikio!', 'success');
+      }).catch(() => showToast('Imeshindikana kunakili!', 'error'));
+    };
+  });
+
+  // ✅ Ukubwa wa Timu
+  db.ref('referrals/'+uid).on('value', snap=>{
+    const referrals = snap.val() || {};
+    const active = Object.values(referrals).filter(r=>r && r.joinedAt).length;
+    document.getElementById('team-size').textContent = active.toLocaleString('sw-TZ');
+  });
+
+  // ✅ Tume kwa viwango
+  db.ref('commissions/'+uid).on('value', snap=>{
+    const data = snap.val() || {};
+    document.getElementById('lvl1-total').textContent = formatTZS(data.lvl1);
+    document.getElementById('lvl2-total').textContent = formatTZS(data.lvl2);
+    document.getElementById('lvl3-total').textContent = formatTZS(data.lvl3);
+  });
+});
+</script>
+</body>
+  </html>
