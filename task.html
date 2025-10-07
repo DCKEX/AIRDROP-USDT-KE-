@@ -31,7 +31,6 @@ html,body{
   color:#fff;
   -webkit-user-select:none;
   user-select:none;
-  -webkit-touch-callout:none;
 }
 input,textarea,select,button{-webkit-user-select:auto;user-select:auto}
 
@@ -147,10 +146,10 @@ body::after{
 </header>
 
 <div class="stats">
-  <div class="stat-box"><h3>Jumla ya Kazi</h3><p id="total-tasks">0</p></div>
-  <div class="stat-box"><h3>Zilizobaki</h3><p id="remaining-tasks">0</p></div>
-  <div class="stat-box"><h3>Zinazoendelea</h3><p id="inprogress-tasks">0</p></div>
-  <div class="stat-box"><h3>Zilizokamilika</h3><p id="completed-tasks">0</p></div>
+  <div class="stat-box"><h3>Jumla ya Viwango</h3><p id="total-vips">0</p></div>
+  <div class="stat-box"><h3>Vilivyofunguliwa</h3><p id="opened-vips">0</p></div>
+  <div class="stat-box"><h3>Vya Kuendelea</h3><p id="ongoing-vips">0</p></div>
+  <div class="stat-box"><h3>Vilivyokamilika</h3><p id="completed-vips">0</p></div>
 </div>
 
 <div class="history">
@@ -168,43 +167,29 @@ body::after{
 
 <script>
 auth.onAuthStateChanged(user=>{
-  if(!user){
-    window.location='signin.html';
-    return;
-  }
+  if(!user){ window.location='signin.html'; return; }
 
   const uid = user.uid;
-  const jumlaVip = 10; // Jumla ya viwango vya VIP
+  const totalVipLevels = 10; // total VIP levels in your system
 
-  // Fuata viwango vilivyofunguliwa
-  db.ref('users/'+uid+'/unlockedVips').on('value', snap=>{
-    const data = snap.val() || {};
-    let inprogress = 0, completed = 0;
+  // ✅ Sync VIP info with vip.html and profile.html
+  db.ref('users/'+uid+'/vipStats').on('value', snap=>{
+    const stats = snap.val() || {};
+    const opened = parseInt(stats.opened || 0);
+    const completed = parseInt(stats.completed || 0);
+    const ongoing = parseInt(stats.ongoing || 0);
+    const remaining = Math.max(0, totalVipLevels - opened);
 
-    Object.entries(data).forEach(([vip, info])=>{
-      let mudaFunguliwa = 0;
-      if (typeof info === 'object' && info.timestamp) {
-        mudaFunguliwa = info.timestamp;
-      } else if (typeof info === 'number') {
-        mudaFunguliwa = info;
-      } else {
-        mudaFunguliwa = Date.now();
-      }
+    document.getElementById('total-vips').textContent = totalVipLevels;
+    document.getElementById('opened-vips').textContent = opened;
+    document.getElementById('ongoing-vips').textContent = ongoing;
+    document.getElementById('completed-vips').textContent = completed;
 
-      const masaa = (Date.now() - mudaFunguliwa) / (1000*60*60);
-      if (masaa >= 24) completed++;
-      else inprogress++;
-    });
-
-    const baki = jumlaVip - (inprogress + completed);
-
-    document.getElementById('total-tasks').textContent     = jumlaVip;
-    document.getElementById('remaining-tasks').textContent = baki;
-    document.getElementById('inprogress-tasks').textContent= inprogress;
-    document.getElementById('completed-tasks').textContent = completed;
+    // auto-balance consistency check: if vip.html adds more later
+    if(opened > totalVipLevels) db.ref('users/'+uid+'/vipStats/opened').set(totalVipLevels);
   });
 
-  // Historia ya kazi
+  // ✅ Update task history
   db.ref('users/'+uid+'/taskHistory').limitToLast(50).on('value', snap=>{
     const hist = snap.val() || {};
     const cont = document.getElementById('task-history');
@@ -213,14 +198,14 @@ auth.onAuthStateChanged(user=>{
     items.forEach(item=>{
       const row = document.createElement('div');
       row.className='row';
-      const muda = new Date(item.timestamp||Date.now()).toLocaleString();
-      row.innerHTML = `<div>${item.action||'Kitendo'}</div><div>${muda}</div>`;
+      const time = new Date(item.timestamp||Date.now()).toLocaleString();
+      row.innerHTML = `<div>${item.action||'Kitendo'}</div><div>${time}</div>`;
       cont.appendChild(row);
     });
   });
 });
 
-// Popup iliyo katikati
+// Popup function
 function showPopup(msg, red=false){
   const p = document.createElement('div');
   p.className='popup' + (red?' red':'');
