@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>Lipa Sasa – M-Pesa Kenya</title>
+<title>Lipa Sasa – Airtel Tanzania</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
 <!-- Firebase Config -->
@@ -28,7 +28,7 @@ const db = firebase.database();
 body {
   margin: 0;
   font-family: Arial, Helvetica, sans-serif;
-  background: linear-gradient(135deg, #001f3f, #003366);
+  background: linear-gradient(135deg, #b30000, #8c0000);
   color: #fff;
   padding-bottom: 60px;
 }
@@ -45,17 +45,18 @@ header {
   padding: 16px;
   background: rgba(255,255,255,0.08);
   border-radius: 12px;
-  box-shadow: 0 0 12px rgba(0,255,255,0.2);
+  box-shadow: 0 0 12px rgba(255,0,0,0.3);
   backdrop-filter: blur(6px);
 }
 .card h3 {
   margin: 0 0 8px;
   font-size: 1.1rem;
   font-weight: 600;
+  color: #ffcc00;
 }
 .card p {
   margin: 0 0 6px;
-  color: #cfcfcf;
+  color: #f2f2f2;
   font-size: 0.9rem;
   line-height: 1.4;
 }
@@ -82,17 +83,17 @@ header {
   display: block;
   width: 100%;
   padding: 12px;
-  background: #28a745;
+  background: #e60000;
   color: #fff;
   border: none;
   border-radius: 6px;
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
-  box-shadow: 0 0 8px rgba(40,167,69,0.5);
+  box-shadow: 0 0 8px rgba(255,0,0,0.5);
 }
 .btn:hover {
-  background: #218838;
+  background: #ff1a1a;
   transform: scale(1.03);
 }
 nav {
@@ -120,12 +121,12 @@ nav i {
   top: 50%;
   left: 50%;
   transform: translate(-50%,-50%);
-  background: #28a745;
+  background: #e60000;
   color: #fff;
   padding: 14px 18px;
   border-radius: 10px;
   font-weight: 600;
-  box-shadow: 0 0 12px rgba(0,255,0,0.5);
+  box-shadow: 0 0 12px rgba(255,0,0,0.5);
   z-index: 9999;
   opacity: 0;
   animation: fadeIn 0.4s ease-in-out forwards;
@@ -143,35 +144,33 @@ nav i {
 </head>
 <body>
 
-<header>Kamilisha Malipo Yako</header>
+<header>Tuma Pesa kwa Airtel Tanzania</header>
 
 <!-- Maelekezo ya Malipo -->
 <div class="card">
-  <h3><i class="fas fa-mobile-alt"></i> Tumia Tigo au Vodacom</h3>
+  <h3><i class="fas fa-mobile-alt"></i> Airtel Money Tanzania</h3>
   <p><strong>Fuata hatua hizi:</strong></p>
-  <p>1️⃣ Piga <span style="color:#00ffcc;">*150*00#</span></p>
+  <p>1️⃣ Piga <span style="color:#ffcc00;">*150*60#</span></p>
   <p>2️⃣ Chagua <strong>"Tuma Pesa"</strong></p>
-  <p>3️⃣ Kisha chagua <strong>"Nje ya Nchi"</strong></p>
-  <p>4️⃣ Chagua <strong>"Kenya"</strong></p>
-  <p>5️⃣ Chagua <strong>"Safaricom M-Pesa"</strong></p>
-  <p>6️⃣ Weka nambari ya mpokeaji: <strong style="color:#00ffcc;">254707207201</strong></p>
-  <p>7️⃣ Jina: <strong style="color:#00ffcc;">LANGAT ROBERT</strong></p>
-  <p>Tuma kiasi kamili cha kifurushi. Baada ya malipo, tafadhali weka namba uliotumia kutuma hapa chini.</p>
+  <p>3️⃣ Weka namba ya mpokeaji: <strong style="color:#ffcc00;">0692397118</strong></p>
+  <p>4️⃣ Jina: <strong style="color:#ffcc00;">Nehema Rihoba</strong></p>
+  <p>5️⃣ Weka kiasi sahihi kisha thibitisha malipo.</p>
+  <p>Baada ya kutuma, weka namba uliotumia hapa chini kuthibitisha malipo yako.</p>
 </div>
 
 <!-- Ingizo la namba -->
 <div class="input-card">
   <label for="senderPhone">Namba yako ya simu (uliyotumia kutuma)</label>
-  <input type="tel" id="senderPhone" placeholder="mf. 07XXXXXXXX">
+  <input type="tel" id="senderPhone" placeholder="mf. 06XXXXXXXX">
   <button class="btn" id="submit-deposit">Tuma Maelezo</button>
 </div>
 
 <!-- Maelezo ya ziada -->
 <div class="card">
   <h3><i class="fas fa-info-circle"></i> Maelezo Muhimu</h3>
-  <p>1️⃣ Hakikisha unaweka namba uliyotumia kutuma hela.</p>
-  <p>2️⃣ Baada ya kutuma, timu yetu itathibitisha ndani ya muda mfupi.</p>
-  <p>3️⃣ Baada ya kuthibitishwa, vipengele vyako vitaongezwa kiotomatiki.</p>
+  <p>✅ Hakikisha unaweka namba uliyotumia kutuma hela.</p>
+  <p>✅ Timu yetu itathibitisha ndani ya muda mfupi.</p>
+  <p>✅ Baada ya kuthibitishwa, salio lako litaongezwa kiotomatiki.</p>
 </div>
 
 <!-- Bottom Navigation -->
@@ -195,7 +194,6 @@ auth.onAuthStateChanged(user => {
     const phone = document.getElementById('senderPhone').value.trim();
     if (!phone) return showPopup('Tafadhali weka namba yako ya simu', true);
 
-    // Tambua group kutoka URL
     const params = new URLSearchParams(window.location.search);
     const group = params.get('group') || 'haijajulikana';
 
