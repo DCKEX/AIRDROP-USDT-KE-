@@ -135,16 +135,14 @@ nav i { font-size: 1.2rem; }
 
 <div class="container" style="display:none;" id="mainContent">
   <div class="card">
-    <h3><i class="fas fa-wallet" style="margin-right:8px;"></i>Maelezo ya Malipo</h3>
-    <p><strong>Tumia:</strong> Vodacom au Tigo</p>
-    <p><strong>Mpangilio:</strong> Piga <strong>*150*00#</strong></p>
+    <h3><i class="fas fa-wallet" style="margin-right:8px;"></i>Tuma Pesa kwa Airtel Tanzania</h3>
+    <p><strong>Tumia:</strong> Airtel Money Tanzania</p>
+    <p><strong>Piga:</strong> *150*60#</p>
     <p><strong>Chagua:</strong> Tuma pesa</p>
-    <p><strong>Nje ya Nchi:</strong> Kenya</p>
-    <p><strong>Safaricom Mpesa</strong></p>
-    <p><strong>Namba ya Mpesa:</strong>
-      <span id="mpesaNumber" style="cursor:pointer; background:#06224d; padding:4px 8px; border-radius:6px;">254707207201</span>
+    <p><strong>Namba ya Airtel Money:</strong>
+      <span id="airtelNumber" style="cursor:pointer; background:#06224d; padding:4px 8px; border-radius:6px;">0692397118</span>
     </p>
-    <p><strong>Jina:</strong> LANGAT ROBERT</p>
+    <p><strong>Jina:</strong> Nehema Rihoba</p>
     <p>Tuma pesa kwa maelezo yaliyo hapo juu kisha wasilisha taarifa zako hapa chini.</p>
   </div>
 
@@ -185,9 +183,9 @@ function showNotification(msg){
   setTimeout(()=>{notif.style.display='none';}, 3000);
 }
 
-document.getElementById('mpesaNumber').addEventListener('click', ()=>{
-  navigator.clipboard.writeText('254707207201')
-    .then(()=>showNotification("Namba ya Mpesa imenakiliwa!"))
+document.getElementById('airtelNumber').addEventListener('click', ()=>{
+  navigator.clipboard.writeText('0692397118')
+    .then(()=>showNotification("Namba ya Airtel imenakiliwa!"))
     .catch(()=>showNotification("Imeshindikana kunakili"));
 });
 
