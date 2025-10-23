@@ -1,366 +1,354 @@
-<!DOCTYPE html>
-<html lang="sw">
-<head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Toa Pesa - CYPX ONLINE CRYPTO</title>
-
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
-
-<!-- Firebase v8 -->
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
-
-<style>
-:root{
-  --bg:#001a33;
-  --card:#0b2f5a;
-  --accent:#2ecc71;
-  --text:#fff;
-  --radius:14px;
-  --shadow:0 8px 30px rgba(0,0,0,0.25);
-}
-html,body{
-  margin:0;
-  padding:0;
-  font-family:system-ui,Roboto,Arial;
-  background:linear-gradient(180deg,var(--bg),#001f3f);
-  color:var(--text);
-  height:100%;
-}
-body{
-  display:flex;
-  justify-content:center;
-  align-items:flex-start;
-  padding:16px 0 80px 0;
-  opacity:0;
-  transition:opacity 0.6s ease;
-}
-header{
-  position:fixed;
-  top:0;
-  width:100%;
-  text-align:center;
-  padding:14px 0;
-  font-weight:700;
-  background:rgba(0,0,0,0.35);
-  border-bottom:1px solid rgba(255,255,255,0.03);
-}
-.container{
-  width:100%;
-  max-width:420px;
-  margin-top:60px;
-}
-.card{
-  background:linear-gradient(160deg,var(--card),#0e3a6f);
-  padding:25px 20px;
-  border-radius:var(--radius);
-  box-shadow:var(--shadow);
-}
-h2{
-  margin:0 0 12px;
-  font-size:18px;
-  color:#00ffcc;
-  text-align:center;
-}
-.label{
-  display:block;
-  margin:8px 0 6px;
-  color:#cfe3ff;
-  font-size:13px;
-}
-.input, select{
-  width:100%;
-  padding:12px;
-  border-radius:10px;
-  border:1px solid rgba(255,255,255,0.04);
-  background:#06243f;
-  color:var(--text);
-  font-size:15px;
-  margin-bottom:10px;
-}
-.btn{
-  width:100%;
-  margin-top:14px;
-  padding:12px;
-  border-radius:12px;
-  border:0;
-  font-weight:700;
-  font-size:15px;
-  cursor:pointer;
-  background:linear-gradient(180deg,#00cc66,#00994d);
-  color:white;
-}
-.small{
-  font-size:13px;
-  color:#d8ecff;
-  margin-top:8px;
-  text-align:center;
-}
-#balanceBox{
-  display:inline-block;
-  background:rgba(255,255,255,0.08);
-  padding:8px 12px;
-  border-radius:10px;
-  font-weight:700;
-  margin-bottom:10px;
-}
-.popup{
-  position:fixed;
-  left:50%;
-  top:50%;
-  transform:translate(-50%,-50%);
-  min-width:240px;
-  padding:16px 18px;
-  border-radius:12px;
-  z-index:999;
-  display:none;
-  text-align:center;
-  font-weight:700;
-}
-.popup.success{background:#083b18;color:#d6ffd6;}
-.popup.error{background:#3a1111;color:#ffd7d7;}
-.popup.confirm{background:#223355;color:#d6e4ff;}
-nav{
-  position:fixed;
-  bottom:0;
-  left:0;
-  right:0;
-  background:#002244;
-  display:flex;
-  justify-content:space-around;
-  height:60px;
-  align-items:center;
-}
-nav a{
-  flex:1;
-  color:white;
-  text-decoration:none;
-  font-size:12px;
-  text-align:center;
-}
-nav i{
-  display:block;
-  margin-bottom:4px;
-  font-size:18px;
-}
-
-/* 🔹 Spinner for page loading */
-#pageLoader {
-  position:fixed;
-  top:0;
-  left:0;
-  right:0;
-  bottom:0;
-  background:linear-gradient(180deg,#001a33,#002244);
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  z-index:1000;
-}
-.loader-ring {
-  border:5px solid rgba(255,255,255,0.2);
-  border-top:5px solid #00ffcc;
-  border-radius:50%;
-  width:60px;
-  height:60px;
-  animation:spin 1s linear infinite;
-}
-.spinner {
-  border:4px solid rgba(255,255,255,0.2);
-  border-top:4px solid #00ffcc;
-  border-radius:50%;
-  width:40px;
-  height:40px;
-  animation: spin 1s linear infinite;
-  position:fixed;
-  top:50%;
-  left:50%;
-  transform:translate(-50%,-50%);
-  display:none;
-  z-index:999;
-}
-@keyframes spin {
-  0% { transform:translate(-50%,-50%) rotate(0deg); }
-  100% { transform:translate(-50%,-50%) rotate(360deg); }
-}
-</style>
-</head>
-<body>
-<div id="pageLoader"><div class="loader-ring"></div></div>
-
-<header>Toa Pesa</header>
-
-<div class="container">
-  <div class="card">
-    <h2><i class="fa-solid fa-wallet"></i> Omba Utoaji wa Pesa</h2>
-    <div style="text-align:center; margin-bottom:10px;">
-      <div style="font-size:12px;color:#cfe3ff">Salio lako la sasa</div>
-      <div id="balanceBox">TZS <span id="balance">—</span></div>
-    </div>
-
-    <form id="withdrawForm">
-      <label class="label" for="method">Chagua Mtandao</label>
-      <select id="method" class="input">
-        <option value="vodacom">Vodacom</option>
-        <option value="airtel">Airtel</option>
-        <option value="tigo">Tigo</option>
-      </select>
-
-      <label class="label" for="phone">Namba ya Simu</label>
-      <input id="phone" class="input" type="text" placeholder="07XXXXXXXX" required />
-
-      <label class="label" for="amount">Kiasi cha Kutolewa (TZS)</label>
-      <input id="amount" class="input" type="number" min="6000" placeholder="mfano: 10,000" required />
-      <div class="small">Kiwango cha chini cha kutoa ni <strong>6,000 TZS</strong>.</div>
-
-      <button id="submitBtn" class="btn" type="submit">Tuma Ombi la Utoaji</button>
-    </form>
-  </div>
-</div>
-
-<nav>
-  <a href="dashboard.html"><i class="fas fa-home"></i><br>Nyumbani</a>
-  <a href="task.html"><i class="fas fa-tasks"></i><br>Kazi</a>
-  <a href="team.html"><i class="fas fa-users"></i><br>Timu</a>
-  <a href="vip.html"><i class="fas fa-crown"></i><br>VIP</a>
-  <a href="profile.html"><i class="fas fa-user"></i><br>Mimi</a>
-</nav>
-
-<div id="popup" class="popup"></div>
-<div id="spinner" class="spinner"></div>
-
-<script>
-// === Firebase Config (Pinned) ===
-const firebaseConfig = {
-  apiKey: "AIzaSyD2Dqz6jg8YACBvg_G_7yIR6c8sSH39BsQ",
-  authDomain: "cypx-onlinecrypto.firebaseapp.com",
-  databaseURL: "https://cypx-onlinecrypto-default-rtdb.europe-west1.firebasedatabase.app",
-  projectId: "cypx-onlinecrypto",
-  storageBucket: "cypx-onlinecrypto.firebasestorage.app",
-  messagingSenderId: "857500807275",
-  appId: "1:857500807275:web:0e04242866ff30bec3812e",
-  measurementId: "G-7PXLNKJLXV"
-};
-firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
-const db = firebase.database();
-
-const balanceEl = document.getElementById('balance');
-const popup = document.getElementById('popup');
-const spinner = document.getElementById('spinner');
-const pageLoader = document.getElementById('pageLoader');
-const form = document.getElementById('withdrawForm');
-const submitBtn = document.getElementById('submitBtn');
-
-function showPopup(msg,type='success',timeout=2800,redirect=null){
-  popup.innerHTML = msg;
-  popup.className='popup '+(type||'success');
-  popup.style.display='block';
-  setTimeout(()=>{
-    popup.style.display='none';
-    if(redirect) window.location=redirect;
-  },timeout);
-}
-
-let currentUser=null;
-
-// 🔹 Wait for page load and Firebase
-auth.onAuthStateChanged(user=>{
-  currentUser=user;
-  if(user){
-    db.ref(`users/${user.uid}/balance`).on('value',s=>{
-      balanceEl.textContent=(Number(s.val())||0).toLocaleString('en-US');
-      // Hide loader and reveal page
-      pageLoader.style.display='none';
-      document.body.style.opacity='1';
-    });
-  } else {
-    window.location='signin.html';
-  }
-});
-
-const prefixes = {
-  vodacom: ["075","074"],
-  airtel: ["078","068"],
-  tigo: ["071","065"]
-};
-function isValidNumberForMethod(phone, method){
-  if(!/^07\d{8}$/.test(phone)) return false;
-  const prefix = phone.substring(0,3);
-  return prefixes[method].includes(prefix);
-}
-
-form.addEventListener('submit',async e=>{
-  e.preventDefault();
-  if(!currentUser) return;
-  spinner.style.display='block';
-
-  const amount = Math.floor(Number(document.getElementById('amount').value));
-  const phone = document.getElementById('phone').value.trim();
-  const method = document.getElementById('method').value;
-
-  if(!amount || amount < 6000){
-    spinner.style.display='none';
-    showPopup('Kiasi cha chini cha kutoa ni 6,000 TZS','error');
-    return;
-  }
-  if(!isValidNumberForMethod(phone, method)){
-    spinner.style.display='none';
-    showPopup('Namba ya simu haifanani na mtandao uliouchagua','error');
-    return;
-  }
-
-  const balSnap = await db.ref(`users/${currentUser.uid}/balance`).once('value');
-  const balance = Number(balSnap.val())||0;
-  if(balance < amount){
-    spinner.style.display='none';
-    showPopup('Salio halitoshi','error');
-    return;
-  }
-
-  const refSnap = await db.ref(`users/${currentUser.uid}/referrals`).once('value');
-  let validRefs=0;
-  refSnap.forEach(r=>{
-    if(Number(r.child('deposited').val()) >= 100000) validRefs++;
-  });
-
-  if(validRefs < 2){
-    spinner.style.display='none';
-    showPopup("Unapaswa kuwa na angalau watu wawili uliowaalika ambao wameweka angalau TZS 100,000 kabla ya kufanya ombi la kutoa pesa.<br>Ungependa kuendelea?","confirm",4000,"select.html");
-    return;
-  }
-
-  submitBtn.disabled=true;
-  submitBtn.textContent='Inatuma...';
-
-  const balanceRef = db.ref(`users/${currentUser.uid}/balance`);
-  balanceRef.transaction(bal=>{
-    bal = Number(bal)||0;
-    if(bal < amount) return;
-    return bal - amount;
-  }, async (err, committed)=>{
-    spinner.style.display='none';
-    submitBtn.disabled=false;
-    submitBtn.textContent='Tuma Ombi la Utoaji';
-    if(err || !committed){
-      showPopup('Hitilafu imetokea, tafadhali jaribu tena','error');
-      return;
-    }
-
-    await db.ref(`users/${currentUser.uid}/withdrawals`).push({
-      amount,
-      phone,
-      method,
-      timestamp: Date.now(),
-      status: 'imetumwa'
-    });
-
-    form.reset();
-    showPopup(`Ombi lako la kutoa TZS ${amount.toLocaleString()} limetumwa kwa mafanikio!`,'success');
-  });
-});
-</script>
-</body>
-  </html>
+<!DOCTYPE html>  
+<html lang="sw">  
+<head>  
+<meta charset="utf-8" />  
+<meta name="viewport" content="width=device-width,initial-scale=1" />  
+<title>Toa Pesa - CYPX ONLINE CRYPTO</title>  
+  
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>  
+  
+<!-- Firebase v8 -->  
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>  
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>  
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>  
+  
+<style>  
+:root{  
+  --bg:#001a33;  
+  --card:#0b2f5a;  
+  --accent:#2ecc71;  
+  --text:#fff;  
+  --radius:14px;  
+  --shadow:0 8px 30px rgba(0,0,0,0.25);  
+}  
+html,body{  
+  margin:0;  
+  padding:0;  
+  font-family:system-ui,Roboto,Arial;  
+  background:linear-gradient(180deg,var(--bg),#001f3f);  
+  color:var(--text);  
+  height:100%;  
+}  
+body{  
+  display:flex;  
+  justify-content:center;  
+  align-items:flex-start;  
+  padding:16px 0 80px 0;  
+  opacity:0;  
+  transition:opacity 0.6s ease;  
+}  
+header{  
+  position:fixed;  
+  top:0;  
+  width:100%;  
+  text-align:center;  
+  padding:14px 0;  
+  font-weight:700;  
+  background:rgba(0,0,0,0.35);  
+  border-bottom:1px solid rgba(255,255,255,0.03);  
+}  
+.container{  
+  width:100%;  
+  max-width:420px;  
+  margin-top:60px;  
+}  
+.card{  
+  background:linear-gradient(160deg,var(--card),#0e3a6f);  
+  padding:25px 20px;  
+  border-radius:var(--radius);  
+  box-shadow:var(--shadow);  
+}  
+h2{  
+  margin:0 0 12px;  
+  font-size:18px;  
+  color:#00ffcc;  
+  text-align:center;  
+}  
+.label{  
+  display:block;  
+  margin:8px 0 6px;  
+  color:#cfe3ff;  
+  font-size:13px;  
+}  
+.input, select{  
+  width:100%;  
+  padding:12px;  
+  border-radius:10px;  
+  border:1px solid rgba(255,255,255,0.04);  
+  background:#06243f;  
+  color:var(--text);  
+  font-size:15px;  
+  margin-bottom:10px;  
+}  
+.btn{  
+  width:100%;  
+  margin-top:14px;  
+  padding:12px;  
+  border-radius:12px;  
+  border:0;  
+  font-weight:700;  
+  font-size:15px;  
+  cursor:pointer;  
+  background:linear-gradient(180deg,#00cc66,#00994d);  
+  color:white;  
+}  
+.small{  
+  font-size:13px;  
+  color:#d8ecff;  
+  margin-top:8px;  
+  text-align:center;  
+}  
+#balanceBox{  
+  display:inline-block;  
+  background:rgba(255,255,255,0.08);  
+  padding:8px 12px;  
+  border-radius:10px;  
+  font-weight:700;  
+  margin-bottom:10px;  
+}  
+.popup{  
+  position:fixed;  
+  left:50%;  
+  top:50%;  
+  transform:translate(-50%,-50%);  
+  min-width:240px;  
+  padding:16px 18px;  
+  border-radius:12px;  
+  z-index:999;  
+  display:none;  
+  text-align:center;  
+  font-weight:700;  
+}  
+.popup.success{background:#083b18;color:#d6ffd6;}  
+.popup.error{background:#3a1111;color:#ffd7d7;}  
+.popup.confirm{background:#223355;color:#d6e4ff;}  
+nav{  
+  position:fixed;  
+  bottom:0;  
+  left:0;  
+  right:0;  
+  background:#002244;  
+  display:flex;  
+  justify-content:space-around;  
+  height:60px;  
+  align-items:center;  
+}  
+nav a{  
+  flex:1;  
+  color:white;  
+  text-decoration:none;  
+  font-size:12px;  
+  text-align:center;  
+}  
+nav i{  
+  display:block;  
+  margin-bottom:4px;  
+  font-size:18px;  
+}  
+  
+/* 🔹 Spinner for page loading */  
+#pageLoader {  
+  position:fixed;  
+  top:0;  
+  left:0;  
+  right:0;  
+  bottom:0;  
+  background:linear-gradient(180deg,#001a33,#002244);  
+  display:flex;  
+  justify-content:center;  
+  align-items:center;  
+  z-index:1000;  
+}  
+.loader-ring {  
+  border:5px solid rgba(255,255,255,0.2);  
+  border-top:5px solid #00ffcc;  
+  border-radius:50%;  
+  width:60px;  
+  height:60px;  
+  animation:spin 1s linear infinite;  
+}  
+.spinner {  
+  border:4px solid rgba(255,255,255,0.2);  
+  border-top:4px solid #00ffcc;  
+  border-radius:50%;  
+  width:40px;  
+  height:40px;  
+  animation: spin 1s linear infinite;  
+  position:fixed;  
+  top:50%;  
+  left:50%;  
+  transform:translate(-50%,-50%);  
+  display:none;  
+  z-index:999;  
+}  
+@keyframes spin {  
+  0% { transform:translate(-50%,-50%) rotate(0deg); }  
+  100% { transform:translate(-50%,-50%) rotate(360deg); }  
+}  
+</style>  
+</head>  
+<body>  
+<div id="pageLoader"><div class="loader-ring"></div></div>  
+  
+<header>Toa Pesa</header>  
+  
+<div class="container">  
+  <div class="card">  
+    <h2><i class="fa-solid fa-wallet"></i> Omba Utoaji wa Pesa</h2>  
+    <div style="text-align:center; margin-bottom:10px;">  
+      <div style="font-size:12px;color:#cfe3ff">Salio lako la sasa</div>  
+      <div id="balanceBox">TZS <span id="balance">—</span></div>  
+    </div>  
+  
+    <form id="withdrawForm">  
+      <label class="label" for="method">Chagua Mtandao</label>  
+      <select id="method" class="input" required>  
+        <option value="vodacom">Vodacom</option>  
+        <option value="airtel">Airtel</option>  
+        <option value="tigo">Tigo</option>  
+        <option value="halotel">Halotel</option>  
+      </select>  
+  
+      <label class="label" for="phone">Namba ya Simu</label>  
+      <input id="phone" class="input" type="text" placeholder="07XXXXXXXXX" required />  
+  
+      <label class="label" for="amount">Kiasi cha Kutolewa (TZS)</label>  
+      <input id="amount" class="input" type="number" min="6000" placeholder="mfano: 10,000" required />  
+      <div class="small">Kiwango cha chini cha kutoa ni <strong>6,000 TZS</strong>.</div>  
+  
+      <button id="submitBtn" class="btn" type="submit">Tuma Ombi la Utoaji</button>  
+    </form>  
+  </div>  
+</div>  
+  
+<nav>  
+  <a href="dashboard.html"><i class="fas fa-home"></i><br>Nyumbani</a>  
+  <a href="task.html"><i class="fas fa-tasks"></i><br>Kazi</a>  
+  <a href="team.html"><i class="fas fa-users"></i><br>Timu</a>  
+  <a href="vip.html"><i class="fas fa-crown"></i><br>VIP</a>  
+  <a href="profile.html"><i class="fas fa-user"></i><br>Mimi</a>  
+</nav>  
+  
+<div id="popup" class="popup"></div>  
+<div id="spinner" class="spinner"></div>  
+  
+<script>  
+// === Firebase Config ===  
+const firebaseConfig = {  
+  apiKey: "AIzaSyD2Dqz6jg8YACBvg_G_7yIR6c8sSH39BsQ",  
+  authDomain: "cypx-onlinecrypto.firebaseapp.com",  
+  databaseURL: "https://cypx-onlinecrypto-default-rtdb.europe-west1.firebasedatabase.app",  
+  projectId: "cypx-onlinecrypto",  
+  storageBucket: "cypx-onlinecrypto.firebasestorage.app",  
+  messagingSenderId: "857500807275",  
+  appId: "1:857500807275:web:0e04242866ff30bec3812e",  
+  measurementId: "G-7PXLNKJLXV"  
+};  
+firebase.initializeApp(firebaseConfig);  
+const auth = firebase.auth();  
+const db = firebase.database();  
+  
+const balanceEl = document.getElementById('balance');  
+const popup = document.getElementById('popup');  
+const spinner = document.getElementById('spinner');  
+const pageLoader = document.getElementById('pageLoader');  
+const form = document.getElementById('withdrawForm');  
+const submitBtn = document.getElementById('submitBtn');  
+  
+function showPopup(msg,type='success',timeout=2800,redirect=null){  
+  popup.innerHTML = msg;  
+  popup.className='popup '+(type||'success');  
+  popup.style.display='block';  
+  setTimeout(()=>{  
+    popup.style.display='none';  
+    if(redirect) window.location=redirect;  
+  },timeout);  
+}  
+  
+let currentUser=null;  
+  
+auth.onAuthStateChanged(user=>{  
+  currentUser=user;  
+  if(user){  
+    db.ref(`users/${user.uid}/balance`).on('value',s=>{  
+      balanceEl.textContent=(Number(s.val())||0).toLocaleString('en-US');  
+      pageLoader.style.display='none';  
+      document.body.style.opacity='1';  
+    });  
+  } else {  
+    window.location='signin.html';  
+  }  
+});  
+  
+form.addEventListener('submit',async e=>{  
+  e.preventDefault();  
+  if(!currentUser) return;  
+  spinner.style.display='block';  
+  
+  const amount = Math.floor(Number(document.getElementById('amount').value));  
+  const phone = document.getElementById('phone').value.trim();  
+  const method = document.getElementById('method').value;  
+  
+  if(!amount || amount < 6000){  
+    spinner.style.display='none';  
+    showPopup('Kiasi cha chini cha kutoa ni 6,000 TZS','error');  
+    return;  
+  }  
+  if(!/^0[0-9]{9}$/.test(phone)){  
+    spinner.style.display='none';  
+    showPopup('Tafadhali ingiza namba sahihi ya simu ya Tanzania','error');  
+    return;  
+  }  
+  
+  const balSnap = await db.ref(`users/${currentUser.uid}/balance`).once('value');  
+  const balance = Number(balSnap.val())||0;  
+  if(balance < amount){  
+    spinner.style.display='none';  
+    showPopup('Salio halitoshi','error');  
+    return;  
+  }  
+  
+  const refSnap = await db.ref(`users/${currentUser.uid}/referrals`).once('value');  
+  let validRefs=0;  
+  refSnap.forEach(r=>{  
+    if(Number(r.child('deposited').val()) >= 100000) validRefs++;  
+  });  
+  
+  if(validRefs < 2){  
+    spinner.style.display='none';  
+    showPopup("Unapaswa kuwa na angalau watu wawili uliowaalika ambao wameweka angalau TZS 100,000 kabla ya kufanya ombi la kutoa pesa.<br>Ungependa kuendelea?","confirm",4000,"select.html");  
+    return;  
+  }  
+  
+  submitBtn.disabled=true;  
+  submitBtn.textContent='Inatuma...';  
+  
+  const balanceRef = db.ref(`users/${currentUser.uid}/balance`);  
+  balanceRef.transaction(bal=>{  
+    bal = Number(bal)||0;  
+    if(bal < amount) return;  
+    return bal - amount;  
+  }, async (err, committed)=>{  
+    spinner.style.display='none';  
+    submitBtn.disabled=false;  
+    submitBtn.textContent='Tuma Ombi la Utoaji';  
+    if(err || !committed){  
+      showPopup('Hitilafu imetokea, tafadhali jaribu tena','error');  
+      return;  
+    }  
+  
+    await db.ref(`users/${currentUser.uid}/withdrawals`).push({  
+      amount,  
+      phone,  
+      method,  
+      timestamp: Date.now(),  
+      status: 'imetumwa'  
+    });  
+  
+    form.reset();  
+    showPopup(`Ombi lako la kutoa TZS ${amount.toLocaleString()} limetumwa kwa mafanikio!`,'success');  
+  });  
+});  
+</script>  
+</body>  
+      </html>
