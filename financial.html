@@ -1,14 +1,14 @@
 <!DOCTYPE html>
-<html lang="sw">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CYPX ONLINE CRYPTO – Historia ya Miwamala</title>
+<title>AIRDROP USDT KE – Transaction History</title>
 
 <!-- Firebase -->
 <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-compat.js"></script>
 <script>
-// 🔥 Config yako iliyopinned
+// 🔥 Firebase Configuration
 const firebaseConfig = {
   apiKey: "AIzaSyD2Dqz6jg8YACBvg_G_7yIR6c8sSH39BsQ",
   authDomain: "cypx-onlinecrypto.firebaseapp.com",
@@ -38,12 +38,12 @@ header {
   background: rgba(0, 0, 0, 0.4);
   padding: 16px;
   text-align: center;
-  border-bottom: 2px solid #ffcc00;
+  border-bottom: 2px solid #00ff88;
 }
 header h2 {
   margin: 0;
   font-size: 1.3rem;
-  color: #ffcc00;
+  color: #00ff88;
   letter-spacing: 1px;
 }
 
@@ -62,7 +62,7 @@ header h2 {
 }
 .loader {
   border: 6px solid rgba(255,255,255,0.1);
-  border-top: 6px solid #ffcc00;
+  border-top: 6px solid #00ff88;
   border-radius: 50%;
   width: 60px;
   height: 60px;
@@ -74,7 +74,7 @@ header h2 {
 }
 .loader-text {
   font-size: 0.95rem;
-  color: #ffcc00;
+  color: #00ff88;
 }
 
 /* Transaction Cards */
@@ -131,34 +131,34 @@ nav i { font-size: 18px; }
 <body>
 
 <header>
-  <h2>Historia ya Miwamala</h2>
+  <h2>Transaction History</h2>
 </header>
 
 <div class="container" id="txn-container">
   <div class="loader-container" id="loader">
     <div class="loader"></div>
-    <div class="loader-text">Inapakia miamala yako...</div>
+    <div class="loader-text">Loading your transactions...</div>
   </div>
   <div id="txn-list" style="display:none;"></div>
 </div>
 
 <nav>
-  <a href="dashboard.html"><i class="fas fa-home"></i><br>Nyumbani</a>
-  <a href="deposit.html"><i class="fas fa-wallet"></i><br>Weka Fedha</a>
-  <a href="withdraw.html"><i class="fas fa-money-bill-wave"></i><br>Toa Fedha</a>
+  <a href="dashboard.html"><i class="fas fa-home"></i><br>Home</a>
+  <a href="deposit.html"><i class="fas fa-wallet"></i><br>Deposit</a>
+  <a href="withdraw.html"><i class="fas fa-money-bill-wave"></i><br>Withdraw</a>
   <a href="vip.html"><i class="fas fa-crown"></i><br>VIP</a>
-  <a href="profile.html"><i class="fas fa-user"></i><br>Wasifu</a>
+  <a href="profile.html"><i class="fas fa-user"></i><br>Profile</a>
 </nav>
 
 <script>
 function renderTxn(type, id, data){
   const div = document.createElement('div');
-  const amountTZS = Number(data.amount).toLocaleString('en-US');
+  const amountKSH = Number(data.amount).toLocaleString('en-US');
   div.className = 'txn';
   div.innerHTML = `
-    <h4>${type} – TZS ${amountTZS}</h4>
-    <p><strong>Tarehe:</strong> ${new Date(data.timestamp).toLocaleString()}</p>
-    <p><strong>Hali:</strong> <span class="status ${data.status}">${data.status}</span></p>
+    <h4>${type} – KSH ${amountKSH}</h4>
+    <p><strong>Date:</strong> ${new Date(data.timestamp).toLocaleString()}</p>
+    <p><strong>Status:</strong> <span class="status ${data.status}">${data.status}</span></p>
   `;
   return div;
 }
@@ -177,28 +177,28 @@ auth.onAuthStateChanged(user => {
   db.ref('deposits/'+uid).on('value', snap => {
     list.innerHTML = "";
     snap.forEach(child => {
-      const txn = renderTxn("Kuweka", child.key, child.val());
+      const txn = renderTxn("Deposit", child.key, child.val());
       list.prepend(txn);
       hasData = true;
     });
     loader.style.display = 'none';
     list.style.display = 'block';
-    if(!hasData) list.innerHTML = "<p>Hakuna miamala ya kuweka bado.</p>";
+    if(!hasData) list.innerHTML = "<p>No deposit transactions yet.</p>";
   });
 
   // Listen for withdrawals
   db.ref('withdrawals/'+uid).on('value', snap => {
     snap.forEach(child => {
-      const txn = renderTxn("Kutoa", child.key, child.val());
+      const txn = renderTxn("Withdrawal", child.key, child.val());
       list.prepend(txn);
       hasData = true;
     });
     loader.style.display = 'none';
     list.style.display = 'block';
-    if(!hasData) list.innerHTML = "<p>Hakuna miamala ya kutoa bado.</p>";
+    if(!hasData) list.innerHTML = "<p>No withdrawal transactions yet.</p>";
   });
 });
 </script>
 
 </body>
-  </html>
+</html>
