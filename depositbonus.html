@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="sw">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CYPX ONLINE CRYPTO – Bonasi ya Amana</title>
+<title>AIRDROP USDT KE – Deposit Bonus</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
 <style>
@@ -12,9 +12,8 @@
     font-family: system-ui, sans-serif;
     background: linear-gradient(180deg, #001a33, #012a50);
     color: #fff;
-    -webkit-user-select: none;
-    -ms-user-select: none;
     user-select: none;
+    padding-bottom: 1cm; /* ✅ Added breathing space */
   }
   header {
     padding: 14px;
@@ -103,64 +102,72 @@
 </style>
 </head>
 <body>
-  <header>Bonasi ya Amana</header>
+  <header>AIRDROP USDT KE – Deposit Bonus</header>
 
   <div class="bonus-container">
-    <div class="bonus-card" data-amount="50000">
-      <div class="deposit-amt">50,000 TZS</div>
-      <div class="bonus-amt">Bonasi 3,000 TZS</div>
+    <div class="bonus-card" data-amount="3000">
+      <div class="deposit-amt">3,000 KSH</div>
+      <div class="bonus-amt">Bonus 150 KSH</div>
+    </div>
+    <div class="bonus-card" data-amount="5000">
+      <div class="deposit-amt">5,000 KSH</div>
+      <div class="bonus-amt">Bonus 300 KSH</div>
+    </div>
+    <div class="bonus-card" data-amount="8000">
+      <div class="deposit-amt">8,000 KSH</div>
+      <div class="bonus-amt">Bonus 450 KSH</div>
+    </div>
+    <div class="bonus-card" data-amount="15000">
+      <div class="deposit-amt">15,000 KSH</div>
+      <div class="bonus-amt">Bonus 600 KSH</div>
+    </div>
+    <div class="bonus-card" data-amount="30000">
+      <div class="deposit-amt">30,000 KSH</div>
+      <div class="bonus-amt">Bonus 1,000 KSH</div>
+    </div>
+    <div class="bonus-card" data-amount="45000">
+      <div class="deposit-amt">45,000 KSH</div>
+      <div class="bonus-amt">Bonus 1,400 KSH</div>
     </div>
     <div class="bonus-card" data-amount="70000">
-      <div class="deposit-amt">70,000 TZS</div>
-      <div class="bonus-amt">Bonasi 5,000 TZS</div>
+      <div class="deposit-amt">70,000 KSH</div>
+      <div class="bonus-amt">Bonus 2,000 KSH</div>
     </div>
     <div class="bonus-card" data-amount="100000">
-      <div class="deposit-amt">100,000 TZS</div>
-      <div class="bonus-amt">Bonasi 7,000 TZS</div>
+      <div class="deposit-amt">100,000 KSH</div>
+      <div class="bonus-amt">Bonus 5,000 KSH</div>
     </div>
-    <div class="bonus-card" data-amount="150000">
-      <div class="deposit-amt">150,000 TZS</div>
-      <div class="bonus-amt">Bonasi 10,000 TZS</div>
+    <div class="bonus-card" data-amount="160000">
+      <div class="deposit-amt">160,000 KSH</div>
+      <div class="bonus-amt">Bonus 10,000 KSH</div>
     </div>
-    <div class="bonus-card" data-amount="200000">
-      <div class="deposit-amt">200,000 TZS</div>
-      <div class="bonus-amt">Bonasi 13,000 TZS</div>
-    </div>
-    <div class="bonus-card" data-amount="300000">
-      <div class="deposit-amt">300,000 TZS</div>
-      <div class="bonus-amt">Bonasi 17,000 TZS</div>
-    </div>
-    <div class="bonus-card" data-amount="400000">
-      <div class="deposit-amt">400,000 TZS</div>
-      <div class="bonus-amt">Bonasi 25,000 TZS</div>
-    </div>
-    <div class="bonus-card" data-amount="500000">
-      <div class="deposit-amt">500,000 TZS</div>
-      <div class="bonus-amt">Bonasi 30,000 TZS</div>
+    <div class="bonus-card" data-amount="170000">
+      <div class="deposit-amt">170,000+ KSH</div>
+      <div class="bonus-amt">Bonus 15,000 KSH</div>
     </div>
   </div>
 
   <nav class="bottom-nav">
-    <a href="dashboard.html"><i class="fa fa-home"></i>Mwanzo</a>
-    <a href="task.html"><i class="fa fa-list"></i>Kazi</a>
-    <a href="team.html"><i class="fa fa-users"></i>Timu</a>
+    <a href="dashboard.html"><i class="fa fa-home"></i>Home</a>
+    <a href="task.html"><i class="fa fa-list"></i>Tasks</a>
+    <a href="team.html"><i class="fa fa-users"></i>Team</a>
     <a href="vip.html"><i class="fa fa-crown"></i>VIP</a>
-    <a href="profile.html"><i class="fa fa-user"></i>Mimi</a>
+    <a href="profile.html"><i class="fa fa-user"></i>Profile</a>
   </nav>
 
   <!-- Loader -->
   <div id="loader">
     <div class="spinner"></div>
-    <p>Tafadhali subiri...</p>
+    <p>Please wait...</p>
   </div>
 
-  <!-- Firebase v9 SDKs -->
+  <!-- Firebase v9 SDK -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
     import { getAuth } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
     import { getDatabase } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
 
-    // ✅ Pinned Firebase Config (CYPX ONLINE CRYPTO)
+    // ✅ Firebase config (AIRDROP USDT KE)
     const firebaseConfig = {
       apiKey: "AIzaSyD2Dqz6jg8YACBvg_G_7yIR6c8sSH39BsQ",
       authDomain: "cypx-onlinecrypto.firebaseapp.com",
@@ -176,19 +183,19 @@
     const auth = getAuth(app);
     const db = getDatabase(app);
 
-    // Redirect with loader animation
+    // Loader redirection
     const loader = document.getElementById('loader');
-    document.querySelectorAll('.bonus-card').forEach(card=>{
-      card.addEventListener('click', ()=>{
+    document.querySelectorAll('.bonus-card').forEach(card => {
+      card.addEventListener('click', () => {
         const amt = card.dataset.amount;
         if (amt) {
           loader.style.display = 'flex';
           setTimeout(() => {
             window.location.href = `deposit.html?amount=${amt}`;
-          }, 1800);
+          }, 1500);
         }
       });
     });
   </script>
 </body>
-  </html>
+</html>
