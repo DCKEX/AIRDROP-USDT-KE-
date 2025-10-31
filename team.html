@@ -1,14 +1,14 @@
 <!DOCTYPE html>
-<html lang="sw">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>CYPX – Timu</title>
+<title>AIRDROP USDT KE – Team</title>
 
 <!-- Firebase compat build -->
 <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-compat.js"></script>
 <script>
-// ✅ Firebase Config (Pinned)
+// ✅ Firebase Config
 const firebaseConfig = {
   apiKey: "AIzaSyD2Dqz6jg8YACBvg_G_7yIR6c8sSH39BsQ",
   authDomain: "cypx-onlinecrypto.firebaseapp.com",
@@ -149,49 +149,49 @@ nav i { font-size: 18px; }
 
 <header>
   <img src="https://png.pngtree.com/png-clipart/20221216/original/pngtree-vip-icon-design-png-image_8749175.png" alt="logo">
-  <h2>CYPX – Timu</h2>
+  <h2>AIRDROP USDT KE – Team</h2>
 </header>
 
 <div class="section">
-  <h3>Kiungo Chako cha Rufaa</h3>
+  <h3>Your Referral Link</h3>
   <div style="display:flex;align-items:center;gap:6px;">
     <input id="ref-link" style="flex:1;border:none;padding:6px;border-radius:6px;" readonly>
-    <button class="copy-btn" id="copyRefBtn">Nakili</button>
+    <button class="copy-btn" id="copyRefBtn">Copy</button>
   </div>
 </div>
 
 <div class="section">
-  <h3>Takwimu za Timu</h3>
+  <h3>Team Statistics</h3>
   <div class="stats-grid">
-    <div class="stat"><div class="stat-label">Ukubwa wa Timu</div><div class="stat-value" id="team-size">0</div></div>
-    <div class="stat"><div class="stat-label">Jumla ya Chaji</div><div class="stat-value" id="team-recharge">0 TZS</div></div>
-    <div class="stat"><div class="stat-label">Chaji ya Kwanza</div><div class="stat-value" id="first-recharge">0 TZS</div></div>
-    <div class="stat"><div class="stat-label">Timu Mpya</div><div class="stat-value" id="new-team">0</div></div>
-    <div class="stat"><div class="stat-label">Jumla ya Utoaji</div><div class="stat-value" id="team-withdraw">0 TZS</div></div>
-    <div class="stat"><div class="stat-label">Utoaji wa Kwanza</div><div class="stat-value" id="first-withdraw">0 TZS</div></div>
+    <div class="stat"><div class="stat-label">Team Size</div><div class="stat-value" id="team-size">0</div></div>
+    <div class="stat"><div class="stat-label">Total Recharge</div><div class="stat-value" id="team-recharge">0 KSH</div></div>
+    <div class="stat"><div class="stat-label">First Recharge</div><div class="stat-value" id="first-recharge">0 KSH</div></div>
+    <div class="stat"><div class="stat-label">New Team Members</div><div class="stat-value" id="new-team">0</div></div>
+    <div class="stat"><div class="stat-label">Total Withdrawals</div><div class="stat-value" id="team-withdraw">0 KSH</div></div>
+    <div class="stat"><div class="stat-label">First Withdrawal</div><div class="stat-value" id="first-withdraw">0 KSH</div></div>
   </div>
 </div>
 
 <div class="section">
-  <h3>Tume kwa Kiwango</h3>
-  <div class="level-box"><h4>Kiwango 1 – 17%</h4><p>Jumla: <span id="lvl1-total">0 TZS</span></p></div>
-  <div class="level-box"><h4>Kiwango 2 – 2%</h4><p>Jumla: <span id="lvl2-total">0 TZS</span></p></div>
-  <div class="level-box"><h4>Kiwango 3 – 1%</h4><p>Jumla: <span id="lvl3-total">0 TZS</span></p></div>
+  <h3>Commission by Level</h3>
+  <div class="level-box"><h4>Level 1 – 17%</h4><p>Total: <span id="lvl1-total">0 KSH</span></p></div>
+  <div class="level-box"><h4>Level 2 – 2%</h4><p>Total: <span id="lvl2-total">0 KSH</span></p></div>
+  <div class="level-box"><h4>Level 3 – 1%</h4><p>Total: <span id="lvl3-total">0 KSH</span></p></div>
 </div>
 
 <nav>
-  <a href="dashboard.html"><i class="fas fa-home"></i><br>Nyumbani</a>
-  <a href="task.html"><i class="fas fa-tasks"></i><br>Kazi</a>
-  <a href="team.html"><i class="fas fa-users"></i><br>Timu</a>
+  <a href="dashboard.html"><i class="fas fa-home"></i><br>Home</a>
+  <a href="task.html"><i class="fas fa-tasks"></i><br>Tasks</a>
+  <a href="team.html"><i class="fas fa-users"></i><br>Team</a>
   <a href="vip.html"><i class="fas fa-crown"></i><br>VIP</a>
-  <a href="profile.html"><i class="fas fa-user"></i><br>Mimi</a>
+  <a href="profile.html"><i class="fas fa-user"></i><br>Profile</a>
 </nav>
 
 <div id="toast" class="toast"></div>
 
 <script>
-function formatTZS(value){
-  return parseFloat(value || 0).toLocaleString('sw-TZ') + ' TZS';
+function formatKSH(value){
+  return parseFloat(value || 0).toLocaleString('en-KE') + ' KSH';
 }
 
 function showToast(msg,type='success'){
@@ -205,10 +205,10 @@ auth.onAuthStateChanged(user=>{
   if(!user){window.location='signin.html';return;}
   const uid=user.uid;
 
-  // ✅ Kiungo cha Rufaa (Now fixed to CYPXONLINECRYPTO-TZ project)
+  // ✅ Referral link
   db.ref('users/'+uid+'/username').once('value').then(snap=>{
     const username = snap.val() || uid;
-    const link = `https://dckex.github.io/CYPXONLINECRYPTO-TZ-/signup.html?ref=${encodeURIComponent(username)}`;
+    const link = `https://dckex.github.io/AIRDROPUSDTKE/signup.html?ref=${encodeURIComponent(username)}`;
     document.getElementById('ref-link').value = link;
 
     document.getElementById('copyRefBtn').onclick = () => {
@@ -217,26 +217,26 @@ auth.onAuthStateChanged(user=>{
           copiedAt: firebase.database.ServerValue.TIMESTAMP,
           link: link
         });
-        showToast('Kiungo kimenakiliwa kwa mafanikio!', 'success');
-      }).catch(() => showToast('Imeshindikana kunakili!', 'error'));
+        showToast('Referral link copied successfully!', 'success');
+      }).catch(() => showToast('Failed to copy link!', 'error'));
     };
   });
 
-  // ✅ Ukubwa wa Timu
+  // ✅ Team size
   db.ref('referrals/'+uid).on('value', snap=>{
     const referrals = snap.val() || {};
     const active = Object.values(referrals).filter(r=>r && r.joinedAt).length;
-    document.getElementById('team-size').textContent = active.toLocaleString('sw-TZ');
+    document.getElementById('team-size').textContent = active.toLocaleString('en-KE');
   });
 
-  // ✅ Tume kwa viwango
+  // ✅ Commission per level
   db.ref('commissions/'+uid).on('value', snap=>{
     const data = snap.val() || {};
-    document.getElementById('lvl1-total').textContent = formatTZS(data.lvl1);
-    document.getElementById('lvl2-total').textContent = formatTZS(data.lvl2);
-    document.getElementById('lvl3-total').textContent = formatTZS(data.lvl3);
+    document.getElementById('lvl1-total').textContent = formatKSH(data.lvl1);
+    document.getElementById('lvl2-total').textContent = formatKSH(data.lvl2);
+    document.getElementById('lvl3-total').textContent = formatKSH(data.lvl3);
   });
 });
 </script>
 </body>
-  </html>
+</html>
