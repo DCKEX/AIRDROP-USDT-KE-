@@ -1,15 +1,15 @@
 <!DOCTYPE html>
-<html lang="sw">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>CYPX – Wasifu</title>
+<title>AIRDROP USDT KE – Profile</title>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
 <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-compat.js"></script>
 <script>
-// ✅ Pinned Firebase Config
+// ✅ Firebase Config
 const firebaseConfig = {
   apiKey: "AIzaSyD2Dqz6jg8YACBvg_G_7yIR6c8sSH39BsQ",
   authDomain: "cypx-onlinecrypto.firebaseapp.com",
@@ -153,13 +153,13 @@ nav i { font-size:18px; }
 
 <header>
   <img src="https://png.pngtree.com/png-clipart/20221216/original/pngtree-vip-icon-design-png-image_8749175.png" alt="VIP Icon">
-  <h2>CYPX – Wasifu</h2>
+  <h2>AIRDROP USDT KE – Profile</h2>
 </header>
 
 <!-- VIP + Email -->
 <div class="vip-card">
   <div class="info">
-    <div class="user-email" id="user-email">Inapakia...</div>
+    <div class="user-email" id="user-email">Loading...</div>
     <div class="vip-level">
       <span id="vip-level">VIP 0</span>
       <span class="vip-stars" id="vip-stars"></span>
@@ -170,26 +170,26 @@ nav i { font-size:18px; }
 
 <!-- Balances -->
 <div class="balance-card">
-  <div id="total-balance">Jumla ya Salio: TZS 0</div>
-  <div id="recharged-amount">Kiasi Ulichoweka: TZS 0</div>
+  <div id="total-balance">Total Balance: KSH 0</div>
+  <div id="recharged-amount">Total Recharged: KSH 0</div>
 </div>
 
 <!-- Buttons -->
 <div class="buttons">
-  <button class="btn" onclick="location.href='deposit.html'"><i class="fas fa-wallet"></i>Weka Fedha</button>
-  <button class="btn" onclick="location.href='withdraw.html'"><i class="fas fa-money-bill"></i>Toa Fedha</button>
-  <button class="btn" onclick="location.href='financial.html'"><i class="fas fa-history"></i>Historia ya Muamala</button>
-  <button class="btn" id="change-password-btn"><i class="fas fa-key"></i>Badilisha Nenosiri</button>
-  <button class="btn" id="logout-btn"><i class="fas fa-sign-out-alt"></i>Toka</button>
+  <button class="btn" onclick="location.href='deposit.html'"><i class="fas fa-wallet"></i>Deposit Funds</button>
+  <button class="btn" onclick="location.href='withdraw.html'"><i class="fas fa-money-bill"></i>Withdraw Funds</button>
+  <button class="btn" onclick="location.href='financial.html'"><i class="fas fa-history"></i>Transaction History</button>
+  <button class="btn" id="change-password-btn"><i class="fas fa-key"></i>Change Password</button>
+  <button class="btn" id="logout-btn"><i class="fas fa-sign-out-alt"></i>Logout</button>
 </div>
 
 <!-- Bottom Navigation -->
 <nav>
-  <a href="dashboard.html"><i class="fas fa-home"></i><br>Nyumbani</a>
-  <a href="task.html"><i class="fas fa-tasks"></i><br>Kazi</a>
-  <a href="team.html"><i class="fas fa-users"></i><br>Timu</a>
+  <a href="dashboard.html"><i class="fas fa-home"></i><br>Home</a>
+  <a href="task.html"><i class="fas fa-tasks"></i><br>Tasks</a>
+  <a href="team.html"><i class="fas fa-users"></i><br>Team</a>
   <a href="vip.html"><i class="fas fa-crown"></i><br>VIP</a>
-  <a href="profile.html"><i class="fas fa-user"></i><br>Mimi</a>
+  <a href="profile.html"><i class="fas fa-user"></i><br>Profile</a>
 </nav>
 
 <script>
@@ -202,7 +202,7 @@ auth.onAuthStateChanged(user => {
 
   document.getElementById('user-email').textContent = user.email;
 
-  // ✅ Get VIP level synced with vip.html
+  // ✅ Get VIP level
   userRef.child('vipLevel').on('value', snap => {
     const level = parseInt(snap.val() || 0);
     document.getElementById('vip-level').textContent = `VIP ${level}`;
@@ -213,17 +213,17 @@ auth.onAuthStateChanged(user => {
   userRef.child('balance').on('value', snap => {
     const bal = parseFloat(snap.val() || 0);
     document.getElementById('total-balance').textContent =
-      `Jumla ya Salio: TZS ${bal.toLocaleString()}`;
+      `Total Balance: KSH ${bal.toLocaleString()}`;
   });
 
   // ✅ Show total recharged
   userRef.child('recharged').on('value', snap => {
     const rech = parseFloat(snap.val() || 0);
     document.getElementById('recharged-amount').textContent =
-      `Kiasi Ulichoweka: TZS ${rech.toLocaleString()}`;
+      `Total Recharged: KSH ${rech.toLocaleString()}`;
   });
 
-  // ✅ Process new deposits ONCE (not on page reload)
+  // ✅ Process new deposits
   let processedDeposits = new Set();
   depositRef.on('child_added', snap => {
     const key = snap.key;
@@ -234,31 +234,31 @@ auth.onAuthStateChanged(user => {
     const amount = parseFloat(deposit.amount);
     const now = new Date().toLocaleString();
 
-    // Update total recharged (only once per new deposit)
+    // Update total recharged
     userRef.child('recharged').transaction(val => (val || 0) + amount);
 
     // Record in transaction history
     transRef.push({
-      type: "Amana (Deposit)",
+      type: "Deposit",
       amount,
       date: now,
-      currency: "TZS"
+      currency: "KSH"
     });
   });
 
   // ✅ Reset password
   document.getElementById('change-password-btn').onclick = () => {
     auth.sendPasswordResetEmail(user.email).then(() => {
-      showPopup('✅ Barua ya kubadilisha nenosiri imetumwa');
-    }).catch(() => showPopup('❌ Hitilafu imetokea', true));
+      showPopup('✅ Password reset email sent');
+    }).catch(() => showPopup('❌ An error occurred', true));
   };
 
   // ✅ Logout
   document.getElementById('logout-btn').onclick = () => {
     auth.signOut().then(() => {
-      showPopup('✅ Umetoka');
+      showPopup('✅ Logged out successfully');
       setTimeout(() => window.location = 'signin.html', 1500);
-    }).catch(() => showPopup('❌ Kushindwa kutoka', true));
+    }).catch(() => showPopup('❌ Failed to log out', true));
   };
 });
 
