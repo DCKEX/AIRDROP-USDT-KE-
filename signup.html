@@ -157,7 +157,7 @@
         };
         await db.ref("users/" + uid).set(userObj);
         if (refBy) await addReferral(refBy, uid, { username, email, phone: "+254" + phone });
-        window.location.href = "welcome.html";
+        window.location.href = "dashboard.html";
       } catch (err) {
         console.error(err);
         showNotify(err.message);
