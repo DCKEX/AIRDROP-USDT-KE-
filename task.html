@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="sw">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>CYPX – Kazi</title>
+<title>CYPX – Tasks</title>
 
 <!-- Firebase compat -->
 <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-compat.js"></script>
@@ -142,27 +142,27 @@ body::after{
 
 <header>
   <img src="https://png.pngtree.com/png-clipart/20221216/original/pngtree-vip-icon-design-png-image_8749175.png" alt="logo">
-  <h2>CYPX – Kazi</h2>
+  <h2>CYPX – Tasks</h2>
 </header>
 
 <div class="stats">
-  <div class="stat-box"><h3>Jumla ya Viwango</h3><p id="total-vips">0</p></div>
-  <div class="stat-box"><h3>Vilivyofunguliwa</h3><p id="opened-vips">0</p></div>
-  <div class="stat-box"><h3>Vya Kuendelea</h3><p id="ongoing-vips">0</p></div>
-  <div class="stat-box"><h3>Vilivyokamilika</h3><p id="completed-vips">0</p></div>
+  <div class="stat-box"><h3>Total Levels</h3><p id="total-vips">0</p></div>
+  <div class="stat-box"><h3>Unlocked</h3><p id="opened-vips">0</p></div>
+  <div class="stat-box"><h3>Ongoing</h3><p id="ongoing-vips">0</p></div>
+  <div class="stat-box"><h3>Completed</h3><p id="completed-vips">0</p></div>
 </div>
 
 <div class="history">
-  <h3>Historia ya Kazi / Matendo</h3>
+  <h3>Task / Action History</h3>
   <div id="task-history"></div>
 </div>
 
 <nav>
-  <a href="dashboard.html"><i class="fas fa-home"></i><br>Mwanzo</a>
-  <a href="task.html"><i class="fas fa-tasks"></i><br>Kazi</a>
-  <a href="team.html"><i class="fas fa-users"></i><br>Timu</a>
+  <a href="dashboard.html"><i class="fas fa-home"></i><br>Home</a>
+  <a href="task.html"><i class="fas fa-tasks"></i><br>Tasks</a>
+  <a href="team.html"><i class="fas fa-users"></i><br>Team</a>
   <a href="vip.html"><i class="fas fa-crown"></i><br>VIP</a>
-  <a href="profile.html"><i class="fas fa-user"></i><br>Mimi</a>
+  <a href="profile.html"><i class="fas fa-user"></i><br>Profile</a>
 </nav>
 
 <script>
@@ -185,7 +185,7 @@ auth.onAuthStateChanged(user=>{
     document.getElementById('ongoing-vips').textContent = ongoing;
     document.getElementById('completed-vips').textContent = completed;
 
-    // auto-balance consistency check: if vip.html adds more later
+    // Auto-correct if more than available VIP levels
     if(opened > totalVipLevels) db.ref('users/'+uid+'/vipStats/opened').set(totalVipLevels);
   });
 
@@ -199,7 +199,7 @@ auth.onAuthStateChanged(user=>{
       const row = document.createElement('div');
       row.className='row';
       const time = new Date(item.timestamp||Date.now()).toLocaleString();
-      row.innerHTML = `<div>${item.action||'Kitendo'}</div><div>${time}</div>`;
+      row.innerHTML = `<div>${item.action||'Action'}</div><div>${time}</div>`;
       cont.appendChild(row);
     });
   });
@@ -216,4 +216,4 @@ function showPopup(msg, red=false){
 </script>
 
 </body>
-  </html>
+</html>
