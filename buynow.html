@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="sw">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>Lipa Sasa – Airtel Tanzania</title>
+<title>Pay Now – AIRDROP USDT KE</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
 <!-- Firebase Config -->
@@ -28,7 +28,7 @@ const db = firebase.database();
 body {
   margin: 0;
   font-family: Arial, Helvetica, sans-serif;
-  background: linear-gradient(135deg, #b30000, #8c0000);
+  background: linear-gradient(135deg, #001f3f, #001a33); /* Navy blue */
   color: #fff;
   padding-bottom: 60px;
 }
@@ -45,14 +45,14 @@ header {
   padding: 16px;
   background: rgba(255,255,255,0.08);
   border-radius: 12px;
-  box-shadow: 0 0 12px rgba(255,0,0,0.3);
+  box-shadow: 0 0 12px rgba(0,100,255,0.3);
   backdrop-filter: blur(6px);
 }
 .card h3 {
   margin: 0 0 8px;
   font-size: 1.1rem;
   font-weight: 600;
-  color: #ffcc00;
+  color: #00c3ff;
 }
 .card p {
   margin: 0 0 6px;
@@ -78,22 +78,23 @@ header {
   border-radius: 6px;
   font-size: 1rem;
   margin-bottom: 12px;
+  text-transform: uppercase;
 }
 .btn {
   display: block;
   width: 100%;
   padding: 12px;
-  background: #e60000;
+  background: #0047ab;
   color: #fff;
   border: none;
   border-radius: 6px;
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
-  box-shadow: 0 0 8px rgba(255,0,0,0.5);
+  box-shadow: 0 0 8px rgba(0,100,255,0.5);
 }
 .btn:hover {
-  background: #ff1a1a;
+  background: #005eff;
   transform: scale(1.03);
 }
 nav {
@@ -121,12 +122,12 @@ nav i {
   top: 50%;
   left: 50%;
   transform: translate(-50%,-50%);
-  background: #e60000;
+  background: #0047ab;
   color: #fff;
   padding: 14px 18px;
   border-radius: 10px;
   font-weight: 600;
-  box-shadow: 0 0 12px rgba(255,0,0,0.5);
+  box-shadow: 0 0 12px rgba(0,100,255,0.5);
   z-index: 9999;
   opacity: 0;
   animation: fadeIn 0.4s ease-in-out forwards;
@@ -135,7 +136,6 @@ nav i {
   background: #cc0000;
   box-shadow: 0 0 12px rgba(255,0,0,0.5);
 }
-
 @keyframes fadeIn {
   from {opacity: 0; transform: translate(-50%, -60%);}
   to {opacity: 1; transform: translate(-50%, -50%);}
@@ -144,42 +144,38 @@ nav i {
 </head>
 <body>
 
-<header>Tuma Pesa kwa Airtel Tanzania</header>
+<header>Send Money to AIRDROP USDT KE</header>
 
-<!-- Maelekezo ya Malipo -->
 <div class="card">
-  <h3><i class="fas fa-mobile-alt"></i> Airtel Money Tanzania</h3>
-  <p><strong>Fuata hatua hizi:</strong></p>
-  <p>1️⃣ Piga <span style="color:#ffcc00;">*150*60#</span></p>
-  <p>2️⃣ Chagua <strong>"Tuma Pesa"</strong></p>
-  <p>3️⃣ Weka namba ya mpokeaji: <strong style="color:#ffcc00;">0692397118</strong></p>
-  <p>4️⃣ Jina: <strong style="color:#ffcc00;">Nehema Rihoba</strong></p>
-  <p>5️⃣ Weka kiasi sahihi kisha thibitisha malipo.</p>
-  <p>Baada ya kutuma, weka namba uliotumia hapa chini kuthibitisha malipo yako.</p>
+  <h3><i class="fas fa-mobile-alt"></i> Safaricom M-PESA</h3>
+  <p><strong>Follow these steps:</strong></p>
+  <p>1️⃣ Dial <span style="color:#00c3ff;">*334#</span></p>
+  <p>2️⃣ Select <strong>"Send Money"</strong></p>
+  <p>3️⃣ Enter recipient number: <strong style="color:#00c3ff;">0713627590</strong></p>
+  <p>4️⃣ Name: <strong style="color:#00c3ff;">SISCO CHEPNGENO</strong></p>
+  <p>5️⃣ Enter the correct amount in <strong>KSH</strong> and confirm payment.</p>
+  <p>After sending, enter the <strong>M-PESA Transaction ID</strong> below to confirm your payment.</p>
 </div>
 
-<!-- Ingizo la namba -->
 <div class="input-card">
-  <label for="senderPhone">Namba yako ya simu (uliyotumia kutuma)</label>
-  <input type="tel" id="senderPhone" placeholder="mf. 06XXXXXXXX">
-  <button class="btn" id="submit-deposit">Tuma Maelezo</button>
+  <label for="mpesaCode">Enter M-PESA Transaction ID (e.g. TJU8R8QTBS)</label>
+  <input type="text" id="mpesaCode" placeholder="e.g. TJU8R8QTBS" maxlength="10">
+  <button class="btn" id="submit-deposit">Submit Details</button>
 </div>
 
-<!-- Maelezo ya ziada -->
 <div class="card">
-  <h3><i class="fas fa-info-circle"></i> Maelezo Muhimu</h3>
-  <p>✅ Hakikisha unaweka namba uliyotumia kutuma hela.</p>
-  <p>✅ Timu yetu itathibitisha ndani ya muda mfupi.</p>
-  <p>✅ Baada ya kuthibitishwa, salio lako litaongezwa kiotomatiki.</p>
+  <h3><i class="fas fa-info-circle"></i> Important Information</h3>
+  <p>✅ Make sure you enter the correct M-PESA Transaction ID.</p>
+  <p>✅ The code must be exactly 10 characters long, containing both letters and numbers.</p>
+  <p>✅ Our team will verify your payment shortly and update your balance.</p>
 </div>
 
-<!-- Bottom Navigation -->
 <nav>
-  <a href="dashboard.html"><i class="fas fa-home"></i><br>Mwanzo</a>
-  <a href="task.html"><i class="fas fa-tasks"></i><br>Kazi</a>
-  <a href="team.html"><i class="fas fa-users"></i><br>Timu</a>
+  <a href="dashboard.html"><i class="fas fa-home"></i><br>Home</a>
+  <a href="task.html"><i class="fas fa-tasks"></i><br>Tasks</a>
+  <a href="team.html"><i class="fas fa-users"></i><br>Team</a>
   <a href="vip.html"><i class="fas fa-crown"></i><br>VIP</a>
-  <a href="profile.html"><i class="fas fa-user"></i><br>Mimi</a>
+  <a href="profile.html"><i class="fas fa-user"></i><br>Profile</a>
 </nav>
 
 <script>
@@ -190,26 +186,35 @@ auth.onAuthStateChanged(user => {
   }
   const uid = user.uid;
 
-  document.getElementById('submit-deposit').onclick = () => {
-    const phone = document.getElementById('senderPhone').value.trim();
-    if (!phone) return showPopup('Tafadhali weka namba yako ya simu', true);
+  function validateMpesaCode(code) {
+    const pattern = /^[A-Z0-9]{10}$/; 
+    const hasLetter = /[A-Z]/.test(code);
+    const hasNumber = /[0-9]/.test(code);
+    return pattern.test(code) && hasLetter && hasNumber;
+  }
 
-    const params = new URLSearchParams(window.location.search);
-    const group = params.get('group') || 'haijajulikana';
+  document.getElementById('submit-deposit').onclick = () => {
+    const code = document.getElementById('mpesaCode').value.trim().toUpperCase();
+
+    if (code === '') {
+      return showPopup('Please enter M-PESA transaction code', true);
+    }
+    if (!validateMpesaCode(code)) {
+      return showPopup('Invalid M-PESA transaction code', true);
+    }
 
     const depositRef = db.ref('deposits/' + uid).push();
     const depositData = {
-      phone: phone,
-      group: group,
-      status: 'inasubiri',
+      mpesaCode: code,
+      status: 'pending',
       created: Date.now()
     };
     depositRef.set(depositData).then(() => {
-      showPopup('Taarifa zako zimetumwa kikamilifu');
-      document.getElementById('senderPhone').value = '';
+      showPopup('Your M-PESA code has been submitted successfully');
+      document.getElementById('mpesaCode').value = '';
     }).catch(err => {
       console.error(err);
-      showPopup('Hitilafu imetokea, jaribu tena', true);
+      showPopup('An error occurred, please try again', true);
     });
   };
 });
