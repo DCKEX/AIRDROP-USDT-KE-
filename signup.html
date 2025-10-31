@@ -47,12 +47,12 @@
 
       <div>
         <label for="password">Password</label>
-        <input id="password" type="password" placeholder="Create a strong password" minlength="8" required/>
+        <input id="password" type="password" placeholder="Create a strong password" minlength="6" required/>
       </div>
 
       <div>
         <label for="confirm">Confirm Password</label>
-        <input id="confirm" type="password" placeholder="Repeat password" minlength="8" required/>
+        <input id="confirm" type="password" placeholder="Repeat password" minlength="6" required/>
       </div>
 
       <div>
@@ -63,8 +63,7 @@
       <button id="signupBtn" type="submit">Sign Up</button>
 
       <div class="foot">
-        Already have an account? <a href="signin.html">Sign In</a><br/>
-        By signing up you agree to our <a href="#">Terms</a>
+        Already have an account? <a href="signin.html">Sign In</a>
       </div>
     </form>
   </div>
@@ -141,7 +140,7 @@
       if (username.length < 3) return showNotify("Username must be at least 3 characters long.");
       if (!validPhone(phone)) return showNotify("Phone number must be 9 digits starting with 7.");
       if (!email) return showNotify("Email is required.");
-      if (pass.length < 8) return showNotify("Password must be at least 8 characters long.");
+      if (pass.length < 6) return showNotify("Password must be at least 6 characters long.");
       if (pass !== conf) return showNotify("Passwords do not match.");
 
       $("signupBtn").disabled = true;
