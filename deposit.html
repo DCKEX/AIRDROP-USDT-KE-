@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="sw">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CYPX ONLINE CRYPTO – Weka Amana</title>
+<title>AIRDROP USDT KE – Deposit</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
 <!-- Firebase -->
@@ -29,7 +29,7 @@ const storage = firebase.storage();
 body {
   margin: 0;
   font-family: Arial, Helvetica, sans-serif;
-  background: #041833;
+  background: #001f4d;
   color: #fff;
   padding-bottom: 80px;
 }
@@ -104,12 +104,12 @@ nav i { font-size: 1.2rem; }
   text-align: center;
 }
 
-/* Loading animation */
+/* Loader */
 #loader {
   position: fixed;
   width: 100%;
   height: 100%;
-  background: #041833;
+  background: #001f4d;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -135,35 +135,32 @@ nav i { font-size: 1.2rem; }
 
 <div class="container" style="display:none;" id="mainContent">
   <div class="card">
-    <h3><i class="fas fa-wallet" style="margin-right:8px;"></i>Tuma Pesa kwa Airtel Tanzania</h3>
-    <p><strong>Tumia:</strong> Airtel Money Tanzania</p>
-    <p><strong>Piga:</strong> *150*60#</p>
-    <p><strong>Chagua:</strong> Tuma pesa</p>
-    <p><strong>Namba ya Airtel Money:</strong>
-      <span id="airtelNumber" style="cursor:pointer; background:#06224d; padding:4px 8px; border-radius:6px;">0692397118</span>
-    </p>
-    <p><strong>Jina:</strong> Nehema Rihoba</p>
-    <p>Tuma pesa kwa maelezo yaliyo hapo juu kisha wasilisha taarifa zako hapa chini.</p>
+    <h3><i class="fas fa-wallet" style="margin-right:8px;"></i>Send Money via Safaricom M-PESA</h3>
+    <p><strong>Go to:</strong> M-PESA Menu</p>
+    <p><strong>Select:</strong> Send Money</p>
+    <p><strong>Enter Number:</strong> <span id="mpesaNumber" style="cursor:pointer; background:#06224d; padding:4px 8px; border-radius:6px;">0713627590</span></p>
+    <p><strong>Name:</strong> SISCO CHEPNGENO</p>
+    <p>Send the desired amount, then enter your M-PESA transaction code below to confirm your deposit.</p>
   </div>
 
   <div class="card">
-    <h3><i class="fas fa-coins" style="margin-right:8px;"></i>Wasilisha Amana Yako</h3>
-    <label>Kiasi (TZS)</label>
-    <input type="text" id="amount" placeholder="mfano: 50,000">
-    <label>Namba yako ya Simu</label>
-    <input type="text" id="phone" placeholder="07XXXXXXXX">
-    <label>Risiti / Picha ya uthibitisho (hiari)</label>
+    <h3><i class="fas fa-coins" style="margin-right:8px;"></i>Submit Your Deposit</h3>
+    <label>Amount (KSH)</label>
+    <input type="text" id="amount" placeholder="e.g. 3000">
+    <label>M-PESA Transaction Code</label>
+    <input type="text" id="mpesaCode" placeholder="e.g. TJU8R8QTBS">
+    <label>Receipt / Screenshot (optional)</label>
     <input type="file" id="receipt">
-    <button id="submitDeposit">Tuma Amana</button>
+    <button id="submitDeposit">Submit Deposit</button>
   </div>
 </div>
 
 <nav>
-  <a href="dashboard.html"><i class="fas fa-home"></i><br>Nyumbani</a>
-  <a href="task.html"><i class="fas fa-tasks"></i><br>Kazi</a>
-  <a href="team.html"><i class="fas fa-users"></i><br>Timu</a>
+  <a href="dashboard.html"><i class="fas fa-home"></i><br>Home</a>
+  <a href="task.html"><i class="fas fa-tasks"></i><br>Tasks</a>
+  <a href="team.html"><i class="fas fa-users"></i><br>Team</a>
   <a href="vip.html"><i class="fas fa-crown"></i><br>VIP</a>
-  <a href="profile.html"><i class="fas fa-user"></i><br>Mimi</a>
+  <a href="profile.html"><i class="fas fa-user"></i><br>Profile</a>
 </nav>
 
 <div id="notification"></div>
@@ -183,10 +180,10 @@ function showNotification(msg){
   setTimeout(()=>{notif.style.display='none';}, 3000);
 }
 
-document.getElementById('airtelNumber').addEventListener('click', ()=>{
-  navigator.clipboard.writeText('0692397118')
-    .then(()=>showNotification("Namba ya Airtel imenakiliwa!"))
-    .catch(()=>showNotification("Imeshindikana kunakili"));
+document.getElementById('mpesaNumber').addEventListener('click', ()=>{
+  navigator.clipboard.writeText('0713627590')
+    .then(()=>showNotification("Safaricom number copied!"))
+    .catch(()=>showNotification("Failed to copy number"));
 });
 
 auth.onAuthStateChanged(user=>{
@@ -196,35 +193,36 @@ auth.onAuthStateChanged(user=>{
   }
   const uid = user.uid;
 
-  db.ref('users/'+uid+'/phone').once('value').then(snap=>{
-    const val = snap.val();
-    if(val) document.getElementById('phone').value = val;
-    else if(user.phoneNumber) document.getElementById('phone').value = user.phoneNumber;
-  });
-
   const btn = document.getElementById('submitDeposit');
   btn.addEventListener('click', async ()=>{
     try {
-      let amountStr = document.getElementById('amount').value.replace(/,/g,'');
+      const amountStr = document.getElementById('amount').value.replace(/,/g,'');
       const amount = parseFloat(amountStr);
-      const phone  = document.getElementById('phone').value.trim();
+      const mpesaCode = document.getElementById('mpesaCode').value.trim().toUpperCase();
       const receiptFile = document.getElementById('receipt').files[0];
 
-      if(!amount || amount < 50000){
-        showNotification("Weka kiasi sahihi cha angalau 50,000 TZS");
-        return;
-      }
-      if(!phone){
-        showNotification("Weka namba yako ya simu");
+      if(!mpesaCode){
+        showNotification("Please enter M-PESA transaction code");
         return;
       }
 
-      await db.ref('users/'+uid+'/phone').set(phone);
+      const validFormat = /^[A-Z0-9]{10}$/;
+      const hasLetter = /[A-Z]/.test(mpesaCode);
+      const hasNumber = /[0-9]/.test(mpesaCode);
+      if (!validFormat.test(mpesaCode) || !hasLetter || !hasNumber) {
+        showNotification("Invalid M-PESA transaction code");
+        return;
+      }
+
+      if(!amount || amount < 3000){
+        showNotification("Minimum deposit is 3,000 KSH");
+        return;
+      }
 
       const ref = db.ref('deposits/'+uid).push();
       const newDeposit = {
         amount,
-        phone,
+        mpesaCode,
         status:"pending",
         timestamp: Date.now()
       };
@@ -236,12 +234,13 @@ auth.onAuthStateChanged(user=>{
       }
 
       await ref.set(newDeposit);
-      showNotification("Amana imetumwa kwa mafanikio!");
+      showNotification("Deposit submitted successfully!");
       document.getElementById('amount').value='';
+      document.getElementById('mpesaCode').value='';
       document.getElementById('receipt').value='';
     } catch(err){
       console.error(err);
-      showNotification("Hitilafu: "+err.message);
+      showNotification("Error: "+err.message);
     }
   });
 
@@ -249,7 +248,7 @@ auth.onAuthStateChanged(user=>{
     const deposit = snap.val();
     if(deposit.status === "approved"){
       db.ref('users/'+uid+'/balance').transaction(b => (parseFloat(b)||0) + parseFloat(deposit.amount));
-      showNotification("Amana imeidhinishwa na salio limeongezwa");
+      showNotification("Deposit approved and balance updated");
     }
   });
 });
