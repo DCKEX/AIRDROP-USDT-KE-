@@ -1,196 +1,158 @@
 <!DOCTYPE html>
-<html lang="sw">
+<html lang="en">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>CYPX – Mpango wa VIP</title>
+<title>AIRDROP USDT KE – VIP Plan</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
-
 <style>
-  body {
-    font-family: 'Poppins', sans-serif;
-    background: linear-gradient(160deg, #00152e, #002f5e, #004080);
-    background-attachment: fixed;
-    margin: 0;
-    padding: 0 0 0.5cm 0;
-    color: #fff;
-  }
-
-  header {
-    background: rgba(0, 40, 90, 0.85);
-    text-align: center;
-    padding: 15px;
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    border-bottom: 1px solid rgba(255,255,255,0.1);
-  }
-
-  header img { height:32px; }
-
-  .container { padding: 20px; }
-
-  .intro {
-    background: rgba(255,255,255,0.05);
-    padding: 15px;
-    border-radius: 10px;
-    margin-bottom: 20px;
-    border: 1px solid rgba(255,255,255,0.08);
-    box-shadow: 0 0 10px rgba(0,255,255,0.1);
-  }
-
-  .plans {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 18px;
-  }
-
-  .plan-card {
-    background: rgba(255,255,255,0.06);
-    border-radius: 12px;
-    padding: 20px;
-    border: 1px solid rgba(255,255,255,0.1);
-    box-shadow: 0 0 15px rgba(0,255,255,0.15);
-  }
-
-  .plan-card h3 {
-    margin: 0 0 6px 0;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-weight: 600;
-    color: #00e6ff;
-  }
-
-  .plan-card h3 i {
-    font-size: 20px;
-  }
-
-  .plan-card p { font-size: 14px; color: #cfe6ff; margin: 4px 0; }
-  .green { color: #00ff7f; font-weight: bold; }
-
-  .plan-card button {
-    margin-top: 10px;
-    padding: 10px;
-    width: 100%;
-    border: none;
-    border-radius: 6px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: 0.2s;
-  }
-
-  .plan-card button.invest { background-color: #ffcc00; color: #002244; }
-  .plan-card button.disabled { background: #555; color: #ccc; cursor: not-allowed; }
-  .plan-card button.receive { background: #28a745; color: #fff; }
-  .plan-card button.completed { background: #333; color: #0f0; cursor: not-allowed; }
-
-  .popup {
-    position: fixed;
-    top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-    background: #28a745;
-    color: white;
-    padding: 15px 30px;
-    border-radius: 8px;
-    display: none;
-    z-index: 999;
-    font-weight: bold;
-    font-size: 14px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-    text-align: center;
-  }
-
-  .popup.red {
-    background: #cc0000;
-  }
-
-  .popup button {
-    margin-top: 10px;
-    padding: 8px 15px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-weight: bold;
-    color: #fff;
-  }
-
-  .popup button.red {
-    background: #e60000;
-  }
-
-  nav {
-    position:fixed;bottom:0;left:0;right:0;
-    display:flex;justify-content:space-around;
-    background: rgba(0,25,60,0.9);
-    padding:8px 0;
-    backdrop-filter: blur(6px);
-    border-top: 1px solid rgba(255,255,255,0.1);
-  }
-  nav a{color:#fff;text-decoration:none;text-align:center;font-size:0.8rem;}
-  nav i{font-size:18px;}
-
-  #loader {
-    position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(0,15,40,0.95);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    z-index: 2000;
-    color: #fff;
-    transition: opacity 0.5s ease;
-  }
-
-  .spinner {
-    width: 60px;
-    height: 60px;
-    border: 5px solid rgba(255,255,255,0.3);
-    border-top-color: #00ffcc;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-    margin-bottom: 15px;
-  }
-
-  @keyframes spin { to { transform: rotate(360deg); } }
-
-  #loader.hidden {
-    opacity: 0;
-    pointer-events: none;
-  }
-
-  /* Custom Icon Colors */
-  .fa-seedling { color: #00ff66; }
-  .fa-coins { color: #ffb84d; }
-  .fa-piggy-bank { color: #99ccff; }
-  .fa-medal { color: #ffd700; }
-  .fa-gem { color: #66ccff; }
-  .fa-diamond { color: #33ccff; }
-  .fa-mountain { color: #99ccff; }
-  .fa-leaf { color: #00e68a; }
-  .fa-water { color: #3399ff; }
-  .fa-fire { color: #ff4d4d; }
+body {
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(160deg, #00152e, #002f5e, #004080);
+  background-attachment: fixed;
+  margin: 0;
+  padding: 0 0 0.5cm 0;
+  color: #fff;
+}
+header {
+  background: rgba(0, 40, 90, 0.85);
+  text-align: center;
+  padding: 15px;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+header img { height:32px; }
+.container { padding: 20px; }
+.intro {
+  background: rgba(255,255,255,0.05);
+  padding: 15px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  border: 1px solid rgba(255,255,255,0.08);
+  box-shadow: 0 0 10px rgba(0,255,255,0.1);
+}
+.plans {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 18px;
+}
+.plan-card {
+  background: rgba(255,255,255,0.06);
+  border-radius: 12px;
+  padding: 20px;
+  border: 1px solid rgba(255,255,255,0.1);
+  box-shadow: 0 0 15px rgba(0,255,255,0.15);
+  position: relative;
+  min-height: 170px;
+}
+.plan-card h3 {
+  margin: 0 0 6px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  color: #00e6ff;
+}
+.plan-card h3 i { font-size: 20px; }
+.plan-card p { font-size: 14px; color: #cfe6ff; margin: 4px 0; }
+.green { color: #00ff7f; font-weight: bold; }
+.plan-card .countdown {
+  margin-top: 8px;
+  font-size: 13px;
+  color: #ffd965;
+  font-weight: 700;
+}
+.plan-card button {
+  margin-top: 12px;
+  padding: 10px;
+  width: 100%;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.2s;
+}
+.plan-card button.invest { background-color: #ffcc00; color: #002244; }
+.plan-card button.disabled { background: #555; color: #ccc; cursor: not-allowed; }
+.plan-card button.completed { background: #333; color: #0f0; cursor: not-allowed; }
+.popup {
+  position: fixed;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  background: #28a745;
+  color: white;
+  padding: 15px 30px;
+  border-radius: 8px;
+  display: none;
+  z-index: 999;
+  font-weight: bold;
+  font-size: 14px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+  text-align: center;
+}
+.popup.red { background: #cc0000; }
+nav {
+  position:fixed;bottom:0;left:0;right:0;
+  display:flex;justify-content:space-around;
+  background: rgba(0,25,60,0.9);
+  padding:8px 0;
+  backdrop-filter: blur(6px);
+  border-top: 1px solid rgba(255,255,255,0.1);
+}
+nav a{color:#fff;text-decoration:none;text-align:center;font-size:0.8rem;}
+nav i{font-size:18px;}
+#loader {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,15,40,0.95);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  z-index: 2000;
+  color: #fff;
+  transition: opacity 0.5s ease;
+}
+.spinner {
+  width: 60px;
+  height: 60px;
+  border: 5px solid rgba(255,255,255,0.3);
+  border-top-color: #00ffcc;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 15px;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+#loader.hidden { opacity: 0; pointer-events: none; }
+/* icon colors */
+.fa-seedling{color:#00ff66;}
+.fa-coins{color:#ffb84d;}
+.fa-piggy-bank{color:#99ccff;}
+.fa-medal{color:#ffd700;}
+.fa-gem{color:#66ccff;}
+.fa-diamond{color:#33ccff;}
+.fa-mountain{color:#99ccff;}
+.fa-leaf{color:#00e68a;}
+.fa-water{color:#3399ff;}
+.fa-fire{color:#ff4d4d;}
 </style>
 </head>
-
 <body>
-<div id="loader">
-  <div class="spinner"></div>
-  <p>Inapakia...</p>
-</div>
+<div id="loader"><div class="spinner"></div><p>Loading...</p></div>
 
 <header>
   <img src="https://png.pngtree.com/png-clipart/20221216/original/pngtree-vip-icon-design-png-image_8749175.png" alt="logo">
-  <h2>CYPX – Mpango wa VIP</h2>
+  <h2>AIRDROP USDT KE – VIP Plan</h2>
 </header>
 
 <div class="container">
   <div class="intro">
-    <p>Karibu! Wekeza leo kwenye kiwango chako cha VIP na uanze kupata faida zako kila siku.</p>
-    <p>Salio la sasa: <span id="userBalance">0</span> TZS</p>
+    <p>Welcome! Invest today in your VIP level and start earning daily profits.</p>
+    <p>Current Balance: <span id="userBalance">0</span> KSH</p>
   </div>
   <div class="plans" id="plansContainer"></div>
 </div>
@@ -198,11 +160,11 @@
 <div class="popup" id="popupMsg"></div>
 
 <nav>
-  <a href="dashboard.html"><i class="fas fa-home"></i><br>Nyumbani</a>
-  <a href="task.html"><i class="fas fa-tasks"></i><br>Kazi</a>
-  <a href="team.html"><i class="fas fa-users"></i><br>Timu</a>
+  <a href="dashboard.html"><i class="fas fa-home"></i><br>Home</a>
+  <a href="task.html"><i class="fas fa-tasks"></i><br>Tasks</a>
+  <a href="team.html"><i class="fas fa-users"></i><br>Team</a>
   <a href="vip.html"><i class="fas fa-crown"></i><br>VIP</a>
-  <a href="profile.html"><i class="fas fa-user"></i><br>Mimi</a>
+  <a href="profile.html"><i class="fas fa-user"></i><br>Profile</a>
 </nav>
 
 <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-compat.js"></script>
@@ -222,172 +184,179 @@ const auth = firebase.auth();
 const db = firebase.database();
 
 const plans = [
-  [100000,300000,"Mwanzo","fa-seedling"],
-  [150000,500000,"Shaba","fa-coins"],
-  [200000,800000,"Fedha","fa-piggy-bank"],
-  [300000,1200000,"Dhahabu","fa-medal"],
-  [400000,1600000,"Platinamu","fa-gem"],
-  [500000,2000000,"Almasi","fa-diamond"],
+  [100000,300000,"Starter","fa-seedling"],
+  [150000,500000,"Bronze","fa-coins"],
+  [200000,800000,"Silver","fa-piggy-bank"],
+  [300000,1200000,"Gold","fa-medal"],
+  [400000,1600000,"Platinum","fa-gem"],
+  [500000,2000000,"Diamond","fa-diamond"],
   [600000,2400000,"Tanzanite","fa-mountain"],
   [700000,2800000,"Emerald","fa-leaf"],
   [800000,3200000,"Sapphire","fa-water"],
   [1000000,4000000,"Ruby","fa-fire"]
 ];
-
+const DAY_MS = 24*60*60*1000;
+const DURATION_DAYS = 15;
 let currentBalance = 0;
-let activeInvestments = {};
-let unlockedVips = {};
-let countdownIntervals = {};
+let investments = {};
+let countdownTimers = {};
 
 auth.onAuthStateChanged(user=>{
-  if(!user){ window.location='signin.html'; return; }
-  const uid = user.uid;
-  const loader = document.getElementById('loader');
-
-  Promise.all([
-    db.ref('users/'+uid+'/balance').once('value'),
-    db.ref('users/'+uid+'/unlockedVips').once('value'),
-    db.ref('investments/'+uid).once('value')
-  ]).then(([balSnap, unlockedSnap, investSnap])=>{
-    currentBalance = balSnap.val() || 0;
-    unlockedVips = unlockedSnap.val() || {};
-    investSnap.forEach(child=>{
-      const inv = child.val();
-      if(inv && inv.status==="active"){
-        activeInvestments[inv.investedAmount] = { ...inv, key: child.key };
-      }
+  if(!user){window.location='signin.html';return;}
+  const uid=user.uid;
+  const loader=document.getElementById('loader');
+  db.ref('users/'+uid+'/balance').on('value',snap=>{
+    currentBalance=snap.val()||0;
+    document.getElementById('userBalance').textContent=Number(currentBalance).toLocaleString('en-KE');
+  });
+  db.ref('investments/'+uid).on('value',snap=>{
+    investments={};
+    snap.forEach(c=>{
+      const v=c.val();v.key=c.key;investments[c.key]=v;
     });
-    document.getElementById('userBalance').textContent = currentBalance.toLocaleString('sw-TZ');
     loadPlans(uid);
-  }).finally(()=>{ loader.classList.add('hidden'); });
+    loader.classList.add('hidden');
+  });
 });
 
 function loadPlans(uid){
-  const container = document.getElementById('plansContainer');
-  container.innerHTML = '';
-  Object.values(countdownIntervals).forEach(id => clearInterval(id));
-  countdownIntervals = {};
-
-  plans.forEach(([amount, roi, name, icon], index)=>{
-    const div = document.createElement('div');
+  const container=document.getElementById('plansContainer');
+  container.innerHTML='';
+  Object.values(countdownTimers).forEach(id=>clearInterval(id));
+  countdownTimers={};
+  plans.forEach(([amount,totalReturn,name,icon],idx)=>{
+    const cardId=`plan-${amount}-${idx}`;
+    const div=document.createElement('div');
     div.className='plan-card';
-    const active = activeInvestments[amount];
-    const completed = unlockedVips && unlockedVips[amount];
-    const btn = document.createElement('button');
+    div.id=cardId;
 
-    if(active){
-      btn.className="disabled";
-      btn.disabled = true;
-      updateCountdown(btn, active.investedAt, uid, active.key, active.returnAmount, amount);
-      countdownIntervals[amount] = setInterval(()=>{
-        updateCountdown(btn, active.investedAt, uid, active.key, active.returnAmount, amount);
-      },1000);
-    } else if(completed){
-      btn.textContent="✅ Imekamilika";
-      btn.className="completed";
-      btn.disabled = true;
+    const invKey=Object.keys(investments).find(k=>{
+      const v=investments[k];
+      return v && +v.investedAmount===+amount && v.status==='active';
+    });
+    const inv=invKey?investments[invKey]:null;
+
+    const title=document.createElement('h3');
+    title.innerHTML=`<i class="fas ${icon}"></i> VIP ${idx+1} – ${name}`;
+    const investP=document.createElement('p');
+    investP.innerText=`Invest: ${Number(amount).toLocaleString('en-KE')} KSH`;
+    const interest=totalReturn-amount;
+    const dailyProfit=(interest/DURATION_DAYS).toFixed(2);
+    const interestP=document.createElement('p');
+    interestP.innerHTML=`Simple Interest (daily): <span class="green">${Number(dailyProfit).toLocaleString('en-KE')} KSH</span>`;
+    const totalP=document.createElement('p');
+    totalP.innerText=`Total Return: ${Number(totalReturn).toLocaleString('en-KE')} KSH`;
+    const scheduleP=document.createElement('p');
+    scheduleP.innerText=`Receive daily for ${DURATION_DAYS} days`;
+    const countdownEl=document.createElement('div');
+    countdownEl.className='countdown';
+    countdownEl.innerText='';
+    const btn=document.createElement('button');
+
+    function setInvest(){btn.textContent='Invest Now';btn.className='invest';btn.disabled=false;btn.onclick=()=>invest(amount,totalReturn,uid,btn);}
+    function setCompleted(){btn.textContent='✅ Completed';btn.className='completed';btn.disabled=true;btn.onclick=null;}
+
+    if(inv){
+      btn.textContent='Active — counting...';
+      btn.className='disabled';
+      startTimer(cardId,inv,amount,totalReturn,countdownEl,btn,uid);
     } else {
-      btn.textContent="Wekeza Sasa";
-      btn.className="invest";
-      btn.onclick = ()=>invest(amount, roi, uid, btn);
+      const done=Object.keys(investments).some(k=>{
+        const v=investments[k];
+        return v && +v.investedAmount===+amount && v.status==='completed';
+      });
+      if(done){setCompleted();countdownEl.innerText='Plan already completed';}
+      else {setInvest();countdownEl.innerText='No active investment';}
     }
-
-    const interest = roi - amount;
-    div.innerHTML=`
-      <h3><i class="fas ${icon}"></i> VIP ${index+1} – ${name}</h3>
-      <p>Wekeza: ${amount.toLocaleString('sw-TZ')} TZS</p>
-      <p>Riba Rahisi: <span class="green">${interest.toLocaleString('sw-TZ')} TZS</span></p>
-      <p>Jumla ya Faida: ${roi.toLocaleString('sw-TZ')} TZS</p>
-      <p>Pokea baada ya saa 24</p>
-    `;
-    div.appendChild(btn);
+    div.append(title,investP,interestP,totalP,scheduleP,countdownEl,btn);
     container.appendChild(div);
   });
 }
 
-function invest(amount, roi, uid, button){
-  if(currentBalance < amount){
-    showDepositPopup();
-    return;
-  }
-
-  const userRef = db.ref('users/'+uid);
-  userRef.transaction(userData=>{
-    if(!userData) userData={};
-    const current = parseFloat(userData.balance||0);
-    if(current < amount) return userData;
-    userData.balance = current - amount;
-    return userData;
-  },(err, committed)=>{
-    if(err || !committed){ showPopup("❌ Muamala umeshindikana", true); return; }
-
-    const newInv = {
-      investedAmount: amount,
-      returnAmount: roi,
-      investedAt: Date.now(),
-      status: "active"
-    };
-    db.ref('investments/'+uid).push(newInv).then(ref=>{
-      const key = ref.key;
-      button.disabled = true;
-      button.className = "disabled";
-      updateCountdown(button, newInv.investedAt, uid, key, roi, amount);
-      countdownIntervals[amount] = setInterval(()=>{
-        updateCountdown(button, newInv.investedAt, uid, key, roi, amount);
-      },1000);
-      showPopup(`✅ Umewekeza ${amount.toLocaleString('sw-TZ')} TZS`);
-    }).catch(()=>{
-      showPopup("❌ Haikuweza kurekodi uwekezaji", true);
+function startTimer(cardId,inv,amount,totalReturn,countdownEl,btn,uid){
+  if(countdownTimers[cardId]) clearInterval(countdownTimers[cardId]);
+  function tick(){
+    db.ref(`investments/${uid}/${inv.key}`).once('value').then(s=>{
+      const v=s.val();if(!v)return;
+      const investedAt=v.investedAt||inv.investedAt;
+      const daysCompleted=v.daysCompleted||0;
+      const now=Date.now();
+      const elapsed=Math.floor((now-investedAt)/DAY_MS);
+      if(daysCompleted>=DURATION_DAYS){
+        db.ref(`investments/${uid}/${inv.key}/status`).set('completed');
+        countdownEl.innerText=`Completed (${DURATION_DAYS}/${DURATION_DAYS})`;
+        btn.textContent='✅ Completed';btn.className='completed';btn.disabled=true;
+        clearInterval(countdownTimers[cardId]);
+        return;
+      }
+      const nextReceiveAt=investedAt+(daysCompleted+1)*DAY_MS;
+      const diff=nextReceiveAt-now;
+      if(diff<=0){
+        const profitTotal=totalReturn-amount;
+        const dailyProfit=profitTotal/DURATION_DAYS;
+        db.ref(`investments/${uid}/${inv.key}/daysCompleted`).transaction(cur=>{
+          if(cur===null)cur=0;
+          if(cur>=DURATION_DAYS)return cur;
+          return cur+1;
+        },(err,ok,snap)=>{
+          if(err||!ok)return;
+          const newDays=snap.val()||0;
+          db.ref(`users/${uid}/balance`).transaction(b=>(b||0)+dailyProfit);
+          countdownEl.innerText=`Day ${newDays}/${DURATION_DAYS} — Paid`;
+          if(newDays>=DURATION_DAYS){
+            db.ref(`investments/${uid}/${inv.key}/status`).set('completed');
+            countdownEl.innerText=`Completed (${DURATION_DAYS}/${DURATION_DAYS})`;
+            btn.textContent='✅ Completed';btn.className='completed';btn.disabled=true;
+            clearInterval(countdownTimers[cardId]);
+          }
+          showPopup(`💰 You received ${Number(dailyProfit).toLocaleString('en-KE')} KSH`);
+        });
+      } else {
+        const hh=Math.floor(diff/(1000*60*60));
+        const mm=Math.floor((diff%(1000*60*60))/(1000*60));
+        const ss=Math.floor((diff%(1000*60))/1000);
+        countdownEl.innerText=`Next receive in ${hh}h ${mm}m ${ss}s (Day ${Math.min(elapsed+1,DURATION_DAYS)}/${DURATION_DAYS})`;
+      }
     });
+  }
+  tick();
+  countdownTimers[cardId]=setInterval(tick,1000);
+}
+
+function invest(amount,totalReturn,uid,button){
+  if(currentBalance<amount){showDepositPopup();return;}
+  const userRef=db.ref('users/'+uid);
+  userRef.transaction(data=>{
+    if(!data)data={};
+    const cur=parseFloat(data.balance||0);
+    if(cur<amount)return data;
+    data.balance=cur-amount;
+    return data;
+  },(err,ok)=>{
+    if(err||!ok){showPopup('❌ Transaction failed');return;}
+    const inv={investedAmount:amount,totalReturn:totalReturn,investedAt:Date.now(),status:'active',daysCompleted:0};
+    db.ref('investments/'+uid).push(inv).then(()=>{
+      showPopup(`✅ You invested ${Number(amount).toLocaleString('en-KE')} KSH`);
+    }).catch(()=>showPopup('❌ Could not record investment'));
   });
 }
 
-function updateCountdown(button, investedAt, uid, key, roi, amount){
-  const now = Date.now();
-  const diff = 24*60*60*1000 - (now - investedAt);
-  if(diff <= 0){
-    clearInterval(countdownIntervals[amount]);
-    button.textContent = "Pokea";
-    button.className="receive";
-    button.disabled = false;
-    button.onclick = ()=>receiveProfit(uid, key, roi, amount, button);
-    return;
-  }
-  const h = Math.floor(diff/(1000*60*60));
-  const m = Math.floor((diff%(1000*60*60))/(1000*60));
-  const s = Math.floor((diff%(1000*60))/1000);
-  button.textContent = `Pokea baada ya ${h}h ${m}m ${s}s`;
-}
-
-function receiveProfit(uid, key, roi, amount, button){
-  db.ref('users/'+uid+'/balance').transaction(bal=>(bal||0)+roi);
-  db.ref('investments/'+uid+'/'+key+'/status').set("completed");
-  db.ref('users/'+uid+'/unlockedVips/'+amount).set(true);
-
-  button.disabled = true;
-  button.className="completed";
-  button.textContent = "✅ Imekamilika";
-  showPopup(`💰 Umeongezewa ${roi.toLocaleString('sw-TZ')} TZS`);
-}
-
-function showPopup(msg, red=false){
+function showPopup(msg,red=false){
   const popup=document.getElementById('popupMsg');
   popup.innerHTML=msg;
   popup.className='popup'+(red?' red':'');
   popup.style.display='block';
-  setTimeout(()=>popup.style.display='none',3500);
+  setTimeout(()=>popup.style.display='none',3000);
 }
 
 function showDepositPopup(){
   const popup=document.getElementById('popupMsg');
-  popup.innerHTML = `
-    <p style="color:red;">⚠️ Salio halitoshi, ungependa kufanya amana?</p>
-    <button style="background:#001f4d;" onclick="window.location='deposit.html'">Thibitisha</button>
-  `;
-  popup.className='popup';
-  popup.style.background = '#001f4d'; // navy blue background
-  popup.style.display='block';
+  popup.innerHTML=`<p style="color:#ffd;font-weight:bold;">⚠️ Insufficient balance — would you like to deposit?</p>
+  <button style="background:#001f4d;padding:8px 12px;border-radius:6px;" onclick="window.location='deposit.html'">Confirm</button>`;
+  popup.className='popup';popup.style.background='#001f4d';popup.style.display='block';
 }
+
+window.addEventListener('beforeunload',()=>Object.values(countdownTimers).forEach(clearInterval));
 </script>
 </body>
 </html>
