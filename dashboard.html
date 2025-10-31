@@ -135,7 +135,7 @@ nav i{font-size:18px}
       Improve VIP work rules on the same day. Upgrading your VIP level allows you to complete more tasks without restrictions.
       You are currently at VIP1 and have completed today’s task. You can move to VIP2 to continue doing VIP2 tasks. The highest level is VIP10.
     </p>
-    <button class="claim-btn" id="claim-btn">Claim KSH 26</button>
+    <button class="claim-btn" id="claim-btn">Claim KSH 100</button>
   </div>
 
   <div class="task-countdown">Task reset time: <span id="countdown"></span></div>
@@ -164,16 +164,16 @@ function hideLoader(){const l=document.getElementById('loader');const p=document
 document.addEventListener('DOMContentLoaded',()=>{document.getElementById('btn-deposit').onclick=()=>location.href='depositbonus.html';document.getElementById('btn-withdraw').onclick=()=>location.href='withdraw.html';document.getElementById('btn-company').onclick=()=>location.href='company.html';});
 auth.onAuthStateChanged(user=>{if(!user){location='signin.html';return;}const uid=user.uid;document.getElementById('user-email').textContent=user.email||'User';
 const balRef=db.ref('users/'+uid+'/balance');balRef.on('value',s=>{const b=parseFloat(s.val()||0);document.getElementById('user-balance').textContent=`Balance: KSH ${fmt(b)}`;});
-const vipAmounts=[5263,7895,10526,15789,21053,26316,31579,36842,42105,52632];const vipNames=["Starter","Basic","Silver","Gold","Platinum","Diamond","Elite","VIP Pro","Executive","Ultimate"];
+const vipAmounts=[3000,5000,10000,20000,36000,60000,90000,36842,120000,200000];const vipNames=["Starter","Basic","Silver","Gold","Platinum","Diamond","Elite","VIP Pro","Executive","Ultimate"];
 function renderVip(unlocked=[]){const v=document.getElementById('vip-list');v.innerHTML='';vipAmounts.forEach((amt,i)=>{const lvl=i+1;const isU=unlocked.includes(lvl);const box=document.createElement('div');box.className='vip-box';box.innerHTML=`<img src="https://png.pngtree.com/png-clipart/20221216/original/pngtree-vip-icon-design-png-image_8749175.png"><div class="info"><p><strong>${vipNames[i]}</strong> – Unlock for: <span class="amount">KSH ${fmt(amt)}</span></p><p>${isU?"✅ Unlocked":"🔐 Locked"} VIP${lvl}</p><p>Earnings available within 24 hours</p></div><div class="arrow ${isU?'':'locked'}" data-lvl="${lvl}">»</div>`;v.appendChild(box);});
 document.querySelectorAll('.vip-box .arrow').forEach(a=>{a.onclick=()=>{const lvl=parseInt(a.dataset.lvl);if(a.classList.contains('locked')){showPopup('Please unlock your VIP level first',true);return;}location.href=`vip.html?level=${lvl}`;};});}
 renderVip([]);
 const vipRef=db.ref('users/'+uid+'/unlockedVips');vipRef.on('value',s=>{const raw=s.val()||{};const u=[];Object.keys(raw).forEach(k=>{const n=parseInt(k,10);if(!isNaN(n)&&n!==0){const i=vipAmounts.indexOf(n);if(i!=-1)u.push(i+1);}else{const val=parseInt(raw[k],10);if(!isNaN(val)&&val>=1&&val<=10)u.push(val);}});renderVip([...new Set(u)]);hideLoader();});
-const vipClaimsRef=db.ref('users/'+uid+'/vipClaims');const vipSimple={1:526,2:7895,3:10526,4:15789,5:21053,6:26316,7:31579,8:36842,9:42105,10:52632};
+const vipClaimsRef=db.ref('users/'+uid+'/vipClaims');const vipSimple={1:800,2:1400,3:3000,4:5400,5:9600,6:16000,7:24000,8:32000,9:53800,10:98000};
 vipClaimsRef.on('value',s=>{const c=s.val()||{};const list=document.getElementById('earnings-list');list.innerHTML='';let total=0;for(let i=1;i<=10;i++){const days=(c[i]&&c[i].daysClaimed)?parseInt(c[i].daysClaimed):0;const earned=days*(vipSimple[i]||0);total+=earned;const row=document.createElement('div');row.className='row';row.innerHTML=`<div>VIP ${i}</div><div>KSH ${fmt(earned)}</div>`;list.appendChild(row);}document.getElementById('vip-grand-total').textContent=`Total VIP Earnings: KSH ${fmt(total)}`;});
 const claimBtn=document.getElementById('claim-btn');const userRef=db.ref('users/'+uid);
 userRef.child('hasClaimedBonus').once('value').then(s=>{if(s.val()){claimBtn.textContent='Completed';claimBtn.disabled=true;}});
-claimBtn.onclick=()=>{if(claimBtn.disabled)return;userRef.transaction(u=>{u=u||{};if(u.hasClaimedBonus)return u;const c=parseFloat(u.balance||0);u.balance=c+26;u.hasClaimedBonus=true;return u;},(e,ok)=>{if(e)showPopup('Error claiming bonus',true);else if(ok){claimBtn.textContent='Completed';claimBtn.disabled=true;showPopup('KSH 26 Claimed');}else{claimBtn.textContent='Completed';claimBtn.disabled=true;}});};});
+claimBtn.onclick=()=>{if(claimBtn.disabled)return;userRef.transaction(u=>{u=u||{};if(u.hasClaimedBonus)return u;const c=parseFloat(u.balance||0);u.balance=c+100;u.hasClaimedBonus=true;return u;},(e,ok)=>{if(e)showPopup('Error claiming bonus',true);else if(ok){claimBtn.textContent='Completed';claimBtn.disabled=true;showPopup('KSH 100 Claimed');}else{claimBtn.textContent='Completed';claimBtn.disabled=true;}});};});
 function startCountdown(){const el=document.getElementById('countdown');let start=localStorage.getItem('cStart')||Date.now();localStorage.setItem('cStart',start);setInterval(()=>{let diff=86400000-(Date.now()-start);if(diff<=0){start=Date.now();localStorage.setItem('cStart',start);diff=86400000;}const h=Math.floor(diff/3600000),m=Math.floor((diff%3600000)/60000),s=Math.floor((diff%60000)/1000);el.textContent=`${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;},1000);}
 startCountdown();
 window.addEventListener('load', hideLoader);
