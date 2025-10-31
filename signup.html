@@ -1,10 +1,9 @@
 <!doctype html>
-
 <html lang="en">
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>CYPX Signup</title>
+  <title>AIRDROP USDT KE - Sign Up</title>
   <style>
     *{box-sizing:border-box;margin:0;padding:0;font-family:Inter,system-ui,Segoe UI,Roboto,Arial}
     body{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#050d25,#0a182c);color:#f1f5f9;padding:24px}
@@ -25,47 +24,59 @@
 </head>
 <body>
   <div class="card">
-    <h1>Sign up</h1>
+    <h1>AIRDROP USDT KE - Sign Up</h1>
+
     <form id="signupForm">
       <div>
         <label for="username">Username</label>
-        <input id="username" placeholder="e.g. Kenmakrk" required minlength="3"/>
-      </div><div>
-    <label for="phone">Phone number (TZ)</label>
-    <div class="row">
-      <div class="flag">🇹🇿<span class="muted">+255</span></div>
-      <input id="phone" placeholder="6XXXXXXXX or 7XXXXXXXX" pattern="[67][0-9]{8}" inputmode="numeric" required/>
-    </div>
+        <input id="username" placeholder="e.g. Kenmark" required minlength="3"/>
+      </div>
+
+      <div>
+        <label for="phone">Phone Number (KE)</label>
+        <div class="row">
+          <div class="flag">🇰🇪<span class="muted">+254</span></div>
+          <input id="phone" placeholder="7XXXXXXXX" pattern="[7][0-9]{8}" inputmode="numeric" required/>
+        </div>
+      </div>
+
+      <div>
+        <label for="email">Email</label>
+        <input id="email" type="email" placeholder="you@example.com" required/>
+      </div>
+
+      <div>
+        <label for="password">Password</label>
+        <input id="password" type="password" placeholder="Create a strong password" minlength="8" required/>
+      </div>
+
+      <div>
+        <label for="confirm">Confirm Password</label>
+        <input id="confirm" type="password" placeholder="Repeat password" minlength="8" required/>
+      </div>
+
+      <div>
+        <label for="referredBy">Referred By</label>
+        <input id="referredBy" placeholder="Referral code or username"/>
+      </div>
+
+      <button id="signupBtn" type="submit">Sign Up</button>
+
+      <div class="foot">
+        Already have an account? <a href="signin.html">Sign In</a><br/>
+        By signing up you agree to our <a href="#">Terms</a>
+      </div>
+    </form>
   </div>
 
-  <div>
-    <label for="email">Email</label>
-    <input id="email" type="email" placeholder="you@example.com" required/>
-  </div>
+  <div id="notify" class="notification"></div>
 
-  <div>
-    <label for="password">Password</label>
-    <input id="password" type="password" placeholder="Choose a strong password" minlength="8" required/>
-  </div>
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
 
-  <div>
-    <label for="confirm">Confirm password</label>
-    <input id="confirm" type="password" placeholder="Repeat password" minlength="8" required/>
-  </div>
-
-  <div>
-    <label for="referredBy">Referred by</label>
-    <input id="referredBy" placeholder="Referral code or username"/>
-  </div>
-
-  <button id="signupBtn" type="submit">Sign up</button>
-  <div class="foot">
-    Have an account? <a href="signin.html">Sign in</a><br/>
-    By signing up you agree to our <a href="#">Terms</a>
-  </div>
-</form>
-
-  </div>  <div id="notify" class="notification"></div>  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>  <script>
+  <script>
     const firebaseConfig = {
       apiKey: "AIzaSyD2Dqz6jg8YACBvg_G_7yIR6c8sSH39BsQ",
       authDomain: "cypx-onlinecrypto.firebaseapp.com",
@@ -104,7 +115,7 @@
       }
     });
 
-    function validPhone(p) { return /^[67]\d{8}$/.test(p); }
+    function validPhone(p) { return /^[7]\d{8}$/.test(p); }
 
     async function addReferral(refUser, newUid, data) {
       const snap = await db.ref("users").orderByChild("username").equalTo(refUser).once("value");
@@ -127,10 +138,10 @@
       const conf = $("confirm").value;
       const refBy = $("referredBy").value.trim();
 
-      if (username.length < 3) return showNotify("Username must be at least 3 characters.");
-      if (!validPhone(phone)) return showNotify("Phone must be 9 digits starting with 6 or 7.");
+      if (username.length < 3) return showNotify("Username must be at least 3 characters long.");
+      if (!validPhone(phone)) return showNotify("Phone number must be 9 digits starting with 7.");
       if (!email) return showNotify("Email is required.");
-      if (pass.length < 8) return showNotify("Password must be at least 8 characters or more.");
+      if (pass.length < 8) return showNotify("Password must be at least 8 characters long.");
       if (pass !== conf) return showNotify("Passwords do not match.");
 
       $("signupBtn").disabled = true;
@@ -139,13 +150,13 @@
         const userCred = await auth.createUserWithEmailAndPassword(email, pass);
         const uid = userCred.user.uid;
         const userObj = {
-          username, email, phone: "+255" + phone,
+          username, email, phone: "+254" + phone,
           referredBy: refBy || null,
           referralsCount: 0,
           joinedAt: firebase.database.ServerValue.TIMESTAMP
         };
         await db.ref("users/" + uid).set(userObj);
-        if (refBy) await addReferral(refBy, uid, { username, email, phone: "+255" + phone });
+        if (refBy) await addReferral(refBy, uid, { username, email, phone: "+254" + phone });
         window.location.href = "welcome.html";
       } catch (err) {
         console.error(err);
@@ -154,5 +165,6 @@
         $("signupBtn").disabled = false;
       }
     });
-  </script></body>
-  </html>
+  </script>
+</body>
+</html>
