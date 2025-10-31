@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="sw">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>Chaguo za Muamala</title>
+<title>AIRDROP USDT KE – Transaction Options</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
 <style>
@@ -129,37 +129,36 @@ nav i {
 <!-- Loader -->
 <div id="loader"><div class="spinner"></div></div>
 
-<header>Chaguo za Muamala</header>
+<header>Transaction Options</header>
 
 <div class="card">
-  <h3><i class="fas fa-shopping-cart"></i> Nunua Kifurushi cha VIP</h3>
-  <p>Boresha akaunti yako kwa kununua vifurushi vya VIP vilivyopo. Kila kiwango kinakupa faida kubwa za kila siku na zawadi zaidi.</p>
-  <a href="repackages.html" class="btn">Nunua Sasa</a>
+  <h3><i class="fas fa-shopping-cart"></i> Buy VIP Package</h3>
+  <p>Upgrade your account by purchasing available VIP packages. Each level gives you higher daily profits and extra rewards.</p>
+  <a href="repackages.html" class="btn">Buy Now</a>
 </div>
 
 <div class="card">
-  <h3><i class="fas fa-user-friends"></i> Mpango wa Rufaa</h3>
-  <p>Alika marafiki zako na upate bonasi wanapoweka amana. Jenga timu yako na fikia viwango vya juu vya kutoa fedha.</p>
-  <a href="team.html" class="btn">Angalia Kiungo chako cha Rufaa</a>
+  <h3><i class="fas fa-user-friends"></i> Referral Program</h3>
+  <p>Invite your friends and earn bonuses when they deposit. Build your team and reach higher withdrawal levels.</p>
+  <a href="team.html" class="btn">View Your Referral Link</a>
 </div>
 
 <div class="card">
-  <h3><i class="fas fa-info-circle"></i> Taarifa Muhimu</h3>
-  <p>Kutoa fedha kunahitaji angalau marafiki wawili walioweka TZS 75,000 kila mmoja. Hakikisha unakidhi masharti kabla ya kuomba kutoa fedha.</p>
+  <h3><i class="fas fa-info-circle"></i> Important Information</h3>
+  <p>Withdrawals require at least two friends who each deposited KSH 75,000. Make sure you meet the requirements before requesting a withdrawal.</p>
 </div>
 
 <!-- Bottom Navigation -->
 <nav>
-  <a href="dashboard.html"><i class="fas fa-home"></i><br>Mwanzo</a>
-  <a href="task.html"><i class="fas fa-tasks"></i><br>Kazi</a>
-  <a href="team.html"><i class="fas fa-users"></i><br>Timu</a>
+  <a href="dashboard.html"><i class="fas fa-home"></i><br>Home</a>
+  <a href="task.html"><i class="fas fa-tasks"></i><br>Tasks</a>
+  <a href="team.html"><i class="fas fa-users"></i><br>Team</a>
   <a href="vip.html"><i class="fas fa-crown"></i><br>VIP</a>
-  <a href="profile.html"><i class="fas fa-user"></i><br>Mimi</a>
+  <a href="profile.html"><i class="fas fa-user"></i><br>Profile</a>
 </nav>
 
 <!-- Firebase Configuration -->
 <script type="module">
-  // Firebase configuration
   const firebaseConfig = {
     apiKey: "AIzaSyD2Dqz6jg8YACBvg_G_7yIR6c8sSH39BsQ",
     authDomain: "cypx-onlinecrypto.firebaseapp.com",
@@ -177,7 +176,7 @@ nav i {
   const app = initializeApp(firebaseConfig);
   const db = getDatabase(app);
 
-  // Loader fade out
+  // Loader fade-out
   window.addEventListener("load", () => {
     const loader = document.getElementById("loader");
     setTimeout(() => {
