@@ -140,7 +140,7 @@ body::after{content:"";display:block;height:0.6cm;}
 
 <div class="stats">
   <div class="stat-box"><h3>Total Levels</h3><p id="total-vips">0</p></div>
-  <div class="stat-box"><h3>Unlocked</h3><p id="opened-vips">0</p></div>
+  <div class="stat-box"><h3>Opened</h3><p id="opened-vips">0</p></div>
   <div class="stat-box"><h3>Ongoing</h3><p id="ongoing-vips">0</p></div>
   <div class="stat-box"><h3>Completed</h3><p id="completed-vips">0</p></div>
 </div>
@@ -171,13 +171,14 @@ auth.onAuthStateChanged(user=>{
   // --- Compute stats and update Firebase ---
   function updateVipStats(snapshot){
     const data = snapshot.val() || {};
-    let opened=0, ongoing=0, completed=0;
+    let opened = 0, ongoing = 0, completed = 0;
 
-    Object.keys(data).forEach(k=>{
+    const keys = Object.keys(data);
+    opened = keys.length; // all time opened
+    keys.forEach(k=>{
       const v = data[k];
-      if(!v) return;
-      if(v.status === 'active'){ opened++; ongoing++; }
-      if(v.status === 'completed'){ opened++; completed++; }
+      if(v.status === 'active'){ ongoing++; }
+      if(v.status === 'completed'){ completed++; }
     });
 
     document.getElementById('total-vips').textContent = totalVipLevels;
