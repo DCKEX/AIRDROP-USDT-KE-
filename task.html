@@ -78,10 +78,7 @@ header h2{margin:0;font-size:1.2rem;color:#ffcc00}
   max-height:420px;
   overflow-y:auto;
 }
-.history h3{
-  margin:0 0 8px 0;
-  color:#ffcc00;
-}
+.history h3{margin:0 0 8px 0;color:#ffcc00;}
 .history .row{
   display:flex;
   justify-content:space-between;
@@ -129,11 +126,7 @@ nav a{
 nav i{font-size:18px}
 
 /* bottom padding */
-body::after{
-  content:"";
-  display:block;
-  height:0.6cm;
-}
+body::after{content:"";display:block;height:0.6cm;}
 </style>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -142,7 +135,7 @@ body::after{
 
 <header>
   <img src="https://png.pngtree.com/png-clipart/20221216/original/pngtree-vip-icon-design-png-image_8749175.png" alt="logo">
-  <h2>CYPX – Tasks</h2>
+  <h2>AIRDROP USDT KE – Tasks</h2>
 </header>
 
 <div class="stats">
@@ -170,67 +163,71 @@ auth.onAuthStateChanged(user=>{
   if(!user){ window.location='signin.html'; return; }
   const uid = user.uid;
   const userRef = db.ref('users/'+uid);
-  const vipRef  = userRef.child('vipLevels');  // each VIP level info
+  const vipRef  = userRef.child('vips'); // ✅ match vip.html
   const statsRef = userRef.child('vipStats');
   const historyRef = userRef.child('taskHistory');
   const totalVipLevels = 10;
 
-  // ✅ Real-time sync with vip.html actions
-  vipRef.on('value', snap=>{
-    const vips = snap.val() || {};
+  // --- Compute stats and update Firebase ---
+  function updateVipStats(snapshot){
+    const vips = snapshot.val() || {};
     let opened=0, ongoing=0, completed=0;
-    Object.keys(vips).forEach(key=>{
-      const item = vips[key];
-      if(item.unlocked) opened++;
-      if(item.status==='active') ongoing++;
-      if(item.status==='completed' || item.received) completed++;
+
+    Object.keys(vips).forEach(k=>{
+      const v = vips[k];
+      if(v.unlocked) opened++;
+      if(v.status==='active') ongoing++;
+      if(v.status==='completed' || v.received) completed++;
     });
 
-    // Update dashboard
     document.getElementById('total-vips').textContent = totalVipLevels;
     document.getElementById('opened-vips').textContent = opened;
     document.getElementById('ongoing-vips').textContent = ongoing;
     document.getElementById('completed-vips').textContent = completed;
 
-    // Save to Firebase for other pages (vip.html/profile.html)
     statsRef.update({ opened, ongoing, completed, total: totalVipLevels });
+  }
+
+  vipRef.on('value', updateVipStats);
+
+  // --- Record changes to history ---
+  vipRef.on('child_added', snap=>{
+    const v = snap.val(); if(!v) return;
+    const time = Date.now();
+    const action = v.unlocked ? `Unlocked VIP ${snap.key}` : `New VIP ${snap.key} added`;
+    historyRef.push({ action, timestamp: time });
   });
 
-  // ✅ Real-time task history
+  vipRef.on('child_changed', snap=>{
+    const v = snap.val(); if(!v) return;
+    const time = Date.now();
+    let action='';
+    if(v.status==='active') action=`Started VIP ${snap.key}`;
+    else if(v.status==='completed' || v.received) action=`Completed VIP ${snap.key}`;
+    if(action) historyRef.push({ action, timestamp: time });
+  });
+
+  // --- Display history in real time ---
   historyRef.limitToLast(50).on('value', snap=>{
-    const hist = snap.val() || {};
+    const data = snap.val() || {};
     const cont = document.getElementById('task-history');
-    cont.innerHTML = '';
-    const items = Object.values(hist).sort((a,b)=>(b.timestamp||0)-(a.timestamp||0));
+    cont.innerHTML='';
+    const items = Object.values(data).sort((a,b)=>b.timestamp-a.timestamp);
     items.forEach(item=>{
-      const row = document.createElement('div');
+      const row=document.createElement('div');
       row.className='row';
-      const time = new Date(item.timestamp||Date.now()).toLocaleString();
-      row.innerHTML = `<div>${item.action||'Action'}</div><div>${time}</div>`;
+      const t=new Date(item.timestamp).toLocaleString();
+      row.innerHTML=`<div>${item.action}</div><div>${t}</div>`;
       cont.appendChild(row);
     });
   });
-
-  // ✅ Ensure task records get updated from VIP unlock/receive actions
-  vipRef.on('child_changed', snap=>{
-    const vip = snap.val();
-    if(!vip) return;
-    const time = Date.now();
-    let action = '';
-    if(vip.status==='active') action = `Started VIP ${snap.key} task`;
-    else if(vip.status==='completed' || vip.received) action = `Completed VIP ${snap.key} task`;
-    else if(vip.unlocked) action = `Unlocked VIP ${snap.key}`;
-    if(action){
-      historyRef.push({ action, timestamp: time });
-    }
-  });
 });
 
-// Popup function
+// popup
 function showPopup(msg, red=false){
-  const p = document.createElement('div');
-  p.className='popup' + (red?' red':'');
-  p.textContent = msg;
+  const p=document.createElement('div');
+  p.className='popup'+(red?' red':'');
+  p.textContent=msg;
   document.body.appendChild(p);
   setTimeout(()=>p.remove(),3000);
 }
