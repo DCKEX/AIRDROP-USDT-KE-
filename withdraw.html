@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Withdraw - AIRDROP USDT KE</title>
+<title>Withdraw - CYPX ONLINE CRYPTO</title>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
 
@@ -111,8 +111,8 @@ h2{
   left:50%;
   top:50%;
   transform:translate(-50%,-50%);
-  min-width:240px;
-  padding:16px 18px;
+  min-width:260px;
+  padding:18px 20px;
   border-radius:12px;
   z-index:999;
   display:none;
@@ -122,6 +122,16 @@ h2{
 .popup.success{background:#083b18;color:#d6ffd6;}
 .popup.error{background:#3a1111;color:#ffd7d7;}
 .popup.confirm{background:#223355;color:#d6e4ff;}
+.popup button{
+  margin-top:10px;
+  background:#0099ff;
+  border:0;
+  color:white;
+  padding:8px 16px;
+  border-radius:8px;
+  font-weight:600;
+  cursor:pointer;
+}
 nav{
   position:fixed;
   bottom:0;
@@ -145,41 +155,29 @@ nav i{
   margin-bottom:4px;
   font-size:18px;
 }
-
-/* 🔹 Spinner for page loading */
 #pageLoader {
   position:fixed;
-  top:0;
-  left:0;
-  right:0;
-  bottom:0;
+  top:0; left:0; right:0; bottom:0;
   background:linear-gradient(180deg,#001a33,#002244);
-  display:flex;
-  justify-content:center;
-  align-items:center;
+  display:flex; justify-content:center; align-items:center;
   z-index:1000;
 }
 .loader-ring {
   border:5px solid rgba(255,255,255,0.2);
   border-top:5px solid #00ffcc;
   border-radius:50%;
-  width:60px;
-  height:60px;
+  width:60px; height:60px;
   animation:spin 1s linear infinite;
 }
 .spinner {
   border:4px solid rgba(255,255,255,0.2);
   border-top:4px solid #00ffcc;
   border-radius:50%;
-  width:40px;
-  height:40px;
+  width:40px; height:40px;
   animation: spin 1s linear infinite;
-  position:fixed;
-  top:50%;
-  left:50%;
+  position:fixed; top:50%; left:50%;
   transform:translate(-50%,-50%);
-  display:none;
-  z-index:999;
+  display:none; z-index:999;
 }
 @keyframes spin {
   0% { transform:translate(-50%,-50%) rotate(0deg); }
@@ -211,8 +209,8 @@ nav i{
       <input id="phone" class="input" type="text" placeholder="07XXXXXXXX" required />
 
       <label class="label" for="amount">Withdrawal Amount (KSH)</label>
-      <input id="amount" class="input" type="number" min="600" placeholder="e.g. 1000" required />
-      <div class="small">Minimum withdrawal is <strong>600 KSH</strong>.</div>
+      <input id="amount" class="input" type="number" min="1000" placeholder="e.g. 1000" required />
+      <div class="small">Minimum withdrawal is <strong>1,000 KSH</strong>.</div>
 
       <button id="submitBtn" class="btn" type="submit">Submit Withdrawal Request</button>
     </form>
@@ -246,23 +244,32 @@ firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.database();
 
-const balanceEl = document.getElementById('balance');
 const popup = document.getElementById('popup');
-const spinner = document.getElementById('spinner');
-const pageLoader = document.getElementById('pageLoader');
-const form = document.getElementById('withdrawForm');
-const submitBtn = document.getElementById('submitBtn');
-
-function showPopup(msg,type='success',timeout=2800,redirect=null){
+function showPopup(msg,type='success',timeout=2800,redirect=null,buttonText=null){
   popup.innerHTML = msg;
-  popup.className='popup '+(type||'success');
+  popup.className = 'popup ' + (type||'success');
   popup.style.display='block';
-  setTimeout(()=>{
-    popup.style.display='none';
-    if(redirect) window.location=redirect;
-  },timeout);
+
+  if(buttonText){
+    const btn=document.createElement('button');
+    btn.textContent=buttonText;
+    btn.onclick=()=>{ window.location=redirect; };
+    popup.appendChild(btn);
+  }
+
+  if(!buttonText){
+    setTimeout(()=>{
+      popup.style.display='none';
+      if(redirect) window.location=redirect;
+    },timeout);
+  }
 }
 
+const balanceEl=document.getElementById('balance');
+const spinner=document.getElementById('spinner');
+const pageLoader=document.getElementById('pageLoader');
+const form=document.getElementById('withdrawForm');
+const submitBtn=document.getElementById('submitBtn');
 let currentUser=null;
 
 auth.onAuthStateChanged(user=>{
@@ -273,7 +280,7 @@ auth.onAuthStateChanged(user=>{
       pageLoader.style.display='none';
       document.body.style.opacity='1';
     });
-  } else {
+  }else{
     window.location='signin.html';
   }
 });
@@ -287,29 +294,39 @@ form.addEventListener('submit',async e=>{
   const phone = document.getElementById('phone').value.trim();
   const method = document.getElementById('method').value;
 
-  if(!amount || amount < 600){
+  if(!amount || amount < 1000){
     spinner.style.display='none';
-    showPopup('Minimum withdrawal amount is 600 KSH','error');
+    showPopup('⚠️ Minimum withdrawal is 1,000 KSH','error');
     return;
   }
+
   if(!/^0[0-9]{8,9}$/.test(phone)){
     spinner.style.display='none';
     showPopup('Please enter a valid phone number','error');
     return;
   }
 
-  const balSnap = await db.ref(`users/${currentUser.uid}/balance`).once('value');
-  const balance = Number(balSnap.val())||0;
+  const balSnap=await db.ref(`users/${currentUser.uid}/balance`).once('value');
+  const balance=Number(balSnap.val())||0;
   if(balance < amount){
     spinner.style.display='none';
-    showPopup('Insufficient balance','error');
+    showPopup('⚠️ Insufficient balance','error');
+    return;
+  }
+
+  // 🔹 Check referrals
+  const refSnap = await db.ref(`users/${currentUser.uid}/referrals`).once('value');
+  const refCount = refSnap.exists() ? Object.keys(refSnap.val()).length : 0;
+  if(refCount < 2){
+    spinner.style.display='none';
+    showPopup('You must at least have two referrals or more to withdraw.<br>Do you want to proceed to get referral?','confirm',null,'select.html','Continue');
     return;
   }
 
   submitBtn.disabled=true;
   submitBtn.textContent='Submitting...';
 
-  const balanceRef = db.ref(`users/${currentUser.uid}/balance`);
+  const balanceRef=db.ref(`users/${currentUser.uid}/balance`);
   balanceRef.transaction(bal=>{
     bal = Number(bal)||0;
     if(bal < amount) return;
@@ -332,7 +349,7 @@ form.addEventListener('submit',async e=>{
     });
 
     form.reset();
-    showPopup(`Your withdrawal request of KSH ${amount.toLocaleString()} has been submitted successfully!`,'success');
+    showPopup(`✅ Your withdrawal request of KSH ${amount.toLocaleString()} has been submitted successfully!`,'success');
   });
 });
 </script>
