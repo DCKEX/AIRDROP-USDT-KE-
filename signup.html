@@ -1,169 +1,178 @@
-<!doctype html>  
-<html lang="en">  
-<head>  
-  <meta charset="utf-8"/>  
-  <meta name="viewport" content="width=device-width,initial-scale=1"/>  
-  <title>AIRDROP USDT KE - Sign Up</title>  
-  <style>  
-    *{box-sizing:border-box;margin:0;padding:0;font-family:Inter,system-ui,Segoe UI,Roboto,Arial}  
-    body{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#050d25,#0a182c);color:#f1f5f9;padding:24px}  
-    .card{width:100%;max-width:420px;background:rgba(255,255,255,0.03);border-radius:14px;padding:24px;box-shadow:0 8px 30px rgba(2,6,23,0.6)}  
-    h1{font-size:22px;margin-bottom:16px;text-align:center;color:#c7d2fe}  
-    form{display:grid;gap:14px}  
-    label{font-size:13px;color:#cbd5e1}  
-    input{width:100%;padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,0.05);background:rgba(255,255,255,0.02);color:#f8fafc;font-size:15px}  
-    input::placeholder{color:#94a3b8}  
-    .row{display:flex;align-items:center;gap:8px}  
-    .flag{display:flex;align-items:center;gap:6px;padding:8px;border-radius:10px;border:1px solid rgba(255,255,255,0.05);background:rgba(255,255,255,0.02)}  
-    button{padding:12px;border-radius:10px;background:linear-gradient(90deg,#06b6d4,#7c3aed);color:white;border:none;font-weight:600;cursor:pointer;font-size:15px}  
-    button:disabled{opacity:.6;cursor:not-allowed}  
-    .notification{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(255,100,100,0.1);border:1px solid rgba(255,100,100,0.2);color:#fecaca;padding:12px 18px;border-radius:8px;text-align:center;display:none;max-width:80%;}  
-    .foot{margin-top:10px;text-align:center;font-size:13px;color:#94a3b8}  
-    .foot a{color:#a5b4fc;text-decoration:none;font-weight:600}  
-  </style>  
-</head>  
-<body>  
-  <div class="card">  
-    <h1>AIRDROP USDT KE - Sign Up</h1>  
-  
-    <form id="signupForm">  
-      <div>  
-        <label for="username">Username</label>  
-        <input id="username" placeholder="e.g. Kenmark" required minlength="3"/>  
-      </div>  
-  
-      <div>  
-        <label for="phone">Phone Number (KE)</label>  
-        <div class="row">  
-          <div class="flag">🇰🇪<span class="muted">+254</span></div>  
-          <input id="phone" placeholder="7XXXXXXXX" pattern="[7][0-9]{8}" inputmode="numeric" required/>  
-        </div>  
-      </div>  
-  
-      <div>  
-        <label for="email">Email</label>  
-        <input id="email" type="email" placeholder="you@example.com" required/>  
-      </div>  
-  
-      <div>  
-        <label for="password">Password</label>  
-        <input id="password" type="password" placeholder="Create a strong password" minlength="6" required/>  
-      </div>  
-  
-      <div>  
-        <label for="confirm">Confirm Password</label>  
-        <input id="confirm" type="password" placeholder="Repeat password" minlength="6" required/>  
-      </div>  
-  
-      <div>  
-        <label for="referredBy">Referred By</label>  
-        <input id="referredBy" placeholder="Referral code or username"/>  
-      </div>  
-  
-      <button id="signupBtn" type="submit">Sign Up</button>  
-  
-      <div class="foot">  
-        Already have an account? <a href="signin.html">Sign In</a>  
-      </div>  
-    </form>  
-  </div>  
-  
-  <div id="notify" class="notification"></div>  
-  
-  <!-- Firebase -->  
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>  
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>  
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>  
-  
-  <script>  
-    const firebaseConfig = {  
-      apiKey: "AIzaSyD2Dqz6jg8YACBvg_G_7yIR6c8sSH39BsQ",  
-      authDomain: "cypx-onlinecrypto.firebaseapp.com",  
-      databaseURL: "https://cypx-onlinecrypto-default-rtdb.europe-west1.firebasedatabase.app",  
-      projectId: "cypx-onlinecrypto",  
-      storageBucket: "cypx-onlinecrypto.firebasestorage.app",  
-      messagingSenderId: "857500807275",  
-      appId: "1:857500807275:web:0e04242866ff30bec3812e",  
-      measurementId: "G-7PXLNKJLXV"  
-    };  
-  
-    firebase.initializeApp(firebaseConfig);  
-    const auth = firebase.auth();  
-    const db = firebase.database();  
-  
-    const $ = id => document.getElementById(id);  
-    function showNotify(msg){  
-      const n = $("notify");  
-      n.textContent = msg;  
-      n.style.display = "block";  
-      setTimeout(()=> n.style.display = "none", 3000);  
-    }  
-  
-    function getRef() {  
-      try {  
-        const url = new URL(window.location.href);  
-        return url.searchParams.get("ref") || "";  
-      } catch { return ""; }  
-    }  
-  
-    document.addEventListener("DOMContentLoaded", () => {  
-      const ref = getRef();  
-      if (ref) {  
-        $("referredBy").value = ref;  
-        $("referredBy").readOnly = true;  
-      }  
-    });  
-  
-    function validPhone(p) { return /^[7]\d{8}$/.test(p); }  
-  
-    async function addReferral(refUser, newUid, data) {  
-      const snap = await db.ref("users").orderByChild("username").equalTo(refUser).once("value");  
-      if (!snap.exists()) return;  
-      const refUid = Object.keys(snap.val())[0];  
-      const refRef = db.ref("users/" + refUid);  
-      await refRef.child("referralsCount").transaction(c => (c || 0) + 1);  
-      await db.ref(`referrals/${refUid}/${newUid}`).set({  
-        ...data,  
-        timestamp: firebase.database.ServerValue.TIMESTAMP  
-      });  
-    }  
-  
-    $("signupForm").addEventListener("submit", async e => {  
-      e.preventDefault();  
-      const username = $("username").value.trim();  
-      const phone = $("phone").value.trim();  
-      const email = $("email").value.trim();  
-      const pass = $("password").value;  
-      const conf = $("confirm").value;  
-      const refBy = $("referredBy").value.trim();  
-  
-      if (username.length < 3) return showNotify("Username must be at least 3 characters long.");  
-      if (!validPhone(phone)) return showNotify("Phone number must be 9 digits starting with 7.");  
-      if (!email) return showNotify("Email is required.");  
-      if (pass.length < 6) return showNotify("Password must be at least 6 characters long.");  
-      if (pass !== conf) return showNotify("Passwords do not match.");  
-  
-      $("signupBtn").disabled = true;  
-  
-      try {  
-        const userCred = await auth.createUserWithEmailAndPassword(email, pass);  
-        const uid = userCred.user.uid;  
-        const userObj = {  
-          username, email, phone: "+254" + phone,  
-          referredBy: refBy || null,  
-          referralsCount: 0,  
-          joinedAt: firebase.database.ServerValue.TIMESTAMP  
-        };  
-        await db.ref("users/" + uid).set(userObj);  
-        if (refBy) await addReferral(refBy, uid, { username, email, phone: "+254" + phone });  
-        window.location.href = "dashboard.html";  
-      } catch (err) {  
-        console.error(err);  
-        showNotify(err.message);  
-      } finally {  
-        $("signupBtn").disabled = false;  
-      }  
-    });  
-  </script>  
-</body>  
-</html>  
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>AIRDROP USDT KE - Sign Up</title>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0;font-family:Inter,system-ui,Segoe UI,Roboto,Arial}
+    body{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#050d25,#0a182c);color:#f1f5f9;padding:24px}
+    .card{width:100%;max-width:420px;background:rgba(255,255,255,0.03);border-radius:14px;padding:24px;box-shadow:0 8px 30px rgba(2,6,23,0.6)}
+    h1{font-size:22px;margin-bottom:16px;text-align:center;color:#c7d2fe}
+    form{display:grid;gap:14px}
+    label{font-size:13px;color:#cbd5e1}
+    input{width:100%;padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,0.05);background:rgba(255,255,255,0.02);color:#f8fafc;font-size:15px}
+    input::placeholder{color:#94a3b8}
+    .row{display:flex;align-items:center;gap:8px}
+    .flag{display:flex;align-items:center;gap:6px;padding:8px;border-radius:10px;border:1px solid rgba(255,255,255,0.05);background:rgba(255,255,255,0.02)}
+    button{padding:12px;border-radius:10px;background:linear-gradient(90deg,#06b6d4,#7c3aed);color:white;border:none;font-weight:600;cursor:pointer;font-size:15px}
+    button:disabled{opacity:.6;cursor:not-allowed}
+    .notification{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(255,100,100,0.1);border:1px solid rgba(255,100,100,0.2);color:#fecaca;padding:12px 18px;border-radius:8px;text-align:center;display:none;max-width:80%;}
+    .foot{margin-top:10px;text-align:center;font-size:13px;color:#94a3b8}
+    .foot a{color:#a5b4fc;text-decoration:none;font-weight:600}
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>AIRDROP USDT KE - Sign Up</h1>
+
+    <form id="signupForm">
+      <div>
+        <label for="username">Username</label>
+        <input id="username" placeholder="e.g. Kenmark" required minlength="3"/>
+      </div>
+
+      <div>
+        <label for="phone">Phone Number (KE)</label>
+        <div class="row">
+          <div class="flag">🇰🇪<span class="muted">+254</span></div>
+          <input id="phone" placeholder="7XXXXXXXX" pattern="[7][0-9]{8}" inputmode="numeric" required/>
+        </div>
+      </div>
+
+      <div>
+        <label for="email">Email</label>
+        <input id="email" type="email" placeholder="you@example.com" required/>
+      </div>
+
+      <div>
+        <label for="password">Password</label>
+        <input id="password" type="password" placeholder="Create a strong password" minlength="6" required/>
+      </div>
+
+      <div>
+        <label for="confirm">Confirm Password</label>
+        <input id="confirm" type="password" placeholder="Repeat password" minlength="6" required/>
+      </div>
+
+      <div>
+        <label for="referredBy">Referred By</label>
+        <input id="referredBy" placeholder="Referral code or username"/>
+      </div>
+
+      <button id="signupBtn" type="submit">Sign Up</button>
+
+      <div class="foot">
+        Already have an account? <a href="signin.html">Sign In</a>
+      </div>
+    </form>
+  </div>
+
+  <div id="notify" class="notification"></div>
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyD2Dqz6jg8YACBvg_G_7yIR6c8sSH39BsQ",
+      authDomain: "cypx-onlinecrypto.firebaseapp.com",
+      databaseURL: "https://cypx-onlinecrypto-default-rtdb.europe-west1.firebasedatabase.app",
+      projectId: "cypx-onlinecrypto",
+      storageBucket: "cypx-onlinecrypto.firebasestorage.app",
+      messagingSenderId: "857500807275",
+      appId: "1:857500807275:web:0e04242866ff30bec3812e",
+      measurementId: "G-7PXLNKJLXV"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.database();
+
+    const $ = id => document.getElementById(id);
+    function showNotify(msg) {
+      const n = $("notify");
+      n.textContent = msg;
+      n.style.display = "block";
+      setTimeout(() => n.style.display = "none", 3000);
+    }
+
+    function getRef() {
+      try {
+        const url = new URL(window.location.href);
+        return url.searchParams.get("ref") || "";
+      } catch { return ""; }
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const ref = getRef();
+      if (ref) {
+        $("referredBy").value = ref;
+        $("referredBy").readOnly = true;
+      }
+    });
+
+    function validPhone(p) { return /^[7]\d{8}$/.test(p); }
+
+    async function addReferral(refUser, newUid, data) {
+      const snap = await db.ref("users").orderByChild("username").equalTo(refUser).once("value");
+      if (!snap.exists()) return;
+      const refUid = Object.keys(snap.val())[0];
+      const refRef = db.ref("users/" + refUid);
+      await refRef.child("referralsCount").transaction(c => (c || 0) + 1);
+      await db.ref(`referrals/${refUid}/${newUid}`).set({
+        ...data,
+        timestamp: firebase.database.ServerValue.TIMESTAMP
+      });
+    }
+
+    $("signupForm").addEventListener("submit", async e => {
+      e.preventDefault();
+      const username = $("username").value.trim();
+      const phone = $("phone").value.trim();
+      const email = $("email").value.trim();
+      const pass = $("password").value;
+      const conf = $("confirm").value;
+      const refBy = $("referredBy").value.trim();
+
+      if (username.length < 3) return showNotify("Username must be at least 3 characters long.");
+      if (!validPhone(phone)) return showNotify("Phone number must be 9 digits starting with 7.");
+      if (!email) return showNotify("Email is required.");
+      if (pass.length < 6) return showNotify("Password must be at least 6 characters long.");
+      if (pass !== conf) return showNotify("Passwords do not match.");
+
+      $("signupBtn").disabled = true;
+
+      try {
+        const userCred = await auth.createUserWithEmailAndPassword(email, pass);
+        await userCred.user.reload(); // refresh token to avoid permission denied
+        const uid = userCred.user.uid;
+        const token = await userCred.user.getIdToken(true); // force refresh auth token
+
+        const userObj = {
+          username,
+          email,
+          phone: "+254" + phone,
+          referredBy: refBy || null,
+          referralsCount: 0,
+          joinedAt: firebase.database.ServerValue.TIMESTAMP
+        };
+
+        // ensure the user is authenticated before writing
+        await db.ref("users/" + uid).set(userObj);
+        if (refBy) await addReferral(refBy, uid, { username, email, phone: "+254" + phone });
+
+        showNotify("Account created successfully! Redirecting...");
+        setTimeout(() => window.location.href = "dashboard.html", 1500);
+      } catch (err) {
+        console.error(err);
+        showNotify(err.message);
+      } finally {
+        $("signupBtn").disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>
