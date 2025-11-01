@@ -163,7 +163,7 @@ auth.onAuthStateChanged(user=>{
   if(!user){ window.location='signin.html'; return; }
   const uid = user.uid;
   const userRef = db.ref('users/'+uid);
-  const vipRef  = userRef.child('vips'); // ✅ match vip.html
+  const vipRef  = userRef.child('vips'); // ✅ synced with vip.html
   const statsRef = userRef.child('vipStats');
   const historyRef = userRef.child('taskHistory');
   const totalVipLevels = 10;
@@ -190,24 +190,29 @@ auth.onAuthStateChanged(user=>{
 
   vipRef.on('value', updateVipStats);
 
-  // --- Record changes to history ---
+  // --- Record new VIP unlocks ---
   vipRef.on('child_added', snap=>{
     const v = snap.val(); if(!v) return;
     const time = Date.now();
-    const action = v.unlocked ? `Unlocked VIP ${snap.key}` : `New VIP ${snap.key} added`;
-    historyRef.push({ action, timestamp: time });
+    let action='';
+    if(v.unlocked) action=`Unlocked VIP ${snap.key}`;
+    else if(v.status==='active') action=`Started VIP ${snap.key}`;
+    else if(v.status==='completed' || v.received) action=`Completed VIP ${snap.key}`;
+    if(action) historyRef.push({ action, timestamp: time });
   });
 
+  // --- Record changes in VIP status ---
   vipRef.on('child_changed', snap=>{
     const v = snap.val(); if(!v) return;
     const time = Date.now();
     let action='';
     if(v.status==='active') action=`Started VIP ${snap.key}`;
     else if(v.status==='completed' || v.received) action=`Completed VIP ${snap.key}`;
+    else if(v.unlocked) action=`Unlocked VIP ${snap.key}`;
     if(action) historyRef.push({ action, timestamp: time });
   });
 
-  // --- Display history in real time ---
+  // --- Display task history in real time ---
   historyRef.limitToLast(50).on('value', snap=>{
     const data = snap.val() || {};
     const cont = document.getElementById('task-history');
