@@ -324,20 +324,51 @@ function startTimer(cardId,inv,amount,totalReturn,countdownEl,btn,uid){
 }
 
 function invest(amount,totalReturn,uid,button){
-  if(currentBalance<amount){showDepositPopup();return;}
-  const userRef=db.ref('users/'+uid);
-  userRef.transaction(data=>{
-    if(!data)data={};
-    const cur=parseFloat(data.balance||0);
-    if(cur<amount)return data;
-    data.balance=cur-amount;
-    return data;
-  },(err,ok)=>{
-    if(err||!ok){showPopup('❌ Transaction failed');return;}
-    const inv={investedAmount:amount,totalReturn:totalReturn,investedAt:Date.now(),status:'active',daysCompleted:0};
-    db.ref('investments/'+uid).push(inv).then(()=>{
+  if(currentBalance < amount){ showDepositPopup(); return; }
+
+  const userRef = db.ref('users/' + uid);
+
+  // Deduct balance transaction
+  userRef.child('balance').transaction(bal => {
+    if(bal === null) bal = 0;
+    if(bal < amount) return; // cancel transaction
+    return bal - amount;
+  }, (error, committed, snapshot) => {
+    if (error || !committed) {
+      showPopup('❌ Transaction failed', true);
+      return;
+    }
+
+    // Record investment after balance updated
+    const inv = {
+      investedAmount: amount,
+      totalReturn: totalReturn,
+      investedAt: Date.now(),
+      status: 'active',
+      daysCompleted: 0
+    };
+
+    db.ref('investments/' + uid).push(inv)
+    .then(() => {
+      // ✅ success feedback
       showPopup(`✅ You invested ${Number(amount).toLocaleString('en-KE')} KSH`);
-    }).catch(()=>showPopup('❌ Could not record investment'));
+
+      // Immediately update UI button
+      button.textContent = 'Active — counting...';
+      button.className = 'disabled';
+      button.disabled = true;
+
+      // Refresh investment list to show countdown
+      db.ref('investments/' + uid).once('value').then(snap => {
+        investments = {};
+        snap.forEach(c => { const v=c.val(); v.key=c.key; investments[c.key]=v; });
+        loadPlans(uid);
+      });
+    })
+    .catch(err => {
+      console.error(err);
+      showPopup('❌ Could not record investment', true);
+    });
   });
 }
 
