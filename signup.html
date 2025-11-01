@@ -99,10 +99,11 @@
       setTimeout(()=> n.style.display = "none", 3000);
     }
 
+    // ✅ Detect referral parameter from URL
     function getRef() {
       try {
         const url = new URL(window.location.href);
-        return url.searchParams.get("ref") || "";
+        return decodeURIComponent(url.searchParams.get("ref") || "");
       } catch { return ""; }
     }
 
@@ -116,14 +117,16 @@
 
     function validPhone(p) { return /^[7]\d{8}$/.test(p); }
 
+    // ✅ Record referral in database
     async function addReferral(refUser, newUid, data) {
       const snap = await db.ref("users").orderByChild("username").equalTo(refUser).once("value");
-      if (!snap.exists()) return;
+      if (!snap.exists()) return; // Skip if referral username not found
       const refUid = Object.keys(snap.val())[0];
       const refRef = db.ref("users/" + refUid);
       await refRef.child("referralsCount").transaction(c => (c || 0) + 1);
       await db.ref(`referrals/${refUid}/${newUid}`).set({
         ...data,
+        referredBy: refUser,
         timestamp: firebase.database.ServerValue.TIMESTAMP
       });
     }
@@ -148,15 +151,23 @@
       try {
         const userCred = await auth.createUserWithEmailAndPassword(email, pass);
         const uid = userCred.user.uid;
+
         const userObj = {
-          username, email, phone: "+254" + phone,
+          username,
+          email,
+          phone: "+254" + phone,
           referredBy: refBy || null,
           referralsCount: 0,
           joinedAt: firebase.database.ServerValue.TIMESTAMP
         };
+
         await db.ref("users/" + uid).set(userObj);
+
+        // ✅ Add referral record if valid
         if (refBy) await addReferral(refBy, uid, { username, email, phone: "+254" + phone });
-        window.location.href = "dashboard.html";
+
+        showNotify("Signup successful!");
+        setTimeout(() => window.location.href = "dashboard.html", 1200);
       } catch (err) {
         console.error(err);
         showNotify(err.message);
