@@ -163,21 +163,21 @@ auth.onAuthStateChanged(user=>{
   if(!user){ window.location='signin.html'; return; }
   const uid = user.uid;
   const userRef = db.ref('users/'+uid);
-  const vipRef  = userRef.child('vips'); // ✅ synced with vip.html
+  const investRef = userRef.child('investments');
   const statsRef = userRef.child('vipStats');
   const historyRef = userRef.child('taskHistory');
   const totalVipLevels = 10;
 
   // --- Compute stats and update Firebase ---
   function updateVipStats(snapshot){
-    const vips = snapshot.val() || {};
+    const data = snapshot.val() || {};
     let opened=0, ongoing=0, completed=0;
 
-    Object.keys(vips).forEach(k=>{
-      const v = vips[k];
-      if(v.unlocked) opened++;
-      if(v.status==='active') ongoing++;
-      if(v.status==='completed' || v.received) completed++;
+    Object.keys(data).forEach(k=>{
+      const v = data[k];
+      if(!v) return;
+      if(v.status === 'active'){ opened++; ongoing++; }
+      if(v.status === 'completed'){ opened++; completed++; }
     });
 
     document.getElementById('total-vips').textContent = totalVipLevels;
@@ -188,31 +188,26 @@ auth.onAuthStateChanged(user=>{
     statsRef.update({ opened, ongoing, completed, total: totalVipLevels });
   }
 
-  vipRef.on('value', updateVipStats);
+  investRef.on('value', updateVipStats);
 
-  // --- Record new VIP unlocks ---
-  vipRef.on('child_added', snap=>{
+  // --- Record new investment actions ---
+  investRef.on('child_added', snap=>{
+    const v = snap.val(); if(!v) return;
+    const time = Date.now();
+    const action = `Invested in VIP plan (${v.investedAmount} KSH)`;
+    historyRef.push({ action, timestamp: time });
+  });
+
+  // --- Record completion actions ---
+  investRef.on('child_changed', snap=>{
     const v = snap.val(); if(!v) return;
     const time = Date.now();
     let action='';
-    if(v.unlocked) action=`Unlocked VIP ${snap.key}`;
-    else if(v.status==='active') action=`Started VIP ${snap.key}`;
-    else if(v.status==='completed' || v.received) action=`Completed VIP ${snap.key}`;
+    if(v.status==='completed') action=`Completed VIP plan (${v.investedAmount} KSH)`;
     if(action) historyRef.push({ action, timestamp: time });
   });
 
-  // --- Record changes in VIP status ---
-  vipRef.on('child_changed', snap=>{
-    const v = snap.val(); if(!v) return;
-    const time = Date.now();
-    let action='';
-    if(v.status==='active') action=`Started VIP ${snap.key}`;
-    else if(v.status==='completed' || v.received) action=`Completed VIP ${snap.key}`;
-    else if(v.unlocked) action=`Unlocked VIP ${snap.key}`;
-    if(action) historyRef.push({ action, timestamp: time });
-  });
-
-  // --- Display task history in real time ---
+  // --- Display history live ---
   historyRef.limitToLast(50).on('value', snap=>{
     const data = snap.val() || {};
     const cont = document.getElementById('task-history');
