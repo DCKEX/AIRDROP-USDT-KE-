@@ -189,7 +189,7 @@ const plans = [
   [10000,45000,"Silver","fa-piggy-bank"],
   [20000,81000,"Gold","fa-medal"],
   [36000,144000,"Platinum","fa-gem"],
-  [60000,24000,"Diamond","fa-diamond"],
+  [60000,240000,"Diamond","fa-diamond"],
   [90000,360000,"Tanzanite","fa-mountain"],
   [120000,480000,"Emerald","fa-leaf"],
   [200000,807000,"Sapphire","fa-water"],
@@ -205,11 +205,13 @@ auth.onAuthStateChanged(user=>{
   if(!user){window.location='signin.html';return;}
   const uid=user.uid;
   const loader=document.getElementById('loader');
+
   db.ref('users/'+uid+'/balance').on('value',snap=>{
     currentBalance=snap.val()||0;
     document.getElementById('userBalance').textContent=Number(currentBalance).toLocaleString('en-KE');
   });
-  db.ref('investments/'+uid).on('value',snap=>{
+
+  db.ref('users/'+uid+'/investments').on('value',snap=>{
     investments={};
     snap.forEach(c=>{
       const v=c.val();v.key=c.key;investments[c.key]=v;
@@ -253,11 +255,11 @@ function loadPlans(uid){
     countdownEl.innerText='';
     const btn=document.createElement('button');
 
-    function setInvest(){btn.textContent='Invest Now';btn.className='invest';btn.disabled=false;btn.onclick=()=>invest(amount,totalReturn,uid,btn);}
+    function setInvest(){btn.textContent='Invest Now';btn.className='invest';btn.disabled=false;btn.onclick=()=>invest(amount,totalReturn,uid,btn,countdownEl,cardId);}
     function setCompleted(){btn.textContent='✅ Completed';btn.className='completed';btn.disabled=true;btn.onclick=null;}
 
     if(inv){
-      btn.textContent='Active — counting...';
+      btn.textContent='Receive';
       btn.className='disabled';
       startTimer(cardId,inv,amount,totalReturn,countdownEl,btn,uid);
     } else {
@@ -276,14 +278,14 @@ function loadPlans(uid){
 function startTimer(cardId,inv,amount,totalReturn,countdownEl,btn,uid){
   if(countdownTimers[cardId]) clearInterval(countdownTimers[cardId]);
   function tick(){
-    db.ref(`investments/${uid}/${inv.key}`).once('value').then(s=>{
+    db.ref(`users/${uid}/investments/${inv.key}`).once('value').then(s=>{
       const v=s.val();if(!v)return;
       const investedAt=v.investedAt||inv.investedAt;
       const daysCompleted=v.daysCompleted||0;
       const now=Date.now();
       const elapsed=Math.floor((now-investedAt)/DAY_MS);
       if(daysCompleted>=DURATION_DAYS){
-        db.ref(`investments/${uid}/${inv.key}/status`).set('completed');
+        db.ref(`users/${uid}/investments/${inv.key}/status`).set('completed');
         countdownEl.innerText=`Completed (${DURATION_DAYS}/${DURATION_DAYS})`;
         btn.textContent='✅ Completed';btn.className='completed';btn.disabled=true;
         clearInterval(countdownTimers[cardId]);
@@ -294,7 +296,7 @@ function startTimer(cardId,inv,amount,totalReturn,countdownEl,btn,uid){
       if(diff<=0){
         const profitTotal=totalReturn-amount;
         const dailyProfit=profitTotal/DURATION_DAYS;
-        db.ref(`investments/${uid}/${inv.key}/daysCompleted`).transaction(cur=>{
+        db.ref(`users/${uid}/investments/${inv.key}/daysCompleted`).transaction(cur=>{
           if(cur===null)cur=0;
           if(cur>=DURATION_DAYS)return cur;
           return cur+1;
@@ -304,7 +306,7 @@ function startTimer(cardId,inv,amount,totalReturn,countdownEl,btn,uid){
           db.ref(`users/${uid}/balance`).transaction(b=>(b||0)+dailyProfit);
           countdownEl.innerText=`Day ${newDays}/${DURATION_DAYS} — Paid`;
           if(newDays>=DURATION_DAYS){
-            db.ref(`investments/${uid}/${inv.key}/status`).set('completed');
+            db.ref(`users/${uid}/investments/${inv.key}/status`).set('completed');
             countdownEl.innerText=`Completed (${DURATION_DAYS}/${DURATION_DAYS})`;
             btn.textContent='✅ Completed';btn.className='completed';btn.disabled=true;
             clearInterval(countdownTimers[cardId]);
@@ -323,15 +325,14 @@ function startTimer(cardId,inv,amount,totalReturn,countdownEl,btn,uid){
   countdownTimers[cardId]=setInterval(tick,1000);
 }
 
-function invest(amount,totalReturn,uid,button){
+function invest(amount,totalReturn,uid,button,countdownEl,cardId){
   if(currentBalance < amount){ showDepositPopup(); return; }
 
   const userRef = db.ref('users/' + uid);
 
-  // Deduct balance transaction
   userRef.child('balance').transaction(bal => {
     if(bal === null) bal = 0;
-    if(bal < amount) return; // cancel transaction
+    if(bal < amount) return;
     return bal - amount;
   }, (error, committed, snapshot) => {
     if (error || !committed) {
@@ -339,7 +340,6 @@ function invest(amount,totalReturn,uid,button){
       return;
     }
 
-    // Record investment after balance updated
     const inv = {
       investedAmount: amount,
       totalReturn: totalReturn,
@@ -348,22 +348,16 @@ function invest(amount,totalReturn,uid,button){
       daysCompleted: 0
     };
 
-    db.ref('investments/' + uid).push(inv)
-    .then(() => {
-      // ✅ success feedback
+    db.ref('users/' + uid + '/investments').push(inv)
+    .then(ref => {
       showPopup(`✅ You invested ${Number(amount).toLocaleString('en-KE')} KSH`);
-
-      // Immediately update UI button
-      button.textContent = 'Active — counting...';
+      button.textContent = 'Receive';
       button.className = 'disabled';
       button.disabled = true;
 
-      // Refresh investment list to show countdown
-      db.ref('investments/' + uid).once('value').then(snap => {
-        investments = {};
-        snap.forEach(c => { const v=c.val(); v.key=c.key; investments[c.key]=v; });
-        loadPlans(uid);
-      });
+      inv.key = ref.key;
+      // Start countdown immediately above the button
+      startTimer(cardId, inv, amount, totalReturn, countdownEl, button, uid);
     })
     .catch(err => {
       console.error(err);
@@ -383,11 +377,13 @@ function showPopup(msg,red=false){
 function showDepositPopup(){
   const popup=document.getElementById('popupMsg');
   popup.innerHTML=`<p style="color:#ffd;font-weight:bold;">⚠️ Insufficient balance — would you like to deposit?</p>
-  <button style="background:#001f4d;padding:8px 12px;border-radius:6px;" onclick="window.location='deposit.html'">Confirm</button>`;
-  popup.className='popup';popup.style.background='#001f4d';popup.style.display='block';
+  <button style="background:#001f4d;padding:8px 12px;border-radius:6px;color:#fff;" onclick="window.location='deposit.html'">Confirm</button>`;
+  popup.className='popup';
+  popup.style.background='#001f4d';
+  popup.style.display='block';
 }
 
 window.addEventListener('beforeunload',()=>Object.values(countdownTimers).forEach(clearInterval));
 </script>
 </body>
-</html>
+  </html>
