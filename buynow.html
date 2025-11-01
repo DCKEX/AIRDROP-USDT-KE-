@@ -28,7 +28,7 @@ const db = firebase.database();
 body {
   margin: 0;
   font-family: Arial, Helvetica, sans-serif;
-  background: linear-gradient(135deg, #001f3f, #001a33); /* Navy blue */
+  background: linear-gradient(135deg, #001f3f, #001a33);
   color: #fff;
   padding-bottom: 60px;
 }
@@ -179,46 +179,6 @@ nav i {
 </nav>
 
 <script>
-auth.onAuthStateChanged(user => {
-  if (!user) {
-    window.location = 'signin.html';
-    return;
-  }
-  const uid = user.uid;
-
-  function validateMpesaCode(code) {
-    const pattern = /^[A-Z0-9]{10}$/; 
-    const hasLetter = /[A-Z]/.test(code);
-    const hasNumber = /[0-9]/.test(code);
-    return pattern.test(code) && hasLetter && hasNumber;
-  }
-
-  document.getElementById('submit-deposit').onclick = () => {
-    const code = document.getElementById('mpesaCode').value.trim().toUpperCase();
-
-    if (code === '') {
-      return showPopup('Please enter M-PESA transaction code', true);
-    }
-    if (!validateMpesaCode(code)) {
-      return showPopup('Invalid M-PESA transaction code', true);
-    }
-
-    const depositRef = db.ref('deposits/' + uid).push();
-    const depositData = {
-      mpesaCode: code,
-      status: 'pending',
-      created: Date.now()
-    };
-    depositRef.set(depositData).then(() => {
-      showPopup('Your M-PESA code has been submitted successfully');
-      document.getElementById('mpesaCode').value = '';
-    }).catch(err => {
-      console.error(err);
-      showPopup('An error occurred, please try again', true);
-    });
-  };
-});
-
 function showPopup(msg, red = false) {
   const p = document.createElement('div');
   p.className = 'popup' + (red ? ' red' : '');
@@ -226,6 +186,54 @@ function showPopup(msg, red = false) {
   document.body.appendChild(p);
   setTimeout(() => p.remove(), 3000);
 }
+
+auth.onAuthStateChanged(user => {
+  if (!user) {
+    window.location = 'signin.html';
+    return;
+  }
+
+  const uid = user.uid;
+
+  document.getElementById('submit-deposit').addEventListener('click', () => {
+    const codeInput = document.getElementById('mpesaCode');
+    const code = codeInput.value.trim().toUpperCase();
+
+    if (!code) {
+      showPopup('Please enter M-PESA transaction code', true);
+      return;
+    }
+    if (!/^[A-Z0-9]{10}$/.test(code) || !/[A-Z]/.test(code) || !/[0-9]/.test(code)) {
+      showPopup('Invalid M-PESA transaction code', true);
+      return;
+    }
+
+    const btn = document.getElementById('submit-deposit');
+    btn.disabled = true;
+    btn.textContent = 'Submitting...';
+
+    const depositData = {
+      mpesaCode: code,
+      status: 'pending',
+      created: Date.now()
+    };
+
+    // ✅ Write to the same secure node as deposit.html
+    db.ref('users/' + uid + '/deposits').push(depositData)
+      .then(() => {
+        showPopup('✅ Your M-PESA code has been submitted successfully');
+        codeInput.value = '';
+        btn.disabled = false;
+        btn.textContent = 'Submit Details';
+      })
+      .catch(err => {
+        console.error(err);
+        showPopup('An error occurred, please try again', true);
+        btn.disabled = false;
+        btn.textContent = 'Submit Details';
+      });
+  });
+});
 </script>
 
 </body>
