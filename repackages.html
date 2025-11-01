@@ -189,12 +189,21 @@ nav i {font-size: 18px;}
 </nav>
 
 <script>
-// Loader hide after content loads
+// Force loader to hide after 3 seconds max — even if network is slow
 window.addEventListener('load', () => {
   const loader = document.getElementById('loader');
-  loader.style.opacity =100';
+  loader.style.opacity = '0';
   setTimeout(() => loader.style.display = 'none', 500);
 });
+
+// Safety timeout: hide loader after 3 seconds no matter what
+setTimeout(() => {
+  const loader = document.getElementById('loader');
+  if (loader) {
+    loader.style.opacity = '0';
+    setTimeout(() => loader.style.display = 'none', 500);
+  }
+}, 3000);
 </script>
 
 </body>
