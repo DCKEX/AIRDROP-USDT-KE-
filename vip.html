@@ -183,17 +183,18 @@ firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.database();
 
+// Updated totalReturn values (amount + 15 * dailyInterest)
 const plans = [
-  [3000,12000,"Starter","fa-seedling"],
-  [5000,21000,"Bronze","fa-coins"],
-  [10000,45000,"Silver","fa-piggy-bank"],
-  [20000,81000,"Gold","fa-medal"],
-  [36000,144000,"Platinum","fa-gem"],
-  [60000,240000,"Diamond","fa-diamond"],
-  [90000,360000,"Tanzanite","fa-mountain"],
-  [120000,480000,"Emerald","fa-leaf"],
-  [200000,807000,"Sapphire","fa-water"],
-  [350000,1470000,"Ruby","fa-fire"]
+  [3000, 3000 + 800*15, "Starter", "fa-seedling"],         // 12,000 + 3,000 = 15,000
+  [5000, 5000 + 1400*15, "Bronze", "fa-coins"],            // 26,000
+  [10000, 10000 + 3000*15, "Silver", "fa-piggy-bank"],     // 55,000
+  [20000, 20000 + 5400*15, "Gold", "fa-medal"],            // 101,000
+  [36000, 36000 + 9600*15, "Platinum", "fa-gem"],          // 180,000
+  [60000, 60000 + 16000*15, "Diamond", "fa-diamond"],      // 300,000
+  [90000, 90000 + 24000*15, "Tanzanite", "fa-mountain"],   // 450,000
+  [120000, 120000 + 32000*15, "Emerald", "fa-leaf"],       // 600,000
+  [200000, 200000 + 53800*15, "Sapphire", "fa-water"],     // 1,007,000
+  [350000, 350000 + 98000*15, "Ruby", "fa-fire"]           // 1,820,000
 ];
 const DAY_MS = 24*60*60*1000;
 const DURATION_DAYS = 15;
