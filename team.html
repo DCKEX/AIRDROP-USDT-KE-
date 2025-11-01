@@ -34,8 +34,6 @@ body {
   background-attachment: fixed;
   background-size: cover;
 }
-
-/* Header */
 header {
   background: rgba(0, 40, 90, 0.8);
   backdrop-filter: blur(6px);
@@ -48,7 +46,6 @@ header {
 header img { height: 32px; }
 header h2 { margin: 0; font-size: 1.2rem; }
 
-/* Section */
 .section {
   margin: 12px;
   padding: 12px;
@@ -59,7 +56,6 @@ header h2 { margin: 0; font-size: 1.2rem; }
 }
 h3 { margin: 0 0 8px 0; color: #ffcc00; }
 
-/* Stats grid */
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -77,7 +73,6 @@ h3 { margin: 0 0 8px 0; color: #ffcc00; }
 .stat-label { color: #cfe6ff; font-size: 0.75rem; }
 .stat-value { color: #ffd966; font-size: 1rem; font-weight: 600; }
 
-/* Copy button */
 .copy-btn {
   background: #ffcc00;
   color: #002244;
@@ -90,7 +85,6 @@ h3 { margin: 0 0 8px 0; color: #ffcc00; }
 }
 .copy-btn:hover { background: #ffe066; }
 
-/* Level boxes */
 .level-box {
   background: rgba(255,255,255,0.05);
   border: 1px solid rgba(255,255,255,0.1);
@@ -105,7 +99,6 @@ h3 { margin: 0 0 8px 0; color: #ffcc00; }
   font-size: 0.95rem;
 }
 
-/* Navigation */
 nav {
   position: fixed;
   bottom: 0; left: 0; right: 0;
@@ -124,7 +117,6 @@ nav a {
 }
 nav i { font-size: 18px; }
 
-/* Toast */
 .toast {
   position: fixed;
   bottom: 70px;
@@ -191,9 +183,8 @@ nav i { font-size: 18px; }
 
 <script>
 function formatKSH(value){
-  return parseFloat(value || 0).toLocaleString('en-KE') + ' KSH';
+  return parseFloat(value || 0).toLocaleString('en-KE', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' KSH';
 }
-
 function showToast(msg,type='success'){
   const t=document.getElementById('toast');
   t.textContent=msg;
@@ -205,12 +196,11 @@ auth.onAuthStateChanged(user=>{
   if(!user){window.location='signin.html';return;}
   const uid=user.uid;
 
-  // ✅ Referral link
-  db.ref('users/'+uid+'/username').once('value').then(snap=>{
+  // 🔗 Referral link
+  db.ref('users/'+uid+'/username').on('value', snap=>{
     const username = snap.val() || uid;
-    const link = `https://dckex.github.io/AIRDROPUSDTKE/signup.html?ref=${encodeURIComponent(username)}`;
+    const link = `https://dckex.github.io/AIRDROP-USDT-KE-/signup.html?ref=${encodeURIComponent(username)}`;
     document.getElementById('ref-link').value = link;
-
     document.getElementById('copyRefBtn').onclick = () => {
       navigator.clipboard.writeText(link).then(() => {
         db.ref('users/' + uid + '/referralLogs').push({
@@ -222,14 +212,40 @@ auth.onAuthStateChanged(user=>{
     };
   });
 
-  // ✅ Team size
+  // 👥 Team real-time tracking
   db.ref('referrals/'+uid).on('value', snap=>{
     const referrals = snap.val() || {};
-    const active = Object.values(referrals).filter(r=>r && r.joinedAt).length;
-    document.getElementById('team-size').textContent = active.toLocaleString('en-KE');
+    const members = Object.values(referrals);
+    const size = members.length;
+    document.getElementById('team-size').textContent = size;
+
+    // Count new members (joined within last 24h)
+    const now = Date.now();
+    const newCount = members.filter(m=>now - (m.joinedAt || 0) < 86400000).length;
+    document.getElementById('new-team').textContent = newCount;
+
+    // Calculate recharge + withdrawal totals
+    let totalRecharge = 0, firstRecharge = 0;
+    let totalWithdraw = 0, firstWithdraw = 0;
+
+    members.forEach(m=>{
+      if(m.uid){
+        db.ref('users/'+m.uid).once('value').then(uSnap=>{
+          const userData = uSnap.val() || {};
+          totalRecharge += parseFloat(userData.totalRecharge||0);
+          totalWithdraw += parseFloat(userData.totalWithdraw||0);
+          firstRecharge = Math.min(firstRecharge||Infinity, parseFloat(userData.firstRecharge||0) || Infinity);
+          firstWithdraw = Math.min(firstWithdraw||Infinity, parseFloat(userData.firstWithdraw||0) || Infinity);
+          document.getElementById('team-recharge').textContent = formatKSH(totalRecharge);
+          document.getElementById('team-withdraw').textContent = formatKSH(totalWithdraw);
+          document.getElementById('first-recharge').textContent = formatKSH(firstRecharge===Infinity?0:firstRecharge);
+          document.getElementById('first-withdraw').textContent = formatKSH(firstWithdraw===Infinity?0:firstWithdraw);
+        });
+      }
+    });
   });
 
-  // ✅ Commission per level
+  // 💸 Commission levels real-time
   db.ref('commissions/'+uid).on('value', snap=>{
     const data = snap.val() || {};
     document.getElementById('lvl1-total').textContent = formatKSH(data.lvl1);
