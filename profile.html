@@ -1,3 +1,4 @@
+<!-- ✅ FIXED PROFILE.HTML -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -33,8 +34,6 @@ body {
   color:#fff;
   padding-bottom:1.5cm;
 }
-
-/* Header */
 header {
   display:flex;
   align-items:center;
@@ -44,8 +43,6 @@ header {
 }
 header img{height:40px;}
 header h2{margin:0;font-size:1.2rem;color:#fff;}
-
-/* VIP + Email Card */
 .vip-card {
   position: relative;
   background: #1e40af;
@@ -74,8 +71,6 @@ header h2{margin:0;font-size:1.2rem;color:#fff;}
 }
 .vip-card .vip-stars { color: #ffd700; }
 .vip-card img.icon{height:40px;}
-
-/* Balance Card */
 .balance-card {
   background: #8B4513;
   border-radius: 12px;
@@ -90,8 +85,6 @@ header h2{margin:0;font-size:1.2rem;color:#fff;}
   align-items: center;
   text-align: center;
 }
-
-/* Buttons */
 .buttons {
   display:flex;
   flex-direction:column;
@@ -113,8 +106,6 @@ header h2{margin:0;font-size:1.2rem;color:#fff;}
 }
 .buttons .btn i { margin-right:8px; }
 .buttons .btn:hover { background:#3b82f6; }
-
-/* Popup */
 .popup {
   position:fixed;
   top:50%;
@@ -129,8 +120,6 @@ header h2{margin:0;font-size:1.2rem;color:#fff;}
   text-align:center;
 }
 .popup.red { background:#cc0000; }
-
-/* Bottom Nav */
 nav {
   position:fixed;
   bottom:0;
@@ -156,7 +145,6 @@ nav i { font-size:18px; }
   <h2>AIRDROP USDT KE – Profile</h2>
 </header>
 
-<!-- VIP + Email -->
 <div class="vip-card">
   <div class="info">
     <div class="user-email" id="user-email">Loading...</div>
@@ -168,13 +156,11 @@ nav i { font-size:18px; }
   <img class="icon" src="https://png.pngtree.com/png-clipart/20221216/original/pngtree-vip-icon-design-png-image_8749175.png" alt="VIP">
 </div>
 
-<!-- Balances -->
 <div class="balance-card">
   <div id="total-balance">Total Balance: KSH 0</div>
   <div id="recharged-amount">Total Recharged: KSH 0</div>
 </div>
 
-<!-- Buttons -->
 <div class="buttons">
   <button class="btn" onclick="location.href='deposit.html'"><i class="fas fa-wallet"></i>Deposit Funds</button>
   <button class="btn" onclick="location.href='withdraw.html'"><i class="fas fa-money-bill"></i>Withdraw Funds</button>
@@ -183,7 +169,6 @@ nav i { font-size:18px; }
   <button class="btn" id="logout-btn"><i class="fas fa-sign-out-alt"></i>Logout</button>
 </div>
 
-<!-- Bottom Navigation -->
 <nav>
   <a href="dashboard.html"><i class="fas fa-home"></i><br>Home</a>
   <a href="task.html"><i class="fas fa-tasks"></i><br>Tasks</a>
@@ -223,27 +208,31 @@ auth.onAuthStateChanged(user => {
       `Total Recharged: KSH ${rech.toLocaleString()}`;
   });
 
-  // ✅ Process new deposits
+  // ✅ Process only approved deposits (prevent double increase)
   let processedDeposits = new Set();
   depositRef.on('child_added', snap => {
     const key = snap.key;
     const deposit = snap.val();
     if (!deposit || !deposit.amount || processedDeposits.has(key)) return;
-    processedDeposits.add(key);
 
-    const amount = parseFloat(deposit.amount);
-    const now = new Date().toLocaleString();
+    // Only proceed if deposit is approved
+    if (deposit.status === 'approved') {
+      processedDeposits.add(key);
 
-    // Update total recharged
-    userRef.child('recharged').transaction(val => (val || 0) + amount);
+      const amount = parseFloat(deposit.amount);
+      const now = new Date().toLocaleString();
 
-    // Record in transaction history
-    transRef.push({
-      type: "Deposit",
-      amount,
-      date: now,
-      currency: "KSH"
-    });
+      // Update total recharged safely
+      userRef.child('recharged').transaction(val => (val || 0) + amount);
+
+      // Record transaction once
+      transRef.push({
+        type: "Deposit",
+        amount,
+        date: now,
+        currency: "KSH"
+      });
+    }
   });
 
   // ✅ Reset password
