@@ -168,29 +168,36 @@ body::after{
 <script>
 auth.onAuthStateChanged(user=>{
   if(!user){ window.location='signin.html'; return; }
-
   const uid = user.uid;
-  const totalVipLevels = 10; // total VIP levels in your system
+  const userRef = db.ref('users/'+uid);
+  const vipRef  = userRef.child('vipLevels');  // each VIP level info
+  const statsRef = userRef.child('vipStats');
+  const historyRef = userRef.child('taskHistory');
+  const totalVipLevels = 10;
 
-  // ✅ Sync VIP info with vip.html and profile.html
-  db.ref('users/'+uid+'/vipStats').on('value', snap=>{
-    const stats = snap.val() || {};
-    const opened = parseInt(stats.opened || 0);
-    const completed = parseInt(stats.completed || 0);
-    const ongoing = parseInt(stats.ongoing || 0);
-    const remaining = Math.max(0, totalVipLevels - opened);
+  // ✅ Real-time sync with vip.html actions
+  vipRef.on('value', snap=>{
+    const vips = snap.val() || {};
+    let opened=0, ongoing=0, completed=0;
+    Object.keys(vips).forEach(key=>{
+      const item = vips[key];
+      if(item.unlocked) opened++;
+      if(item.status==='active') ongoing++;
+      if(item.status==='completed' || item.received) completed++;
+    });
 
+    // Update dashboard
     document.getElementById('total-vips').textContent = totalVipLevels;
     document.getElementById('opened-vips').textContent = opened;
     document.getElementById('ongoing-vips').textContent = ongoing;
     document.getElementById('completed-vips').textContent = completed;
 
-    // Auto-correct if more than available VIP levels
-    if(opened > totalVipLevels) db.ref('users/'+uid+'/vipStats/opened').set(totalVipLevels);
+    // Save to Firebase for other pages (vip.html/profile.html)
+    statsRef.update({ opened, ongoing, completed, total: totalVipLevels });
   });
 
-  // ✅ Update task history
-  db.ref('users/'+uid+'/taskHistory').limitToLast(50).on('value', snap=>{
+  // ✅ Real-time task history
+  historyRef.limitToLast(50).on('value', snap=>{
     const hist = snap.val() || {};
     const cont = document.getElementById('task-history');
     cont.innerHTML = '';
@@ -202,6 +209,20 @@ auth.onAuthStateChanged(user=>{
       row.innerHTML = `<div>${item.action||'Action'}</div><div>${time}</div>`;
       cont.appendChild(row);
     });
+  });
+
+  // ✅ Ensure task records get updated from VIP unlock/receive actions
+  vipRef.on('child_changed', snap=>{
+    const vip = snap.val();
+    if(!vip) return;
+    const time = Date.now();
+    let action = '';
+    if(vip.status==='active') action = `Started VIP ${snap.key} task`;
+    else if(vip.status==='completed' || vip.received) action = `Completed VIP ${snap.key} task`;
+    else if(vip.unlocked) action = `Unlocked VIP ${snap.key}`;
+    if(action){
+      historyRef.push({ action, timestamp: time });
+    }
   });
 });
 
